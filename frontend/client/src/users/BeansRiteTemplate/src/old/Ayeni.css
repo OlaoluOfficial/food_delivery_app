@@ -1,0 +1,135 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  gap: 2rem;
+  background-color:#fff2e8;
+}
+.image{
+  width: 30rem;
+  max-height: 20rem;
+  margin-left: 10rem;
+  margin-top: 20rem;
+}
+
+.wrapper {
+  position: relative;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin: 5rem  ;
+  width: 50vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  color: rgb(111, 42, 12);
+
+}
+
+.faq {
+  width: 5rem;
+  margin: 1rem;
+  font-size: 2rem;
+  text-decoration: underline;
+  color: rgb(111, 42, 12);
+}
+
+.accordion {
+  width: 650px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 1.6rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color:#fd7e14;
+  text-align: center;
+  color: #fff2e8;
+}
+
+.con {
+  display: flex;
+  flex-direction: column;
+  width: 38vw;
+  align-items: center;
+}
+
+.quest {
+  display: flex;
+  justify-content: space-between;
+  width: 38vw;
+  margin: 1rem;
+}
+
+.title {
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cont {
+  position: relative;
+  width: 625px;
+  background-color: rgba(190, 115, 57, 0.771);
+  padding-left: 15%;
+  padding-right: 15%;
+  border-radius: 2rem;
+}
+
+.img-icon{
+  width: 2rem;
+  height: 2rem;
+  transform: rotateX(150deg);
+  background-color: #fff2e8;
+}
+
+.content {
+  font-size: 2rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: 8s ease;
+  transition: all .4s;
+}
+
+.content.show {
+  padding: 2rem 0;
+  height: auto;
+  max-height: 9999px;
+  overflow: hidden;
+}
+
+.img-icon {
+  transform: rotateX(150deg);
+  background-color: #fd7e14;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.3rem;
+  /* border-radius: 50%; */
+/* }
+
+ */ 

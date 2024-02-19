@@ -1,0 +1,380 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #090614;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+
+.top {
+  height: 10rem;
+  background-color: #fd7e14;
+  margin-bottom: 10vh;
+}
+
+.image-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.larger-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-container:hover .larger-image {
+  opacity: 1;
+}
+
+.combo {
+  text-align: center;
+  /* color: #fd7e14; */
+
+  margin-bottom: 3rem;
+  font-size: larger;
+}
+
+.add {
+  color: #fd7e14;
+  padding-left: 17px;
+}
+
+.container {
+  justify-items: center;
+  box-shadow: 0px 0px 20px 15px rgba(0, 0, 0, 0.1);
+  max-width: 130rem;
+  margin: 0 auto;
+  background-color: #f7f7f7;
+  height: 80vh;
+  /* border-radius: 30px; */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.combo_deals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.beans,
+.pulpy {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.foodname {
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+  margin: 10px 0;
+}
+
+.price {
+  text-align: center;
+  color: #fd7e14;
+  font-weight: 500;
+  font-size: large;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #fd7e14;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 100%;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  transition: background-color 0.2s ease-in-out;
+}
+.combo-btn {
+  background-color: #fd7e14;
+  border-radius: 0 3rem 3rem 0;
+  padding: 0.5rem 1rem;
+  width: auto;
+}
+button:hover {
+  background-color: #ff9800;
+}
+.bg-red {
+  background-color: red;
+  border-radius: 0 3rem 3rem 0;
+  padding: 0.5rem 1rem;
+  width: auto;
+}
+.bg-red:hover {
+  background-color: red;
+}
+.color-red {
+  color: red;
+}
+
+.minus,
+.plus {
+  font-size: 18px;
+  margin: 0 5px;
+}
+.plus {
+  margin-left: 8px;
+}
+.min {
+  margin-top: -5px;
+  margin-left: -1px;
+}
+.plu {
+  margin-top: -3px;
+  margin-left: -2.5px;
+}
+.value {
+  font-weight: 400px;
+  font-size: large;
+}
+button:focus {
+  outline: none;
+}
+/* .combo-btn {
+  display: inline-block;
+  border: 1px solid #fff2e8;
+  border-radius: 0 3rem 3rem 0;
+  padding: 0.5rem 1rem;
+  width: auto;
+} */
+/******************************
+LOGIN  REGISTERATION AND  PAGE
+*******************************/
+
+.login-clip {
+  background-image: linear-gradient(to right bottom, #f5f5f57d, #f5f5f57d),
+    url(../img/login-img.jpg);
+  border-radius: 0 30rem 30rem 0;
+  background-size: cover;
+  background-position: left;
+  width: 60%;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.beansrite-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-flex-box {
+  z-index: 100000000;
+  display: flex;
+  background-color: #fff;
+  height: 70%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.login-img-box {
+  max-width: 60%;
+  height: 100%;
+}
+.login-img {
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  border-radius: 0 26rem 26rem 0;
+}
+
+.login {
+  color: #fd7e14;
+  font-weight: bold;
+}
+
+.login-container {
+  display: flex;
+  gap: 3.5rem;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+}
+
+.input-name,
+.input-password,
+.input-email {
+  margin-left: -1rem;
+  width: 93%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  border-radius: 0 5rem 5rem 0;
+}
+
+.input-password {
+  margin-left: 3rem;
+}
+
+.input-email {
+  margin-left: 3rem;
+}
+
+input::placeholder {
+  color: #999;
+}
+
+.btnLog,
+.btnReg {
+  margin-left: 5rem;
+  width: 80%;
+  padding: 10px;
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0 5rem 5rem 0;
+}
+.btnLog {
+  height: 35px;
+}
+.btnReg {
+  height: 35px;
+  width: 94%;
+  margin-left: 1.5rem;
+}
+
+.btnLog:hover,
+.btnReg:hover {
+  transform: translateY(-0.3px);
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.btnLog:active,
+.btnReg:active {
+  transform: translateY(0.3px);
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.error {
+  display: block;
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+span {
+  color: black;
+}
+
+.register-question {
+  color: rgb(111, 42, 12);
+  text-align: center;
+  font-size: small;
+  margin-left: 4rem;
+}
+
+.reg {
+  color: #fff;
+  font-size: small;
+  background-color: #ff9800;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-radius: 0 5rem 5rem 0;
+}
+.reg:hover {
+  transform: translateY(-0.3px);
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+reg:active {
+  transform: translateY(0);
+}
+.reg-arrow {
+  font-size: 2rem;
+}
+
+.log {
+  margin-top: 2rem;
+  font-size: 3rem;
+  color: rgb(111, 42, 12);
+  text-align: center;
+}
+.sign-up {
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
+/********************
+MEDIA QUARIES
+******************* */
+
+@media screen and (max-width: 768px) {
+  .container,
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container,
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

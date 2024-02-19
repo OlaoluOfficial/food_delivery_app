@@ -1,0 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #090614;
+  /* font-family: "Quicksand"; */
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+.section-faq {
+  background-color: #f7f7f7;
+}
+
+.containerxx {
+  padding: 4rem auto;
+  position: relative;
+  margin: 0 3rem;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  /* gap: 2rem; */
+  align-items: center;
+}
+.image {
+  width: 100%;
+  /* height: 100%; */
+}
+.faq-img-box {
+  width: 50%;
+}
+.wrapper {
+  position: relative;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin: 5rem;
+  width: 50%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  color: rgb(111, 42, 12);
+}
+
+.faq {
+  font-size: 3rem;
+  /* text-decoration: underline; */
+  color: rgb(111, 42, 12);
+}
+.faq-icon {
+  font-size: 5rem;
+}
+.accordion {
+  width: 650px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 1.6rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #fd7e14;
+  text-align: center;
+  color: #fff2e8;
+}
+
+.con {
+  display: flex;
+  flex-direction: column;
+  width: 38vw;
+  align-items: center;
+}
+
+.quest {
+  display: flex;
+  justify-content: space-between;
+  width: 38vw;
+  margin: 1rem;
+}
+
+.title {
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cont {
+  position: relative;
+  width: 49rem;
+  background-color: #f7f7f7;
+  padding: 0 2rem 0 2rem;
+  border-radius: 2rem;
+}
+
+.img-icon {
+  width: 2rem;
+  height: 2rem;
+  transform: rotateX(150deg);
+  background-color: #fff2e8;
+}
+
+.content {
+  font-size: 2rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: 8s ease;
+  transition: all 0.4s;
+}
+
+.content.show {
+  padding: 2rem 0;
+  height: auto;
+  max-height: 9999px;
+  overflow: hidden;
+}
+
+.img-icon {
+  transform: rotateX(150deg);
+  background-color: #fd7e14;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.3rem;
+  /* border-radius: 50%; */
+}
