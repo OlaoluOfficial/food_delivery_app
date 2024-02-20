@@ -3,9 +3,9 @@ const express = require('express');
 
 const path = require('path');
 const cors = require('cors');
-const errorHandler = require("./config/error");
 const fileUpload = require('express-fileupload');
-const userRoutes = require("./server/routes/user.routes")
+const userRoutes = require("./server/routes/user.routes");
+const authRoutes = require("./server/routes/auth.routes")
 const connectDB = require('./database/db');
 
 const app = express();
@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/auth', authRoutes)
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
