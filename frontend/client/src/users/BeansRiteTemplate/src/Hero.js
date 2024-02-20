@@ -1,7 +1,6 @@
 import img from "./beansLogo.png";
 import React from "react";
 
-
 export default function Hero() {
   return (
     <div className="hero-container">
@@ -16,3 +15,4 @@ export default function Hero() {
     </div>
   );
 }
+// https://www.design.com/maker/social/2nxafmnrfq
