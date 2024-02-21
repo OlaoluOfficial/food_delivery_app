@@ -228,3 +228,7 @@ body {
   font-size: 1.8rem;
   margin-bottom: 1rem;
 }
+
+.footerLink:hover{
+  color: #d28343;
+}

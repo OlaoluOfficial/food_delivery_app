@@ -3,10 +3,11 @@ import BensCard from "./BensCard";
 import MenuSideCart from "./MenuSideCart";
 import axios from "axios";
 import data from "../data.json";
-import {FaMagnifyingGlass} from "react-icons/fa6";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 export default function MenuContainer() {
   const [menus, setMenus] = useState([]);
+  const [search, setSearch] = useState("");
   const [selectiedId, setSelectedId] = useState(null);
   // useEffect(() => {
   //   axios
@@ -21,12 +22,39 @@ export default function MenuContainer() {
   //     });
   // }, []);
 
+  useEffect(() => {
+    let url = "http://localhost:5000/api/food";
+    if (search != "") {
+      axios.get(`http://localhost:5000/api/food/${search}`)
+      .then((response) => {
+        setMenus(response.data.menuItems);
+      })
+      .catch((error) => {
+        console.error("Error fetching menus:", error);
+      })
+    } else {
+      axios.get(url)
+      .then((response) => {
+        setMenus(response.data.menuItems);
+      })
+      .catch((error) => {
+        console.error("Error fetching menus:", error);
+      })
+    }
+      
+  }, [search])
+
+    
+
   return (
     <section className="section-menu">
       <div className="menu-header-box">
         <h2 className="heading-secondary">Our menu 🔥</h2>
         <form className="menu-search">
-          <input placeholder="Search for food or restaurant"/>
+          <input
+            placeholder="Search for food or restaurant"
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <FaMagnifyingGlass className="search"/>
         </form>
         <p className="menu-paragraph">30 items showing &darr;</p>

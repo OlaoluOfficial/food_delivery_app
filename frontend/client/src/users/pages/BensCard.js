@@ -2,8 +2,7 @@
 import image1 from "../beansLogo.png";
 
 function BensCard({ menu, selectedId, setSelectedId }) {
-  // const [selectiedId, setSelectedId] = useState(null);
-
+  
   function handleClick(id) {
     setSelectedId(id !== selectedId ? id : null);
     // console.log(id);

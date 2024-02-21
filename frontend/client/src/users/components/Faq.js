@@ -1,7 +1,7 @@
 import { useState } from "react";
 import data from "./FAQsData";
 import image from "../img/faq-bg-img.jpeg";
-import "../styles/Ayeni.css";
+import "./Faq.css";
 
 function FAQs() {
   const [selected, setSelected] = useState(null);
