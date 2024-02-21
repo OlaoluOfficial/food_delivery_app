@@ -6,11 +6,11 @@ export const Marque = () => {
   return (
     <section className="marquee-wrapper">
       <div className="marquee-inner-wrapper card-wrapper">
-        <Marquee className="d-flex justify-content-between align-items-center">
+        <Marquee className="marquee-container">
           <div className="marquee-inner">
             <img
               src="images/brand-01.png"
-              className="marqueeImage"
+              className="marqueeImage1"
               alt="brand logo"
             />
           </div>

@@ -1,4 +1,4 @@
-import img from "../src/img/EatRite-logo.png";
+import img from "./img/EatRite-logo.png";
 import React from "react";
 
 export default function Hero() {
