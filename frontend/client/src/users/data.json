@@ -1,19 +1,29 @@
-[{
+[
+  {
     "restaurant": "The Place",
     "name": "Jollof Rice",
     "price": 2500,
-    "image": "../beansLogo. png"
-},
-{
+    "image": "../beansLogo. png",
+    "id": 1,
+    "selected": "selected",
+    "option": "Add to cart"
+  },
+  {
     "restaurant": "Mr Biggs",
     "name": "Fried Rice",
     "price": "3500",
-    "image": "./beansLogo.jpg"
-},
-{
+    "image": "./beansLogo.jpg",
+    "id": 2,
+    "selected": "selected",
+    "option": "Add to cart"
+  },
+  {
     "restaurant": "Tantalizer",
     "name": "Semo and Egusi",
     "price": "3000",
-    "image": "./beansLogo.jpg"
-}
+    "image": "./beansLogo.jpg",
+    "id": 3,
+    "selected": "selected",
+    "option": "Add to cart"
+  }
 ]
