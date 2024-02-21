@@ -8,7 +8,7 @@ import {
   AiFillAppstore,
   AiFillApple,
 } from "react-icons/ai";
-import img from "../img/Beans logo.jpg";
+import img from "../img/footer-logo.png";
 
 export default function Footer() {
   return (

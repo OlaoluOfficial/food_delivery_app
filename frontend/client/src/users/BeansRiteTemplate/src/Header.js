@@ -13,7 +13,7 @@ function Header() {
         setUserInfo(userInfo);
       });
     });
-  }, []);
+  }, [setUserInfo]);
 
   function logout() {
     fetch("http://localhost:5000/logout", {
@@ -30,7 +30,7 @@ function Header() {
           <ul id="navbar">
             <li>
               <Link className="nav-list-item" to="/">
-                Menu
+                Me<span style={{ color: "#ffd43b" }}>n</span>u
               </Link>
             </li>
             {/* <li>
@@ -45,7 +45,8 @@ function Header() {
             </li>
             <li>
               <Link className="nav-list-item" to="/specialoffers">
-                Special Offers
+                <span style={{ color: "#ffd43b" }}>S</span>pecial
+                <span style={{ color: "#ffd43b" }}>O</span>ffers
               </Link>
             </li>
           </ul>
