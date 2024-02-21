@@ -1,0 +1,19 @@
+[{
+    "restaurant": "The Place",
+    "name": "Jollof Rice",
+    "price": 2500,
+    "image": "../beansLogo. png"
+},
+{
+    "restaurant": "Mr Biggs",
+    "name": "Fried Rice",
+    "price": "3500",
+    "image": "./beansLogo.jpg"
+},
+{
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg"
+}
+]
