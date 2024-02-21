@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.Header {
+  display: flex;
+  background-color: #fd7e14;
+}
+
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #090614;
+  /* font-family: "Quicksand"; */
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+
+.containerz {
+  /* height: 300px; */
+  /* width: 120rem; */
+  margin: 0 auto;
+  background-color: #fff2e8;
+  padding: 9rem;
+}
+
+.wrapper {
+  /* width: 100%;
+  height: 100%;
+  margin: 0 auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.subtitle {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #2d1909;
+}
+.orange {
+  color: #fd7e14;
+}
+
+.title {
+  margin-bottom: 32px;
+  font-size: 40px;
+  color: #2d1909;
+}
+
+.inputContainer {
+  width: 500px;
+  height: 60px;
+  border: 1px solid #431907;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-radius: 20px;
+  background-color: #fff;
+}
+
+.inputContainer > input {
+  outline: none;
+  border: none;
+  width: 90%;
+  padding: 1rem 0;
+  transition: 150ms all;
+  background-color: #ffffff;
+}
+
+.inputContainer > input::placeholder {
+  font-size: 16px;
+}
+
+.inputContainer > input:focus {
+  padding-left: 0.75rem;
+}
+
+/* .inputContainer:focus-within {
+
+} */
+
+.sendIcon {
+  font-size: 22px;
+  color: #fd7e14;
+}
+
+.illustration {
+  height: 300px;
+  margin-top: 2.5rem;
+}

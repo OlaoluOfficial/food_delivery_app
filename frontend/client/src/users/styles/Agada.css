@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.Header {
+  display: flex;
+  background-color: #fd7e14;
+}
+
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #090614;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+
+.Containerwe {
+  background-color: #fd7e14;
+  height: 10rem;
+}
+.special-offer {
+  text-align: start;
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+.special-offer-text {
+  margin-left: 1rem;
+}
+
+.Special-Cards {
+  margin: 0rem auto;
+  justify-content: space-evenly;
+  max-width: 130rem;
+  height: 600px;
+  display: flex;
+}
+
+.Card-1 {
+  max-width: 30%;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 40px 20px;
+}
+
+.Card-2 {
+  max-width: 30%;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 40px 20px;
+  position: relative;
+}
+.Card-2::after {
+  content: "Hottest";
+  position: absolute;
+  top: 6%;
+  right: -22%;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: red;
+  padding: 0.8rem 8rem;
+  transform: rotate(45deg);
+}
+
+.Card-3 {
+  max-width: 30%;
+  /* height: 500px; */
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 40px 20px;
+}
+.Card-1,
+.Card-2,
+.Card-3 {
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.img-special {
+  width: 100%;
+  max-width: 300px;
+  min-height: 200px;
+  display: block;
+  object-fit: cover;
+}
+.offer-plan {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+.offer-list {
+  font-size: 1.6rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.offer-list-item {
+  border-bottom: 1px solid #999;
+}
+
+.Btn-Pack {
+  font-size: 16px;
+  border-radius: 0 3rem 3rem 0;
+  background-color: #fd7e14;
+  color: #fff;
+  width: 70%;
+  height: auto;
+  padding: 1rem 2rem;
+  display: block;
+  cursor: pointer;
+  text-transform: capitalize;
+  margin: 3rem auto;
+}
+
+.Btn-Pack:hover {
+  background-color: #e39b61;
+}
+
+.Btn-Pack:active {
+  transform: translateY(3px);
+}
