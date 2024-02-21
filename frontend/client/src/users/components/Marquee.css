@@ -1,12 +1,20 @@
 .marquee-wrapper {
-  border: 1px solid;
-}
-.card-wrapper {
+  /* border: 1px solid; */
+  height: 35vh;
+  width: 95%;
   background-color: #fff;
   box-shadow: 0 0 10px #0000001a;
   padding: 15px;
+  margin: auto;
+}
+.card-wrapper {
+  /* border: 1px solid; */
 }
 
-.marqueeImage{
-    width: 15rem
+.marqueeImage {
+  width: 15rem;
+}
+
+.marquee-inner {
+  margin-right: 4rem;
 }

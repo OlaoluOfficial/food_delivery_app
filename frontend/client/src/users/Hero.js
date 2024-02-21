@@ -1,6 +1,5 @@
-import img from "./beansLogo.png";
+import img from "../src/img/EatRite-logo.png";
 import React from "react";
-
 
 export default function Hero() {
   return (
@@ -9,10 +8,11 @@ export default function Hero() {
         <img className="hero-img" src={img} alt="hero-img" />
         <h1 className="heading-primary">
           {" "}
-          <span className="orange-text">B</span>eans
+          <span className="orange-text">E</span>at
           <span className="orange-text">R</span>ite
         </h1>
       </div>
     </div>
   );
 }
+// https://www.design.com/maker/social/2nxafmnrfq
