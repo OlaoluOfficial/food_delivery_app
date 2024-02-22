@@ -25,26 +25,25 @@ export default function MenuContainer() {
   useEffect(() => {
     let url = "http://localhost:5000/api/food";
     if (search != "") {
-      axios.get(`http://localhost:5000/api/food/${search}`)
-      .then((response) => {
-        setMenus(response.data.menuItems);
-      })
-      .catch((error) => {
-        console.error("Error fetching menus:", error);
-      })
+      axios
+        .get(`http://localhost:5000/api/food/${search}`)
+        .then((response) => {
+          setMenus(response.data.menuItems);
+        })
+        .catch((error) => {
+          console.error("Error fetching menus:", error);
+        });
     } else {
-      axios.get(url)
-      .then((response) => {
-        setMenus(response.data.menuItems);
-      })
-      .catch((error) => {
-        console.error("Error fetching menus:", error);
-      })
+      axios
+        .get(url)
+        .then((response) => {
+          setMenus(response.data.menuItems);
+        })
+        .catch((error) => {
+          console.error("Error fetching menus:", error);
+        });
     }
-      
-  }, [search])
-
-    
+  }, [search]);
 
   return (
     <section className="section-menu">
@@ -55,7 +54,7 @@ export default function MenuContainer() {
             placeholder="Search for food or restaurant"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <FaMagnifyingGlass className="search"/>
+          <FaMagnifyingGlass className="search" />
         </form>
         <p className="menu-paragraph">30 items showing &darr;</p>
       </div>
@@ -75,8 +74,8 @@ export default function MenuContainer() {
           {data.map((menu) => (
             <BensCard
               menu={menu}
-              key={menu._id}
-              selectedId={selectiedId}
+              key={menu.id}
+              selectedId={menu.id}
               setSelectedId={setSelectedId}
             />
           ))}
@@ -84,7 +83,7 @@ export default function MenuContainer() {
         <MenuSideCart
           // menus={menus}
           selectedId={selectiedId}
-          setSelectedId={setSelectedId}
+          // setSelectedId={setSelectedId}
         />
       </div>
     </section>

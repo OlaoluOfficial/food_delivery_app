@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "../styles/footer.module.css";
+import { Link } from "react-router-dom";
 import {
   AiFillInstagram,
   AiFillFacebook,
@@ -9,7 +10,6 @@ import {
   AiFillApple,
 } from "react-icons/ai";
 import img from "../img/footer-logo.png";
-import { Link } from "react-router-dom/dist/umd/react-router-dom.development";
 
 export default function Footer() {
   return (
@@ -21,9 +21,15 @@ export default function Footer() {
         <div className={classes.col}>
           <h2 className={classes.title}>Links of Interest</h2>
           <ul className={classes.list}>
-            <Link className={classes.footerLink} to=''>About Us</Link>
-            <Link className={classes.footerLink} to='/faqs'>FAQ</Link>
-            <Link className={classes.footerLink} to=''>Contact Us</Link>
+            <Link className={classes.footerLink} to="">
+              About Us
+            </Link>
+            <Link className={classes.footerLink} to="/faqs">
+              FAQ
+            </Link>
+            <Link className={classes.footerLink} to="">
+              Contact Us
+            </Link>
           </ul>
         </div>
 

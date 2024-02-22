@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginImg from "../img/login-img.jpg";
 
 function RegisterPage() {
@@ -86,6 +86,15 @@ function RegisterPage() {
             <span className="error">{registrationError}</span>
           )}
           <button className="btnReg">Register</button>
+          {/* option */}
+          <p className="register-question">
+            Already have an account? <span className="reg-arrow">⤵</span>
+          </p>
+          <p className>
+            <Link className="reg" to="/login">
+              Return to Login page
+            </Link>
+          </p>
         </form>
       </div>
     </div>

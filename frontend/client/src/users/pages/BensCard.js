@@ -2,13 +2,12 @@
 import image1 from "../beansLogo.png";
 
 function BensCard({ menu, selectedId, setSelectedId }) {
-  
   function handleClick(id) {
-    setSelectedId(id !== selectedId ? id : null);
+    setSelectedId(id);
     // console.log(id);
   }
   return (
-    <div className="overall" onClick={() => handleClick(menu._id)}>
+    <div className="overall" onClick={() => handleClick(menu.id)}>
       <div className="content-box">
         <img className="img" src={image1} alt="beans img" />
         <div className="description">
@@ -22,15 +21,15 @@ function BensCard({ menu, selectedId, setSelectedId }) {
         </p>
       </div>
       <div className="click-order">
-        <span className={selectedId === menu._id ? "color-red" : "price"}>
+        <span className={selectedId === menu.id ? "color-red" : "price"}>
           <sup className={selectedId === menu.id && "color-red"}>&#8358;</sup>
           {menu.price}
         </span>
         <button
-          className={selectedId === menu._id ? "menu-btn bg-red" : "menu-btn"}
-          onClick={() => handleClick(menu._id)}
+          className={selectedId === menu.id ? "menu-btn bg-red" : "menu-btn"}
+          onClick={() => handleClick(menu.id)}
         >
-          {menu._id === selectedId ? menu.addedToCart : menu.cart}
+          {menu.id === selectedId ? menu.selected : menu.option}
         </button>
       </div>
     </div>
