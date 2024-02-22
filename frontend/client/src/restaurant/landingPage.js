@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./landingPage.css"
 
 const RestaurantLandingPage = () => {
   const [foods, setFoods] = useState([]);
@@ -6,10 +7,11 @@ const RestaurantLandingPage = () => {
   const [price, setPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [image, setImage] = useState(null);
+  const [desc, setDesc] = useState("");
 
   const fetchFoods = async () => {
     try {
-      const response = await fetch("YOUR_API_ENDPOINT");
+      const response = await fetch("");
       if (response.ok) {
         const data = await response.json();
         setFoods(data);
@@ -87,7 +89,7 @@ const RestaurantLandingPage = () => {
   };
 
   return (
-    <div>
+    <div className="restaurant-page-container">
       <h1>Restaurant Admin Page</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -95,6 +97,15 @@ const RestaurantLandingPage = () => {
           <input
             type="text"
             value={foodName}
+            onChange={(e) => setFoodName(e.target.value)}
+          />
+        </label>
+        <br/>
+        <label>
+          Food Description:
+          <input
+            type="text"
+            value={desc}
             onChange={(e) => setFoodName(e.target.value)}
           />
         </label>

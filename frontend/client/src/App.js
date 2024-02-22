@@ -12,12 +12,14 @@ import Homepage from "./users/Homepage";
 import FAQs from "./users/components/Faq";
 import RestaurantLandingPage from "./restaurant/landingPage";
 import RestaurantAdminPage from "./restaurant/newItemUpload";
+import DeliveryPersonnelPage from "./delivery/deliveryPage";
 
 const App = () => {
   return (
     <UserContextProvider>
       <Router>
         <Routes>
+          <Route path="/delivery" element={<DeliveryPersonnelPage />} />
           <Route path="/restaurant" element={<RestaurantLandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
