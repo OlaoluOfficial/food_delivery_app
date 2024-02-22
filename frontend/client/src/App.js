@@ -10,14 +10,15 @@ import Services from "./users/pages/Services";
 import SpecialOffer from "./users/pages/SpecialOffer";
 import Homepage from "./users/Homepage";
 import FAQs from "./users/components/Faq";
-import MainApp from "./users/pages/Cart2";
+import RestaurantLandingPage from "./restaurant/landingPage";
+import RestaurantAdminPage from "./restaurant/newItemUpload";
 
 const App = () => {
   return (
     <UserContextProvider>
       <Router>
         <Routes>
-          <Route path="/cart2" element={<MainApp />} />
+          <Route path="/restaurant" element={<RestaurantLandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/cart" element={<Cart />} />
