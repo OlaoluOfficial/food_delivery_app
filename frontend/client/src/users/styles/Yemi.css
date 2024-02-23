@@ -13,7 +13,7 @@ html {
 body {
   font-size: 2.4rem;
   font-family: sans-serif;
-  color: #090614;
+  color: #4c2506f4;
   font-family: "Rubik", sans-serif;
   font-weight: 400;
 }
@@ -130,16 +130,15 @@ body {
   margin-top: 10px;
 }
 
-
 .combo-btn {
   background-color: #fd7e14;
   border-radius: 0 3rem 3rem 0;
   padding: 0.5rem 1rem;
   width: auto;
 }
-
+/* 
 .bg-red {
-  background-color: red;
+  background-color:red ;
   border-radius: 0 3rem 3rem 0;
   padding: 0.5rem 1rem;
   width: auto;
@@ -149,7 +148,7 @@ body {
 }
 .color-red {
   color: red;
-}
+} */
 
 .minus,
 .plus {

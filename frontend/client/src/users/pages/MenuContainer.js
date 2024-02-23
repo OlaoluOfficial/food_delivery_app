@@ -8,7 +8,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 export default function MenuContainer() {
   const [menus, setMenus] = useState([]);
   const [search, setSearch] = useState("");
-  const [selectiedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   // useEffect(() => {
   //   axios
   //     .get(`http://localhost:5000/api/menu`)
@@ -51,12 +51,13 @@ export default function MenuContainer() {
         <h2 className="heading-secondary">Our menu 🔥</h2>
         <form className="menu-search">
           <input
+            className="input_search"
             placeholder="Search for food or restaurant"
             onChange={(e) => setSearch(e.target.value)}
           />
           <FaMagnifyingGlass className="search" />
         </form>
-        <p className="menu-paragraph">30 items showing &darr;</p>
+        {/* <p className="menu-paragraph">30 items showing &darr;</p> */}
       </div>
       <div className="menu-cart-flexbox">
         {/* <div className="main-course">
@@ -75,14 +76,14 @@ export default function MenuContainer() {
             <BensCard
               menu={menu}
               key={menu.id}
-              selectedId={menu.id}
+              selectedId={selectedId}
               setSelectedId={setSelectedId}
             />
           ))}
         </div>
         <MenuSideCart
           // menus={menus}
-          selectedId={selectiedId}
+          selectedId={selectedId}
           // setSelectedId={setSelectedId}
         />
       </div>

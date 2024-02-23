@@ -5,7 +5,8 @@
     "price": 2500,
     "image": "../beansLogo. png",
     "id": 1,
-    "selected": "selected",
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
     "option": "Add to cart"
   },
   {
@@ -14,7 +15,8 @@
     "price": "3500",
     "image": "./beansLogo.jpg",
     "id": 2,
-    "selected": "selected",
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
     "option": "Add to cart"
   },
   {
@@ -23,7 +25,128 @@
     "price": "3000",
     "image": "./beansLogo.jpg",
     "id": 3,
-    "selected": "selected",
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "The Place",
+    "name": "Jollof Rice",
+    "price": 2500,
+    "image": "../beansLogo. png",
+    "id": 111,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Mr Biggs",
+    "name": "Fried Rice",
+    "price": "3500",
+    "image": "./beansLogo.jpg",
+    "id": 22,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 33,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 4,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 5,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 6,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 7,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 8,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 9,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 10,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 11,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
+    "option": "Add to cart"
+  },
+  {
+    "restaurant": "Tantalizer",
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 12,
+    "selected": "Food Added",
+    "description": "Delicious food made with the finest ingridents. Natural and healthy.",
     "option": "Add to cart"
   }
 ]

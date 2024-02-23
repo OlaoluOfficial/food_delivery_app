@@ -33,6 +33,10 @@ export default function SideCart({ menu, selectedId }) {
         if (item.id === selectedId) {
           setSelectedFood(item);
         }
+        if (selectedId === null) {
+          setSelectedFood(null);
+          setStatus("");
+        }
       });
       console.log(selectedItem);
     }
@@ -44,7 +48,7 @@ export default function SideCart({ menu, selectedId }) {
       price: price,
     };
     axios.post("localhost:3000/api/addToCart", cart).then((response) => {
-      if (response.status == 201) {
+      if (response.status === 201) {
         setSelectedFood({});
       }
     });
@@ -61,7 +65,7 @@ export default function SideCart({ menu, selectedId }) {
       addToCart(selectedFood, userOffer);
     } else {
       // Show an error (you might want to handle this differently)
-      setStatus("Offer declined!");
+      setStatus("Negotiate Higer 😔");
     }
   };
 
