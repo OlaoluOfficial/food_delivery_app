@@ -90,7 +90,7 @@ function Cart() {
             {cart.map((item) => (
               <li key={item.id}>
                 <div className="leftCartSec-Headers">
-                  <img src={item.image} alt="item image" />
+                  <img src={item.image} alt="item" />
                   <p>{item.name}</p>
                   <button onClick={() => removeFromCart(item.id)}>
                     Remove

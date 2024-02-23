@@ -150,7 +150,7 @@ const RestaurantLandingPage = () => {
       </form>
 
       <h2>Previously Uploaded Items:</h2>
-      <ul className="main-course2">
+      <div className="main-course2">
         {foods.map((food) => (
           <div className="overall2">
             <div className="content-box2">
@@ -180,7 +180,7 @@ const RestaurantLandingPage = () => {
             </div>
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
