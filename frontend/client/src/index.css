@@ -147,7 +147,6 @@ MAIN MENU
   padding-bottom: 8rem;
   max-width: 110rem;
   /* margin: 0 auto; */
-
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;

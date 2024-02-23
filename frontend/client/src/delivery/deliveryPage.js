@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import data from "./data.json";
 
 const DeliveryPersonnelPage = () => {
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState([]);
 
   useEffect(() => {
     // Fetch existing orders from your backend API
@@ -10,12 +11,22 @@ const DeliveryPersonnelPage = () => {
   }, []);
 
   const fetchOrders = async () => {
-    try {
-      const response = await fetch("your_backend_api/orders");
-      const data = await response.json();
-      setOrders(data);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
+    // try {
+    //   const response = await fetch("your_backend_api/orders");
+    //   const data = await response.json();
+    //   setOrders(data);
+    // } catch (error) {
+    //   console.error("Error fetching orders:", error);
+    // }
+    setOrders(data);
+  };
+  const handleSelection = (order) => {
+    const updatedOrder = [...selectedOrder];
+    const existingOrder = updatedOrder.find((item) => item.id === order.id);
+    if (existingOrder) {
+      setSelectedOrder([...selectedOrder]);
+    } else {
+      setSelectedOrder([...selectedOrder, order]);
     }
   };
 
@@ -33,11 +44,22 @@ const DeliveryPersonnelPage = () => {
         )
       );
 
-      // Reset the selected order
-      setSelectedOrder(null);
+      const updateSelectedOrder = selectedOrder.filter(
+        (item) => item.id !== orderId
+      );
+      setSelectedOrder(updateSelectedOrder);
     } catch (error) {
       console.error("Error accepting order:", error);
     }
+  };
+
+  const handleCancel = (selectedId) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === selectedId ? { ...order, status: "Cancelled" } : order
+      )
+    );
+    setSelectedOrder(null); // Reset the selected order
   };
 
   return (
@@ -47,7 +69,7 @@ const DeliveryPersonnelPage = () => {
         {orders.map((order) => (
           <li key={order.id}>
             Order #{order.id} - Status: {order.status}
-            <button onClick={() => setSelectedOrder(order)}>Accept</button>
+            <button onClick={() => handleSelection(order)}>Accept</button>
           </li>
         ))}
       </ul>
@@ -55,11 +77,38 @@ const DeliveryPersonnelPage = () => {
       {selectedOrder && (
         <div>
           <h3>Selected Order</h3>
-          <p>Order #{selectedOrder.id}</p>
-          <p>Status: {selectedOrder.status}</p>
-          <button onClick={() => handleAcceptOrder(selectedOrder.id)}>
-            Accept Order
-          </button>
+          {selectedOrder.map((order) => {
+            return (
+              <div>
+                <div className="selectedOrder">
+                  <div className="selectedOrder-header">
+                    <p>Order #{order.id}</p>
+                    <p>Status: {order.status}</p>
+                  </div>
+                  <div className="selectedOrder-details">
+                    <div className="orderDetails">
+                      <p>{order.name}</p>
+                      <p>{order.price}</p>
+                    </div>
+                    <div className="restaurantDetails">
+                      <h5>{order.restaurantName}</h5>
+                      <p>{order.restaurantAddress}</p>
+                      <p>{order.restaurantContact}</p>
+                    </div>
+                    <div className="customerDetails">
+                      <h5>{order.customerName}</h5>
+                      <p>{order.customerAddress}</p>
+                      <p>{order.customerContact}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => handleAcceptOrder(order.id)}>
+                    Accept Order
+                  </button>
+                  <button onClick={() => handleCancel(order.id)}>Cancel</button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
