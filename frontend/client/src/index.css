@@ -22,7 +22,7 @@ html {
 body {
   font-size: 2.4rem;
   font-family: sans-serif;
-  color: #090614;
+  color: #4c2506f4 !important;
   /* font-family: "Quicksand"; */
   font-family: "Rubik", sans-serif;
   font-weight: 400;
@@ -140,17 +140,21 @@ MAIN MENU
 .menu-cart-flexbox {
   display: flex;
   /* outline: 1px solid; */
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .main-course {
   padding: 0 3rem;
   padding-bottom: 8rem;
-  max-width: 110rem;
+  width: 75%;
   /* margin: 0 auto; */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
-  /* overflow: scroll; */
+  overflow: scroll;
+  height: 100vh;
+}
+.main-course::-webkit-scrollbar {
+  display: none;
 }
 
 .menu-header-box {
@@ -163,13 +167,30 @@ MAIN MENU
   border:1px solid;
 } */
 .menu-search {
+  width: 40%;
   position: relative;
 }
-.menu-search input {
-  width: 28rem;
+.input_search {
+  font-family: inherit;
+  color: inherit;
+  font-size: 1.5rem;
+  padding: 1.5rem 2rem;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  height: 4rem;
   padding: 0.5rem;
-  border-radius: 15px;
+  /* border-radius: 15px; */
+  border: none;
   font-size: 1.8rem;
+}
+.input_search:focus {
+  outline: none;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #fd7e14;
+}
+.input_search::-webkit-input-placeholder {
+  color: #999;
 }
 
 .search {
@@ -185,19 +206,27 @@ MAIN MENU
 }
 .menu-btn {
   display: inline-block;
-  border: 1px solid #fff2e8;
+  color: #fff2e8;
+  /* border: 1px solid #fff2e8; */
+  border: none;
   border-radius: 0 3rem 3rem 0;
   padding: 0.5rem 1rem;
   width: auto;
 }
+.bg-orange {
+  background-color: #fd7e14;
+}
 .bg-red {
-  background-color: red;
+  background-color: orangered;
 }
-.bg-red:hover {
-  background-color: red;
-}
+/* .bg-red:hover {
+  background-color: orangered;
+} */
 .color-red {
-  color: red;
+  color: orangered;
+}
+.color-orange {
+  color: #fd7e14;
 }
 
 /**********************
@@ -205,7 +234,7 @@ MENU SIDE CART
 *********************/
 .side-cart-container {
   background-color: white;
-  height: auto;
+  height: 70vh;
   padding: 3rem;
   width: 25%;
 }
@@ -271,19 +300,18 @@ MENU SIDE CART
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  padding: 1rem;
-  padding-bottom: 2rem;
+  padding: 1rem 1rem 1.5rem 1rem;
   background-color: #fff;
 }
-.img {
-  max-width: 58%;
+.card-img {
+  width: 50%;
   object-fit: contain;
   border-radius: 5px;
-  transition: all 0.2s;
+  transition: all 0.5s;
   max-height: 13rem;
 }
-.img:hover {
-  transform: scale(1.01);
+.card-img:hover {
+  transform: scale(1.05);
   cursor: pointer;
 }
 .description {
@@ -291,7 +319,8 @@ MENU SIDE CART
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
-  width: 42%;
+  width: 50%;
+  /* width: 42%; */
 }
 .description-status {
   color: #999;
@@ -299,6 +328,13 @@ MENU SIDE CART
 }
 .dish-name {
   font-size: 1.6rem;
+}
+.vendor-name-box {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.vendor-name {
+  color: #999;
 }
 .click-order {
   display: flex;
