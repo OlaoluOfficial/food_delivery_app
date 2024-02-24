@@ -75,7 +75,7 @@ export default function SideCart({ menu, selectedId }) {
   const addToCart = (item, price) => {
     const cart = { ...item, offeredPrice: price };
 
-    axios.post("localhost:2300/api/addToCart", cart).then((response) => {
+    axios.post("http://localhost:2300/api/carts", cart).then((response) => {
       if (response.status === 201) {
         setSelectedFood({});
       }

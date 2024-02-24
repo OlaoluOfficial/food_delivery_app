@@ -9,6 +9,7 @@ const userRoutes = require("./server/routes/user.routes");
 const authRoutes = require("./server/routes/auth.routes");
 const cartRoutes = require("./server/routes/cart.routes")
 const connectDB = require("./database/db");
+const productRoutes = require("./server/routes/product.routes");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/carts", cartRoutes);
+app.use("/api/v1/products", productRoutes);
 
 app.use((err, req, res,next) => {
   if (err instanceof multer.MulterError) {
