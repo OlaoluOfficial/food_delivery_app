@@ -8,6 +8,8 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./server/routes/user.routes");
 const authRoutes = require("./server/routes/auth.routes");
 const connectDB = require("./database/db");
+const orderRoutes = require("./server/routes/order.routes");
+const productRoutes = require("./server/routes/product.routes");
 
 const app = express();
 
@@ -39,6 +41,14 @@ app.use(
 app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/products', productRoutes);
+
+const { lookup } = require("dns").promises;
+const os = require("os");
+
+const PORT = process.env.PORT || 2300;
+app.enable("trust proxy");
 
 app.use((err, req, res,next) => {
   if (err instanceof multer.MulterError) {
@@ -64,19 +74,6 @@ app.use((err, req, res, next) => {
   next(error);
 });
 
-app.use((err, req, res, _next) => {
-  res.status(err.status || 500).json({
-    error: {
-      message: err.message,
-    },
-  });
-});
-
-const { lookup } = require("dns").promises;
-const os = require("os");
-
-const PORT = process.env.PORT || 2300;
-app.enable("trust proxy");
 // eslint-disable-next-line no-unused-vars
 app.listen(PORT, async (req, res) => {
   const IP = (await lookup(os.hostname())).address;
