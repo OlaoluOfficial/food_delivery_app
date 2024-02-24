@@ -8,4 +8,6 @@ router.get('/', OrderController.getAllOrders);
 
 router.get('/:orderId', OrderController.getOrder);
 
+router.put('/:orderId', OrderController.updateOrder);
+
 module.exports = router;
