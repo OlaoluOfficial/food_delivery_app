@@ -8,9 +8,9 @@ const addRestaurant = async (req, res) => {
     const regID = req.user.registrationNo;
     // console.log(userRole);
     if (userRole == "admin" || userRole == "restaurant") {
-      const { description, name, location, registrationID } = req.body;
+      const { description, name, location,phoneNumber, registrationID } = req.body;
 
-      if (!description || !name || !location || !registrationID)
+      if (!description || !name || !location || !registrationID || phoneNumber)
         return res.status(400).json({ message: "Missing required fields" });
 
       if (registrationID !== regID && userRole == "restaurant")
@@ -31,6 +31,7 @@ const addRestaurant = async (req, res) => {
           name,
           location,
           registeredBy: registrationID,
+          phoneNumber
         });
 
         const savedRestaurant = await newRestaurant.save();

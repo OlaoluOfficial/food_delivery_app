@@ -31,7 +31,7 @@ const uploadItem = async (req, res) => {
       description: description,
       price: price,
       productPictures: [],
-      minimum_price:minimumPrice
+      minimumPrice
     });
 
     const newProduct = await product.save();
