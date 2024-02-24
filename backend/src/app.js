@@ -10,6 +10,7 @@ const authRoutes = require("./server/routes/auth.routes");
 const connectDB = require("./database/db");
 const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
+const cartRoutes = require("./server/routes/cart.routes");
 
 const app = express();
 
