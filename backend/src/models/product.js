@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { Schema, model } = require('mongoose');
 
 const productSchema = new Schema({
@@ -6,9 +7,13 @@ const productSchema = new Schema({
     require: true
   },
   description: {
-    type: string
+    type: String,
   },
   price: { 
+    type: Number, 
+    required: true 
+  },
+  minimum_price: { 
     type: Number, 
     required: true 
   },
@@ -17,7 +22,11 @@ const productSchema = new Schema({
     ref: 'Restaurant', 
     required: true 
   },
-});
+  productPictures: [String],
+
+},
+{ timestamps: true }
+);
 
 const Product = model('Product', productSchema);
 
