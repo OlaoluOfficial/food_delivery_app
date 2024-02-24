@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const productSchema = new Schema({
   name: {
@@ -7,15 +6,15 @@ const productSchema = new Schema({
     require: true
   },
   description: {
-    type: String,
+    type: String
   },
   price: { 
     type: Number, 
     required: true 
   },
-  minimum_price: { 
-    type: Number, 
-    required: true 
+  minimumPrice: {
+    type: Number,
+    required: true
   },
   restaurant: { 
     type: mongoose.Schema.Types.ObjectId, 

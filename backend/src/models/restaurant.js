@@ -11,6 +11,10 @@ const restaurantSchema = new Schema({
   location: {
     type: String
   },
+  phoneNumber: {
+    type: String,
+    required: true
+  },
   registeredBy: {
     type: String,
     default:'admin'
