@@ -7,6 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./server/routes/user.routes");
 const authRoutes = require("./server/routes/auth.routes");
+const cartRoutes = require("./server/routes/cart.routes")
 const connectDB = require("./database/db");
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(
 app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/carts", cartRoutes);
 
 app.use((err, req, res,next) => {
   if (err instanceof multer.MulterError) {
