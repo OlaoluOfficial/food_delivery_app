@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import data from "./data.json";
+import axios from "axios";
 
 const DeliveryPersonnelPage = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
+  const [acceptedOrder, setAcceptedOrder] = useState([]);
 
   useEffect(() => {
     // Fetch existing orders from your backend API
@@ -11,14 +13,13 @@ const DeliveryPersonnelPage = () => {
   }, []);
 
   const fetchOrders = async () => {
-    // try {
-    //   const response = await fetch("your_backend_api/orders");
-    //   const data = await response.json();
-    //   setOrders(data);
-    // } catch (error) {
-    //   console.error("Error fetching orders:", error);
-    // }
-    setOrders(data);
+    try {
+      const response = await fetch("http://localhost:2300/api/v1/orders");
+      const data = await response.json();
+      setOrders(data.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
   const handleSelection = (order) => {
     const updatedOrder = [...selectedOrder];
@@ -30,13 +31,14 @@ const DeliveryPersonnelPage = () => {
     }
   };
 
-  const handleAcceptOrder = async (orderId) => {
+  const handleAcceptOrder = (orderId) => {
     try {
       // Send a request to your backend API to mark the order as accepted
-      await fetch(`your_backend_api/orders/${orderId}/accept`, {
-        method: "PUT",
-      });
-
+      axios
+        .put(`http://localhost:2300/api/v1/orders/${orderId}`, {
+          status: "Accepted",
+        })
+        .then(() => {});
       // Update the local state to reflect the accepted order
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
@@ -54,11 +56,33 @@ const DeliveryPersonnelPage = () => {
   };
 
   const handleCancel = (selectedId) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === selectedId ? { ...order, status: "Cancelled" } : order
-      )
+    const updateSelectedOrder = selectedOrder.filter(
+      (item) => item.id !== selectedId
     );
+    setSelectedOrder(updateSelectedOrder);
+    // setSelectedOrder(null); // Reset the selected order
+  };
+  const handleDelivered = async (orderId) => {
+    try {
+      // Send a request to your backend API to mark the order as accepted
+      await axios.put(`your_backend_api/orders/${orderId}`, {
+        status: "Delivered",
+      });
+
+      // Update the local state to reflect the accepted order
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: "Accepted" } : order
+        )
+      );
+
+      const updateSelectedOrder = selectedOrder.filter(
+        (item) => item.id !== orderId
+      );
+      setSelectedOrder(updateSelectedOrder);
+    } catch (error) {
+      console.error("Error accepting order:", error);
+    }
     setSelectedOrder(null); // Reset the selected order
   };
 
@@ -110,6 +134,16 @@ const DeliveryPersonnelPage = () => {
             );
           })}
         </div>
+      )}
+      {acceptedOrder && (
+        <ul>
+          {acceptedOrder.map((order) => (
+            <li key={order.id}>
+              Order #{order.id} - Status: {order.status}
+              <button onClick={() => handleDelivered(order)}>Delivered</button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -23,12 +23,12 @@ export default function MenuContainer() {
   // }, []);
 
   useEffect(() => {
-    let url = "http://localhost:5000/api/food";
+    let url = "http://localhost:2300/api/v1/products";
     if (search != "") {
       axios
-        .get(`http://localhost:5000/api/food/${search}`)
+        .get(`http://localhost:2300/api/v1/products/${search}`)
         .then((response) => {
-          setMenus(response.data.menuItems);
+          setMenus(response.data.data);
         })
         .catch((error) => {
           console.error("Error fetching menus:", error);
@@ -37,7 +37,8 @@ export default function MenuContainer() {
       axios
         .get(url)
         .then((response) => {
-          setMenus(response.data.menuItems);
+          console.log(response)
+          setMenus(response.data.data);
         })
         .catch((error) => {
           console.error("Error fetching menus:", error);
@@ -72,7 +73,7 @@ export default function MenuContainer() {
         </div> */}
 
         <div className="main-course">
-          {data.map((menu) => (
+          {menus.map((menu) => (
             <BensCard
               menu={menu}
               key={menu.id}
@@ -82,7 +83,7 @@ export default function MenuContainer() {
           ))}
         </div>
         <MenuSideCart
-          // menus={menus}
+          menus={menus}
           selectedId={selectedId}
           // setSelectedId={setSelectedId}
         />

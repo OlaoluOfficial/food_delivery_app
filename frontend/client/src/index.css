@@ -103,10 +103,9 @@ body {
 .hero-img {
   width: 35rem;
   height: 35rem;
-  background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14);
+  /* background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14); */
   padding: 5rem;
   border-radius: 50%;
-
   position: absolute;
   top: 50%;
   left: 50%;

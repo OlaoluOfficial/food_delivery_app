@@ -17,7 +17,7 @@ function LoginPage() {
     // If data is valid, proceed with the registration logic
     setValidationError(null);
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("http://localhost:2300/api/v1/auth", {
         method: "POST",
         body: JSON.stringify(userData),
         headers: { "Content-Type": "application/json" },
