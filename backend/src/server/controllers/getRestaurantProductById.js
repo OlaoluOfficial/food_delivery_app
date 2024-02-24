@@ -4,12 +4,10 @@ const viewProductsByRestaurant = async (req, res) => {
   try {
     const restaurantId = req.params.id;
 
-    console.log(restaurantId)
     const products = await Product.find({ restaurant: restaurantId }).populate(
       "restaurant",
       "name location"
     );
-    console.log(products);
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found for this restaurant" });
