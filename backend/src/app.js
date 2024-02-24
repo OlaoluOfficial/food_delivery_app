@@ -8,6 +8,7 @@ const userRoutes = require("./server/routes/user.routes");
 const authRoutes = require("./server/routes/auth.routes");
 const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
+const cartRoutes = require("./server/routes/cart.routes")
 const connectDB = require('./database/db');
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/orders', orderRoutes)
 app.use('/api/v1/products', productRoutes)
+app.use('/api/v1/carts', cartRoutes)
 
 app.use((req, res, next) => {
     const error = new Error('Page Not Found');
