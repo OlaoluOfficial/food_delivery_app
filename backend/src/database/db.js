@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connectDB = async () => {
+  const url= process.env.ATLAS_DATABASE;
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/food_delivery_app");
     console.log('Connected to MongoDB');

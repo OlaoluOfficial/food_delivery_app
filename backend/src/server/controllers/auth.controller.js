@@ -1,31 +1,52 @@
 const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const errorHandler = require('../middlewares/handleError')
+require('dotenv').config();
+
+function generateRandomRegistrationNumber(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let registrationNumber = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    registrationNumber += characters.charAt(randomIndex);
+  }
+  return registrationNumber;
+}
+
+
+const registrationNumber = generateRandomRegistrationNumber(10);
+
 
 class AuthController {
   static async register(req, res) {
+    let regNo='';
     try {
       let { username, password, email, phone, role} = req.body;
-      let user = await User.findOne({ email });
-      if (user) {
-        return res.status(400).json({ msg: 'User already exists' });
-      }
+    
+    if( role =="restaurant" ) 
+     regNo = registrationNumber;      
+  
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
-      user = new User({
+     let user = new User({
         username,
         password,
         email,
         phone,
         role,
+        registrationNo:regNo
       });
 
       await user.save();
   
-      res.status(201).json({ status: 200, message: "User created successfully", data: user });
+     return res.status(201).json({ status: 200, message: "User created successfully", data: user });
     } catch (error) {
-      console.log(error.message)
-      return new Error('Could not create user')
+      const errors = errorHandler.dbSchemaErrors(error);
+      // console.log(errors)
+    return res.status(403).json({ Message: errors });
+
+  
     }
   }
 
@@ -46,11 +67,13 @@ class AuthController {
           id: user.id,
         },
       };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 });
-      res.status(200).json({ message: 'Login Successful', data: { user, token }})
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600000 });
+      res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
+
+    return   res.status(200).json({ message: 'Login Successful', data: { user, token }})
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+     return res.status(500).send('Server Error');
     }
   }
 }

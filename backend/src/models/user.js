@@ -4,7 +4,7 @@ const userSchema = new Schema({
   username: {
     type: String,
     require: true,
-    unique: true,
+    
   },
   email: { 
     type: String, 
@@ -25,6 +25,13 @@ const userSchema = new Schema({
     enum: ['customer', 'restaurant', 'admin', 'delivery'], 
     required: true 
   },
+  registrationNo:{
+    type: String, 
+    default:""
+  }
+},
+{
+  timestamps: true 
 });
 
 const User = model('User', userSchema);
