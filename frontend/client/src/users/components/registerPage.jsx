@@ -1,25 +1,44 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import loginImg from "../img/login-img.jpg";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const Schema = z.object({
+  email: z.string(),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters." }),
+  tel: z
+    .number({invalid_type_error: "Phone Number is required"})
+    .min(11, { message: "Phone Number should be atleast 11 numbers" }),
+  address: z
+    .string()
+    .min(10, { message: "Address must be atleast 10 characters long" }),
+});
 
 function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({ resolver: zodResolver(Schema) });
   const [validationError, setValidationError] = useState(null);
   const [registrationError, setRegistrationError] = useState(null);
   // const history = useHistory(); // Access the history object
   const navigate = useNavigate();
-  async function register(e) {
-    e.preventDefault();
-    const userData = { username, password, email };
 
-    // If data is valid, proceed with the registration logic
-    setValidationError(null);
+  async function signUp(data) {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/auth", {
+      const response = await fetch("http://localhost:2300/api/v1/auth/signUp", {
         method: "POST",
-        body: JSON.stringify(userData),
+        body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
 
@@ -29,8 +48,7 @@ function RegisterPage() {
         // Optionally, redirect to the login page
         navigate("/login"); // Use navigate to redirect to '/login'
         // Reset the form and clear input fields
-        setUsername("");
-        setEmail("");
+
         setPassword("");
         setValidationError("");
         setRegistrationError("");
@@ -53,35 +71,76 @@ function RegisterPage() {
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
-        <form className="login-container" onSubmit={register}>
+        <form className="login-container" onSubmit={handleSubmit(signUp)}>
           <h2 className="log">Sign-up</h2>
-          <input
-            className="input-name"
-            type="text"
-            id="username"
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-
-          <input
-            className="input-email"
-            type="email"
-            id="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            className="input-password"
-            type="password"
-            id="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          {validationError && <span className="error">{validationError}</span>}
+          <div>
+            <input
+              className="input-name"
+              type="email"
+              id="email"
+              placeholder="Email"
+              {...register("email")}
+            />
+            {errors.email && <p className="error">{errors.username.message}</p>}
+          </div>
+          <div>
+            <input
+              className="input-email"
+              id="username"
+              placeholder="Username"
+              type="text"
+              {...register("username")}
+            />
+            {errors.username && (
+              <p className="error">{errors.username.message}</p>
+            )}
+          </div>
+          <div>
+            <input
+              className="input-password"
+              type="password"
+              id="password"
+              placeholder="Password"
+              {...register("password")}
+            />
+            {errors.password && (
+              <p className="error">{errors.password.message}</p>
+            )}
+          </div>
+          <div>
+            <input
+              className="input-password"
+              type="password"
+              id="password"
+              placeholder="Confirm Password"
+              {...register("confirmPassword")}
+            />
+            {errors.confirmPassword && (
+              <p className="error">{errors.confirmPassword.message}</p>
+            )}
+          </div>
+          <div>
+            <input
+              className="input-email"
+              id="username"
+              placeholder="Phone Number"
+              type="number"
+              {...register("tel", { valueAsNumber: true })}
+            />
+            {errors.tel && <p className="error">{errors.tel.message}</p>}
+          </div>
+          <div>
+            <input
+              className="input-email"
+              id="username"
+              placeholder="Address"
+              type="text"
+              {...register("address")}
+            />
+            {errors.address && (
+              <p className="error">{errors.address.message}</p>
+            )}
+          </div>
           {registrationError && (
             <span className="error">{registrationError}</span>
           )}

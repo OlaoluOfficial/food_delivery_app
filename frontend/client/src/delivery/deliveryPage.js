@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import data from "./data.json";
 import axios from "axios";
 
 const DeliveryPersonnelPage = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
   const [acceptedOrder, setAcceptedOrder] = useState([]);
+  const [deliveredOrder, setDeliveredOrder] = useState([]);
 
   useEffect(() => {
     // Fetch existing orders from your backend API
@@ -16,7 +16,20 @@ const DeliveryPersonnelPage = () => {
     try {
       const response = await fetch("http://localhost:2300/api/v1/orders");
       const data = await response.json();
-      setOrders(data.data);
+      const actualData = data.data;
+      setOrders(actualData);
+
+      // set accepted orders state
+      const updateAcceptedOrder = actualData.filter(
+        (item) => item.status == "Accepted"
+      );
+      setAcceptedOrder(updateAcceptedOrder);
+
+      // set delivered orders state
+      const updateDeliveredOrder = actualData.filter(
+        (item) => item.status == "Delivered"
+      );
+      setDeliveredOrder(updateDeliveredOrder);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -38,18 +51,22 @@ const DeliveryPersonnelPage = () => {
         .put(`http://localhost:2300/api/v1/orders/${orderId}`, {
           status: "Accepted",
         })
-        .then(() => {});
-      // Update the local state to reflect the accepted order
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === orderId ? { ...order, status: "Accepted" } : order
-        )
-      );
+        .then(() => {
+          
+          // Update the local state to reflect the accepted order
+          setOrders((prevOrders) =>
+            prevOrders.map((order) =>
+              order.id === orderId ? { ...order, status: "Accepted" } : order
+            )
+          );
+        });
 
       const updateSelectedOrder = selectedOrder.filter(
         (item) => item.id !== orderId
       );
+
       setSelectedOrder(updateSelectedOrder);
+      fetchOrders();
     } catch (error) {
       console.error("Error accepting order:", error);
     }
@@ -65,7 +82,7 @@ const DeliveryPersonnelPage = () => {
   const handleDelivered = async (orderId) => {
     try {
       // Send a request to your backend API to mark the order as accepted
-      await axios.put(`your_backend_api/orders/${orderId}`, {
+      await axios.put(`http://localhost:2300/api/v1/orders/${orderId}`, {
         status: "Delivered",
       });
 
@@ -80,6 +97,7 @@ const DeliveryPersonnelPage = () => {
         (item) => item.id !== orderId
       );
       setSelectedOrder(updateSelectedOrder);
+      fetchOrders();
     } catch (error) {
       console.error("Error accepting order:", error);
     }
@@ -91,8 +109,8 @@ const DeliveryPersonnelPage = () => {
       <h2>Delivery Personnel Page</h2>
       <ul>
         {orders.map((order) => (
-          <li key={order.id}>
-            Order #{order.id} - Status: {order.status}
+          <li key={order.orderId}>
+            Order #{order.orderId} - Status: {order.status}
             <button onClick={() => handleSelection(order)}>Accept</button>
           </li>
         ))}
@@ -125,26 +143,33 @@ const DeliveryPersonnelPage = () => {
                       <p>{order.customerContact}</p>
                     </div>
                   </div>
-                  <button onClick={() => handleAcceptOrder(order.id)}>
+                  <button onClick={() => handleAcceptOrder(order.orderId)}>
                     Accept Order
                   </button>
-                  <button onClick={() => handleCancel(order.id)}>Cancel</button>
+                  <button onClick={() => handleCancel(order.orderId)}>
+                    Cancel
+                  </button>
                 </div>
               </div>
             );
           })}
         </div>
       )}
-      {acceptedOrder && (
-        <ul>
-          {acceptedOrder.map((order) => (
-            <li key={order.id}>
-              Order #{order.id} - Status: {order.status}
-              <button onClick={() => handleDelivered(order)}>Delivered</button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div>
+        <h3>Accepted Orders</h3>
+        {acceptedOrder && (
+          <ul>
+            {acceptedOrder.map((order) => (
+              <li key={order.orderId}>
+                Order #{order.orderId} - Status: {order.status}
+                <button onClick={() => handleDelivered(order.orderId)}>
+                  Delivered
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./landingPage.css";
-import data from "./data.json"
-import {FaTrash, FaPen} from 'react-icons/fa'
+import { FaTrash, FaPen } from 'react-icons/fa'
+import {useForm} from "react-hook-form"
 
 const RestaurantLandingPage = () => {
   const [foods, setFoods] = useState([]);
@@ -10,20 +10,20 @@ const RestaurantLandingPage = () => {
   const [minPrice, setMinPrice] = useState("");
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState("");
+  // const {register} = useform()
 
   const fetchFoods = async () => {
-    // try {
-    //   const response = await fetch("");
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     setFoods(data);
-    //   } else {
-    //     console.error("Failed to fetch data from the database");
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    setFoods(data)
+    try {
+      const response = await fetch("http://localhost:2300/api/v1/products");
+      if (response.ok) {
+        const data = await response.json();
+        setFoods(data.data);
+      } else {
+        console.error("Failed to fetch data from the database");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   useEffect(() => {
     // Simulated API endpoint for fetching data from the database
@@ -54,25 +54,25 @@ const RestaurantLandingPage = () => {
     formData.append("description", desc);
     console.log(formData)
 
-    // try {
-    //   // Simulate API request using fetch or Axios
-    //   const response = await fetch("YOUR_API_ENDPOINT", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
+    try {
+      // Simulate API request using fetch or Axios
+      const response = await fetch("http://localhost:2300/api/v1/products", {
+        method: "POST",
+        body: formData,
+      });
 
-    //   if (response.ok) {
-    //     console.log("Data successfully uploaded to the database");
-    //     // Refetch the updated list of foods
-    //     fetchFoods();
-    //   } else {
-    //     console.error("Failed to upload data to the database");
-    //     // Additional logic or feedback for failure
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    setFoods([...foods, dataForm]);
+      if (response.ok) {
+        alert("Data successfully uploaded to the database");
+        // Refetch the updated list of foods
+        fetchFoods();
+      } else {
+        console.error("Failed to upload data to the database");
+        // Additional logic or feedback for failure
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    // setFoods([...foods, dataForm]);
     console.log(foods)
   };
 
@@ -104,7 +104,12 @@ const RestaurantLandingPage = () => {
   return (
     <div className="restaurant-page-container">
       <h1>Restaurant Admin Page</h1>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        action="/upload"
+        method="POST"
+        encType="multipart/form-data"
+      >
         <label>
           Food Name:
           <input
@@ -175,7 +180,7 @@ const RestaurantLandingPage = () => {
               ></FaPen>
               <FaTrash
                 className="click-order2-icon"
-                 onClick={() => handleDelete(food.id)}
+                onClick={() => handleDelete(food.id)}
               ></FaTrash>
             </div>
           </div>

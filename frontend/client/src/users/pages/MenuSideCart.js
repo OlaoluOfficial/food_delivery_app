@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import data from "../data.json";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function SideCart({ menu, selectedId }) {
@@ -7,43 +7,12 @@ export default function SideCart({ menu, selectedId }) {
   const [selectedFood, setSelectedFood] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
   const [status, setStatus] = useState("");
+  const [res, setRes] = useState("")
+  const navigate = useNavigate();
 
   const handleOfferChange = (event) => {
     setOfferPrice(event.target.value);
   };
-  // const id = selectedFood.menuItems._id;
-  // useEffect(
-  //   function () {
-  //     async function DisplaySelected() {
-  //       const res = await fetch(`http://localhost:5000/api/menu`);
-  //       const data = await res.json();
-  //       console.log(selectedId);
-  //       setSelectedFood(data.menuItems);
-  //     }
-  //     DisplaySelected();
-  //   },
-  //   [selectedId]
-  // );
-  // console.log(selectedFood);
-  // console.log(data)
-
-  // useEffect(() => {
-  //   function check() {
-  //     // console.log(data)
-  //     setAllMenu(menu)
-  //     const selectedItem = allMenu.map((item) => {
-  //       if (item.id === selectedId) {
-  //         setSelectedFood(item);
-  //       }
-  //       if (selectedId === null) {
-  //         setSelectedFood(null);
-  //         setStatus("");
-  //       }
-  //     });
-  //     console.log(selectedItem);
-  //   }
-  //   check();
-  // }, [selectedId]);
 
   useEffect(() => {
     function check() {
@@ -51,7 +20,7 @@ export default function SideCart({ menu, selectedId }) {
       axios
         .get("http://localhost:2300/api/v1/products")
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setAllMenu(response.data.data);
         })
         .catch((error) => {
@@ -67,19 +36,25 @@ export default function SideCart({ menu, selectedId }) {
           setStatus("");
         }
       });
-      console.log(selectedItem);
     }
     check();
   }, [selectedId]);
 
-  const addToCart = (item, price) => {
+  const addToCart = async (item, price) => {
     const cart = { ...item, offeredPrice: price };
-
-    axios.post("http://localhost:2300/api/carts", cart).then((response) => {
-      if (response.status === 201) {
-        setSelectedFood({});
+    try {
+      const response = await axios.post("http://localhost:2300/api/v1/carts", cart)
+        if (response.status === 201) {
+          setSelectedFood({});
+        } else {
+          setRes(response.data.message)
+        }
+    } catch (error) {
+      if (error.response.status === 401) {
+        alert("Please login to your account");
+        navigate("/login");
       }
-    });
+    }
   };
   // console.log(selectedFood);
 
