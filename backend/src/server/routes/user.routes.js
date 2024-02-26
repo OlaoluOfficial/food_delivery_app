@@ -4,4 +4,6 @@ const UserController = require('../controllers/user.controller');
 const AuthMiddleware = require('../middlewares/auth.middleware')
 
 router.get('/getProfile', AuthMiddleware.authenticateUser, UserController.getProfile);
+router.put('/', AuthMiddleware.authenticateUser, UserController.updateUser);
+
 module.exports = router;
