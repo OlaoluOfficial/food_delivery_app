@@ -2,9 +2,9 @@
 import image1 from "../beans-img3.jpg";
 
 function BensCard({ menu, selectedId, setSelectedId }) {
+  console.log(menu)
   function handleClick(id) {
     setSelectedId(id !== selectedId ? id : null);
-    console.log(id);
   }
   return (
     <div className="overall" onClick={() => handleClick(menu.id)}>
@@ -31,7 +31,7 @@ function BensCard({ menu, selectedId, setSelectedId }) {
           }
           onClick={() => handleClick(menu.id)}
         >
-          {menu.id === selectedId ? menu.selected : menu.option}
+          {menu.id === selectedId ? "Food Added" : "Add to Cart"}
         </button>
       </div>
     </div>

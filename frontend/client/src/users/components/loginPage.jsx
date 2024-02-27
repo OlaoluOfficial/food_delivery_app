@@ -1,28 +1,52 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../userContext";
 import loginImg from "../img/login-img.jpg";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+
+const schema = z.object({
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
+});
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [validationError, setValidationError] = useState(null);
   const [loginError, setLoginError] = useState(null);
+  const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
-  async function login(e) {
-    e.preventDefault();
-    const userData = { username, password };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({ resolver: zodResolver(schema) });
 
-    // If data is valid, proceed with the registration logic
-    setValidationError(null);
+  //password toggle function
+  const handleToggle = () => {
+    if (type === "password") {
+      setIcon(<FaEyeSlash className="icons" />);
+      setType("text");
+    } else {
+      setIcon(<FaEye className="icons" />);
+      setType("password");
+    }
+  };
+
+  async function login(data) {
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      const response = await axios.post(
+        "http://localhost:2300/api/v1/auth/login",
+        data
+      );
       if (response.ok) {
         response.json().then((userInfo) => {
           setUserInfo(userInfo);
@@ -31,19 +55,19 @@ function LoginPage() {
         alert("Login successful!");
         navigate("/");
         // Reset the form and clear input fields
-        setUsername("");
-        setPassword("");
-        setValidationError("");
         setLoginError("");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.error); // Display the error message sent by the server
+        alert(data.data.message); // Display the error message sent by the server
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      if (error.response.status == 400) {
+        setLoginError(error.response.data.msg); // Set the registration error message
+      } else {
+        setLoginError("An error occurred, please try again later");
+      }
       // Handle other errors (e.g., network error)
-      setLoginError("An error occurred during login. Please try again later."); // Set the registration error message
     }
   }
   return (
@@ -52,27 +76,44 @@ function LoginPage() {
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
-        <form onSubmit={login} className="login-container">
+        <form onSubmit={handleSubmit(login)} className="login-container">
           <h2 className="log">Login 🔐</h2>
-          <input
-            className="input-name"
-            type="text"
-            placeholder="username"
-            value={username}
-            id="logIn"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            className="input-password"
-            type="password"
-            id="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {validationError && <span className="error">{validationError}</span>}
-          {loginError && <span className="error">{loginError}</span>}
-          <button className="btnLog">Login</button>
+          <div>
+            <input
+              className="input-name"
+              type="text"
+              placeholder="Username"
+              id="logIn"
+              {...register("username")}
+            />
+            {errors.username && (
+              <p className="error">{errors.username.message}</p>
+            )}
+          </div>
+          <div className="Password-input-container">
+            <input
+              className="input-password"
+              type={type}
+              id="password"
+              placeholder="Password"
+              {...register("password")}
+            />
+            {icon && <div onClick={handleToggle}>{icon}</div>}
+            <div>
+              {errors.password && (
+                <p className="error password-error">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+          </div>
+          {loginError && (
+            <span className="error password-error">{loginError}</span>
+          )}
+          {/* <button disabled={!isValid} type="submit" className={ isValid ? "btnLog" : "btnLog2" }>Login</button> */}
+          <button type="submit" className="btnLog">
+            Login
+          </button>
           <p className="register-question">
             Don't have an account? <span className="reg-arrow">⤵</span>
           </p>
