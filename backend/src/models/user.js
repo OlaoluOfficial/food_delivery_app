@@ -25,9 +25,9 @@ const userSchema = new Schema({
     enum: ['customer', 'restaurant', 'admin', 'delivery'], 
     required: true 
   },
-  registrationNo:{
-    type: String, 
-    default:""
+  address: { 
+    type:String,
+    required: true
   }
 },
 {
