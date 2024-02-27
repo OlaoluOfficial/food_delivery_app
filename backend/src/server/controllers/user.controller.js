@@ -1,16 +1,15 @@
 const User = require('../../models/user');
-const bcrypt = require('bcryptjs')
 
 class UserController {
-  static async createUser(req, res) {
+  static async getProfile(req, res) {
     try {
-      const { username, password, email, phone } = req.body;
+      const user = await User.findById(req.user.id).select('-password');
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({username, hashedPassword, email, phone});
-
-      await newUser.save();
-      res.status(201).json({ status: 200, message: "User created successfully", data: newUser });
+      if (!user) {
+        return res.status(404).json({ msg: 'User profile not found' });
+      }
+  
+      res.json(user);
     } catch (error) {
       return new Error('Could not create user')
     }

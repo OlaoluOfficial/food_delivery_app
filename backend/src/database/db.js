@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async () => {
+  const url = process.env.ATLAS_DATABASE;
   try {
     await mongoose.connect(
-      "mongodb://localhost:27017/your-database-namemongodb+srv://k2law:lawlund%40k2law@cluster0.zkjwxrb.mongodb.net/FoodDeliveryService",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
+      "mongodb+srv://k2law:lawlund%40k2law@cluster0.zkjwxrb.mongodb.net/FoodDeliveryService"
     );
     console.log("Connected to MongoDB");
   } catch (error) {
