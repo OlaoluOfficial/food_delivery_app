@@ -10,6 +10,8 @@ const authRoutes = require("./server/routes/auth.routes");
 const connectDB = require("./database/db");
 const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
+const cartRoutes = require("./server/routes/cart.routes")
+
 
 const app = express();
 
@@ -39,10 +41,12 @@ app.use(
   express.static(path.join(__dirname, "Products_Images"))
 );
 app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/auth", authRoutes);
-app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/products', productRoutes);
+
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/orders', orderRoutes)
+app.use('/api/v1/products', productRoutes)
+app.use('/api/v1/carts', cartRoutes)
 
 const { lookup } = require("dns").promises;
 const os = require("os");

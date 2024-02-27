@@ -4,7 +4,7 @@ const Restaurant = require("../../models/restaurant");
 
 const DeleteRestaurant = async (req, res) => {
   const restaurantId = req.params.id;
-  console.log(restaurantId);
+//   console.log(restaurantId);
   try {
     const restaurant = await Restaurant.findById({ _id: restaurantId });
 

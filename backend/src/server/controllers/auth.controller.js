@@ -4,15 +4,15 @@ const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
 require("dotenv").config();
 
-function generateRandomRegistrationNumber(length) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let registrationNumber = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    registrationNumber += characters.charAt(randomIndex);
-  }
-  return registrationNumber;
-}
+// function generateRandomRegistrationNumber(length) {
+//   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//   let registrationNumber = "";
+//   for (let i = 0; i < length; i++) {
+//     const randomIndex = Math.floor(Math.random() * characters.length);
+//     registrationNumber += characters.charAt(randomIndex);
+//   }
+//   return registrationNumber;
+// }
 class AuthController {
   static async register(req, res) {
     try {

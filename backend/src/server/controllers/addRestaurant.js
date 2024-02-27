@@ -1,5 +1,5 @@
 const Restaurant = require("../../models/restaurant");
-const errorHandler = require("../middlewares/handleError");
+// const errorHandler = require("../middlewares/handleError");
 
 const addRestaurant = async (req, res) => {
     try {
