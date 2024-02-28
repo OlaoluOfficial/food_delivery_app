@@ -28,7 +28,7 @@ const SuperAdminPage = () => {
 
   const fetchAdmin = async () => {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/restaurants");
+      const response = await fetch("http://localhost:2300/api/v1/allrestaurants");
       if (response.ok) {
         const data = await response.json();
         setAdmin(data);
@@ -58,7 +58,7 @@ const SuperAdminPage = () => {
 
   const handleAddRestaurant = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/restaurants", {
+      const response = await fetch("http://localhost:5000/api/v1/createrestaurants", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
@@ -86,7 +86,7 @@ const SuperAdminPage = () => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/restaurants/${Id}`,
+        `http://localhost:2300/api/v1/deleterestaurants/${Id}`,
         {
           method: "DELETE",
         }

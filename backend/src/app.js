@@ -40,10 +40,12 @@ app.use(
   express.static(path.join(__dirname, "Products_Images"))
 );
 app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
+
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
-app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/products', productRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/carts", cartRoutes);
 
 const { lookup } = require("dns").promises;
 const os = require("os");
@@ -53,7 +55,7 @@ app.enable("trust proxy");
 app.use("/api/v1/carts", cartRoutes);
 app.use("/api/v1/products", productRoutes);
 
-app.use((err, req, res,next) => {
+app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     // A Multer error occurred during file upload
     console.log(err.code);
