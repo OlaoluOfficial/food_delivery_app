@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['placed', 'confirmed', 'in_progress', 'delivered', 'cancelled'],
+    enum: ['placed', 'confirmed', 'delivered'],
     default: 'placed',
   },
   price: {
@@ -42,6 +42,14 @@ const orderSchema = new mongoose.Schema({
     type: Date, 
     default: Date.now 
   },
+  restaurantEmail: {
+    type: String,
+    required: true
+  },
+  customerEmail: {
+    type: String,
+    required: true
+  }
 });
 
 const Order = mongoose.model('Order', orderSchema);

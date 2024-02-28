@@ -1,5 +1,5 @@
 const Order = require('../../models/order');
-
+const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
     try {
@@ -8,10 +8,12 @@ class OrderController {
         price,
         customerName,
         customerAddress,
+        customerEmail,
         customerPhoneNumber,
         restaurantName,
         restaurantAddress,
         restaurantPhoneNumber,
+        restaurantEmail,
       } = req.body;
 
       // Create a new order instance
@@ -20,10 +22,12 @@ class OrderController {
         price,
         customerName,
         customerAddress,
+        customerEmail,
         customerPhoneNumber,
         restaurantName,
         restaurantAddress,
         restaurantPhoneNumber,
+        restaurantEmail,
       });
 
       // Save the order to the database
@@ -71,7 +75,7 @@ class OrderController {
       const updateData = req.body;
 
       const updatedOrder = await Order.findOneAndUpdate(
-        { orderId: orderId },
+        { _id: orderId },
         updateData,
         { new: true }
       );
@@ -79,6 +83,15 @@ class OrderController {
       if (!updatedOrder) {
         return res.status(404).json({ message: 'Order not found' });
       }
+
+      const mailOptions = {
+        from: 'olaoluofficial@gmail.com',
+        to: [updatedOrder.customerEmail, updatedOrder.restaurantEmail],
+        subject: 'Order Updated',
+        text: `Your order with ID ${updatedOrder.id} has been updated.`,
+      };
+
+      sendEmailNotification(mailOptions);
 
       res.status(200).json(updatedOrder);
     } catch (err) {
