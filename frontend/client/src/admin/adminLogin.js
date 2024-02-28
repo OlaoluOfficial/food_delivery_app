@@ -114,8 +114,6 @@ function AdminLoginPage() {
           <button type="submit" className="btnLog">
             Login
           </button>
-
-
         </form>
       </div>
     </div>

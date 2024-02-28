@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./superAdmin.css";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaXmark } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
@@ -15,8 +16,10 @@ const schema = z.object({
 
 const SuperAdminPage = () => {
   const [admin, setAdmin] = useState([]);
-
+  const [modalOpen2, setModalOpen2] = useState(false);
   const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -43,6 +46,15 @@ const SuperAdminPage = () => {
 
     fetchAdmin();
   }, []);
+
+  const openModal2 = (id) => {
+    setSelectedId(id);
+    setModalOpen2(true);
+  };
+  const closeModal2 = () => {
+    setSelectedId("");
+    setModalOpen2(false);
+  };
 
   const handleAddRestaurant = async (data) => {
     try {
@@ -83,6 +95,8 @@ const SuperAdminPage = () => {
       if (response.ok) {
         console.log("Data successfully deleted from the database");
         // Refetch the updated list of foods
+          setSelectedId("");
+          closeModal2();
         fetchAdmin();
       } else {
         console.error("Failed to delete data from the database");
@@ -150,11 +164,41 @@ const SuperAdminPage = () => {
               <div className="click-order3">
                 <FaTrash
                   className="click-order3-icon"
-                  onClick={() => handleDelete(e.id)}
+                  onClick={() => openModal2(e.id)}
                 ></FaTrash>
               </div>
             </div>
           ))}
+          <div className="modal-container">
+            <Modal
+              isOpen={modalOpen2}
+              onRequestClose={closeModal2}
+              className="modal2"
+            >
+              <FaXmark
+                className="modal-icon"
+                onClick={() => setModalOpen2(false)}
+              />
+              <h3>Delete Product</h3>
+              <p>Are you sure you want to delete this item?</p>
+
+              <div className="btn-chamber2">
+                <button
+                  className="modal-button cnfm"
+                  type="submit"
+                  onClick={() => handleDelete(selectedId)}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="modal-button"
+                  onClick={() => setModalOpen2(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </Modal>
+          </div>
         </div>
       </div>
     </>
