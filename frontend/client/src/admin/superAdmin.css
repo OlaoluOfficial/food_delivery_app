@@ -1,5 +1,6 @@
 .restaurant-page-container {
   background-color: #fff2e8;
+  min-height: 100vh;
 }
 
 .main-course3 {
@@ -77,5 +78,17 @@
   color: #fff;
   border-radius: 5px;
   margin-top: 1rem;
+  cursor: pointer;
+  /* right: 38px; */
+}
+
+.addAdmin-btn2 {
+  background-color: #efbd80;
+  border: none;
+  padding: 10px;
+  color: #fff;
+  border-radius: 5px;
+  margin-top: 1rem;
+  cursor: pointer;
   /* right: 38px; */
 }

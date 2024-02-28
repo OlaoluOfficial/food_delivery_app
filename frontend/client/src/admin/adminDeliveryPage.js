@@ -6,16 +6,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
-  restaurantName: z.string().min(2),
-  restaurantLocation: z.string().min(2),
-  restaurantEmail: z.string().min(2),
-  restaurantTel: z.number().min(2),
-  restaurantDescription: z.string().min(2),
+  name: z.string().min(2),
+  tel: z.number().min(1000000000),
+  email: z.string().min(2),
 });
 
-const SuperAdminPage = () => {
-  const [admin, setAdmin] = useState([]);
-
+const AdminDeliveryPage = () => {
+  const [delivery, setDelivery] = useState([]);
   const [error, setError] = useState("");
   const {
     register,
@@ -23,12 +20,14 @@ const SuperAdminPage = () => {
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const fetchAdmin = async () => {
+  //fetch delivery personnel data
+
+  const fetchDelivery = async () => {
     try {
       const response = await fetch("http://localhost:2300/api/v1/restaurants");
       if (response.ok) {
         const data = await response.json();
-        setAdmin(data);
+        setDelivery(data);
       } else {
         setError("Failed to fetch data from the database");
         console.error("Failed to fetch data from the database");
@@ -41,10 +40,11 @@ const SuperAdminPage = () => {
   useEffect(() => {
     // Simulated API endpoint for fetching data from the database
 
-    fetchAdmin();
+    fetchDelivery();
   }, []);
 
-  const handleAddRestaurant = async (data) => {
+  //post request for adding a delivery person
+  const handleAddDelivery = async (data) => {
     try {
       const response = await fetch("http://localhost:5000/api/v1/restaurants", {
         method: "POST",
@@ -55,7 +55,7 @@ const SuperAdminPage = () => {
       if (response.ok) {
         response.json().then(alert("Registration successful!"));
         // Registration successful, show success message or redirect to another page
-        fetchAdmin();
+        fetchDelivery();
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
@@ -68,13 +68,11 @@ const SuperAdminPage = () => {
     }
   };
 
-  //post request for adding a delivery person
-
   const handleDelete = async (Id) => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/restaurants/${Id}`,
+        `http://localhost:2300/api/v1/delivery/${Id}`,
         {
           method: "DELETE",
         }
@@ -83,7 +81,7 @@ const SuperAdminPage = () => {
       if (response.ok) {
         console.log("Data successfully deleted from the database");
         // Refetch the updated list of foods
-        fetchAdmin();
+        fetchDelivery();
       } else {
         console.error("Failed to delete data from the database");
         // Additional logic or feedback for failure
@@ -97,32 +95,22 @@ const SuperAdminPage = () => {
     <>
       <div className="restaurant-page-container">
         <h1>Super Admin Page</h1>
-        <form onSubmit={handleSubmit(handleAddRestaurant)}>
+        <form onSubmit={handleSubmit(handleAddDelivery)}>
           <label>
-            Restaurant Name:
-            <input type="text" {...register("restaurantName")} />
+            Full Name:
+            <input type="text" {...register("name")} />
           </label>
           <br />
           <label>
-            Restaurant Location:
-            <input type="text" {...register("restaurantLocation")} />
+            Email:
+            <input type="email" {...register("email")} />
           </label>
           <br />
           <label>
-            Restaurant Description:
-            <input type="text" {...register("restaurantDescription")} />
-          </label>
-          <br />
-          <label>
-            Restaurant Email:
-            <input type="email" {...register("restaurantEmail")} />
-          </label>
-          <br />
-          <label>
-            Restaurant Tel:
+            Phone Number:
             <input
               type="number"
-              {...register("restaurantTel", { valueAsNumber: true })}
+              {...register("tel", { valueAsNumber: true })}
             />
           </label>
           <br />
@@ -133,20 +121,18 @@ const SuperAdminPage = () => {
             className={isValid ? "addAdmin-btn" : "addAdmin-btn2"}
             // className="addAdmin-btn"
           >
-            Add Restaurant
+            Submit
           </button>
         </form>
-
-        <h2>Previously Uploaded Admins:</h2>
+        <h2>Previously Uploaded Delivery Persons:</h2>
         <div className="main-course3">
-          {admin.map((e) => (
+          {delivery.map((e) => (
             <div className="overall3">
               <h4 className="dish-name3">{e.name}</h4>
               <div className="description3">
                 <p>{e.email}</p>
                 <p>{e.tel}</p>
               </div>
-              <p className="admin-loc">{e.location}</p>
               <div className="click-order3">
                 <FaTrash
                   className="click-order3-icon"
@@ -161,4 +147,4 @@ const SuperAdminPage = () => {
   );
 };
 
-export default SuperAdminPage;
+export default AdminDeliveryPage;
