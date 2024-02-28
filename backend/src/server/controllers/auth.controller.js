@@ -75,6 +75,36 @@ class AuthController {
       return res.status(500).send("Server Error");
     }
   }
+
+  static async  changePassword (req, res) {
+    const userId = req.user._id;
+    const value = req.body;
+        
+    try {
+      const userExist = await User.findById({ _id: userId });
+      // console.log(userExist);
+      let verifyPassword = await bcrypt.compare(
+        value.currentPassword,
+        userExist.password
+      );
+      if (verifyPassword) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(value.newPassword, salt);
+        const restaurant = await User.findByIdAndUpdate(
+          { _id: userId },
+          // { password: value.currentPassword },
+          { password: hashedPassword },
+          { new: true }
+        );
+        if(restaurant)
+        return res.status(201).json({ message: "Password changed successfully" });
+      } else  return res.status(403).json({ message: "Current password is incorrect" });
+    } catch (error) {
+      console.log(error);
+     return res.status(417).json({ Error: error });
+    }
+  }
+  
 }
 
 module.exports = AuthController;
