@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./landingPage.css";
-import { FaTrash, FaPen } from "react-icons/fa";
-import { useForm } from "react-hook-form";
 import { FaTrash, FaPen, FaXmark } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import Modal from "react-modal";
@@ -78,42 +76,33 @@ const RestaurantLandingPage = () => {
 
   const handleSubmits = async (e) => {
     e.preventDefault();
-    const dataForm = {
-      name: foodName,
-      price: price,
-      minimumPrice: minPrice,
-      image: image,
-      description: desc,
-    };
-    // Simulated API endpoint for uploading data to the database
-    const formData = new FormData();
-    formData.append("name", foodName);
-    formData.append("price", price);
-    formData.append("minimumPrice", minPrice);
-    formData.append("image", image);
-    formData.append("description", desc);
-    console.log(formData);
 
-    try {
-      // Simulate API request using fetch or Axios
-      const response = await fetch("http://localhost:2300/api/v1/products", {
-        method: "POST",
-        body: formData,
-      });
+    if (foodName || price || image || desc || minPrice == "" || 0) {
+      setError("Please fill out all input fields");
+    } else {
+      const dataForm = {
+        name: foodName,
+        price: price,
+        minimumPrice: minPrice,
+        image: image,
+        description: desc,
+      };
+      // Simulated API endpoint for uploading data to the database
+      const formData = new FormData();
+      formData.append("name", foodName);
+      formData.append("price", price);
+      formData.append("minimumPrice", minPrice);
+      formData.append("image", image);
+      formData.append("description", desc);
+      console.log(formData);
 
-    //   if (response.ok) {
-    //     alert("Data successfully uploaded to the database");
-    //     // Refetch the updated list of foods
-    //     fetchFoods();
-    //   } else {
-    //     console.error("Failed to upload data to the database");
-    //     // Additional logic or feedback for failure
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    // // setFoods([...foods, dataForm]);
-    // console.log(foods);
+      try {
+        // Simulate API request using fetch or Axios
+        const response = await fetch("http://localhost:2300/api/v1/products", {
+          method: "POST",
+          body: formData,
+        });
+
         if (response.ok) {
           alert(response.data.message);
           // Refetch the updated list of foods
@@ -217,7 +206,7 @@ const RestaurantLandingPage = () => {
               <legend className="legend">Menu Manager</legend>
               <form
                 className="form"
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmits}
                 action="/upload"
                 method="POST"
                 encType="multipart/form-data"
@@ -263,6 +252,7 @@ const RestaurantLandingPage = () => {
                     onChange={handleImageChange}
                   />
                 </ul>
+                {error && <p className="error">{error}</p>}
                 <button className="submit-btn" type="submit">
                   <svg
                     className="submit-icon"
@@ -309,15 +299,107 @@ const RestaurantLandingPage = () => {
               <div className="click-order2">
                 <FaPen
                   className="click-order2-icon"
-                  onClick={() => handleEdit(food)}
+                  onClick={() => openModal(food)}
                 ></FaPen>
                 <FaTrash
                   className="click-order2-icon"
-                  onClick={() => handleDelete(food.id)}
+                  onClick={() => openModal2(food.id)}
                 ></FaTrash>
               </div>
             </div>
           ))}
+          <div className="modal-container">
+            <Modal
+              isOpen={modalOpen}
+              onRequestClose={closeModal}
+              className="modal"
+            >
+              <FaXmark
+                className="modal-icon"
+                onClick={() => setModalOpen(false)}
+              />
+              <h3>Edit Product</h3>
+              <form onSubmit={handleSubmit(handleEdit)} className="modal-form">
+                <input
+                  className="modal-input"
+                  type="text"
+                  value={selectedItem.name}
+                  readOnly
+                />
+                <br />
+                <input
+                  className="modal-input"
+                  type="text"
+                  placeholder="Description"
+                  {...register("description")}
+                />
+                <br />
+                <input
+                  className="modal-input"
+                  type="number"
+                  placeholder="Price"
+                  {...register("price", { valueAsNumber: true })}
+                />
+                <br />
+                <input
+                  className="modal-input"
+                  type="number"
+                  placeholder="Minimum Price"
+                  {...register("minimumPrice", { valueAsNumber: true })}
+                />
+                {updateError && <p className="error">{updateError}</p>}
+
+                <div className="btn-chamber">
+                  <button
+                    disabled={!isValid}
+                    className={
+                      isValid ? "modal-button cnfm" : "modal-button cnfm2"
+                    }
+                    type="submit"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="modal-button"
+                    onClick={() => setModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </Modal>
+          </div>
+
+          <div className="modal-container">
+            <Modal
+              isOpen={modalOpen2}
+              onRequestClose={closeModal2}
+              className="modal2"
+            >
+              <FaXmark
+                className="modal-icon"
+                onClick={() => setModalOpen2(false)}
+              />
+              <h3>Delete Product</h3>
+              <p>Are you sure you want to delete this item?</p>
+
+              <div className="btn-chamber2">
+                <button
+                  className="modal-button cnfm"
+                  type="submit"
+                  onClick={() => handleDelete(selectedId)}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="modal-button"
+                  onClick={() => setModalOpen2(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </Modal>
+          </div>
         </div>
       </section>
     </div>

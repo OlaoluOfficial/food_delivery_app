@@ -150,7 +150,7 @@ const DeliveryPersonnelPage = () => {
                     </div>
                   </div>
                   <button onClick={() => handleAcceptOrder(order.orderId)}>
-                   { order.status == "Accepted" ? "Delivered Order" : "Accept Order"}
+                   Accept Order
                   </button>
                   <button onClick={() => handleCancel(order.orderId)}>
                     Cancel
