@@ -89,7 +89,7 @@
   border-radius: 15px;
   margin: 5rem auto;
   padding: 2rem 4rem;
-  height: 30vh;
+  height: 33vh;
   position: relative;
   background-color: #fff2e8;
 }
@@ -145,5 +145,11 @@
 .cnfm{
   border: none;
   background-color: #fd7e14;
+  color: #fff;
+}
+
+.cnfm2{
+  border: none;
+  background-color: #deb887;
   color: #fff;
 }

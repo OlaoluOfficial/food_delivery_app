@@ -7,12 +7,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters." }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+  description: z.string(),
+  price: z.number(),
+  minimumPrice: z.number(),
 });
 
 const RestaurantLandingPage = () => {
@@ -27,6 +24,7 @@ const RestaurantLandingPage = () => {
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
+  const [updateError, setUpdateError] = useState("");
 
   const {
     register,
@@ -78,42 +76,46 @@ const RestaurantLandingPage = () => {
 
   const handleSubmits = async (e) => {
     e.preventDefault();
-    const dataForm = {
-      name: foodName,
-      price: price,
-      minimumPrice: minPrice,
-      image: image,
-      description: desc,
-    };
-    // Simulated API endpoint for uploading data to the database
-    const formData = new FormData();
-    formData.append("name", foodName);
-    formData.append("price", price);
-    formData.append("minimumPrice", minPrice);
-    formData.append("image", image);
-    formData.append("description", desc);
-    console.log(formData);
 
-    try {
-      // Simulate API request using fetch or Axios
-      const response = await fetch("http://localhost:2300/api/v1/products", {
-        method: "POST",
-        body: formData,
-      });
+    if (foodName || price || image || desc || minPrice == "" || 0) {
+      setError("Please fill out all input fields");
+    } else {
+      const dataForm = {
+        name: foodName,
+        price: price,
+        minimumPrice: minPrice,
+        image: image,
+        description: desc,
+      };
+      // Simulated API endpoint for uploading data to the database
+      const formData = new FormData();
+      formData.append("name", foodName);
+      formData.append("price", price);
+      formData.append("minimumPrice", minPrice);
+      formData.append("image", image);
+      formData.append("description", desc);
+      console.log(formData);
 
-      if (response.ok) {
-        alert("Data successfully uploaded to the database");
-        // Refetch the updated list of foods
-        fetchFoods();
-      } else {
-        console.error("Failed to upload data to the database");
-        // Additional logic or feedback for failure
+      try {
+        // Simulate API request using fetch or Axios
+        const response = await fetch("http://localhost:2300/api/v1/products", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert(response.data.message);
+          // Refetch the updated list of foods
+          fetchFoods();
+        } else {
+          setError("Failed to upload data to the database");
+          // console.error("Failed to upload data to the database");
+          // Additional logic or feedback for failure
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
-    // setFoods([...foods, dataForm]);
-    console.log(foods);
   };
 
   const handleDelete = async (foodId) => {
@@ -127,14 +129,12 @@ const RestaurantLandingPage = () => {
       );
 
       if (response.ok) {
-        console.log("Data successfully deleted from the database");
         setSelectedId("");
         closeModal2();
         // Refetch the updated list of foods
         fetchFoods();
       } else {
-        console.error("Failed to delete data from the database");
-        // Additional logic or feedback for failure
+        alert("Something went wrong, Please try again later");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -160,6 +160,7 @@ const RestaurantLandingPage = () => {
         // Refetch the updated list of foods
         fetchFoods();
       } else {
+        setUpdateError("Something went wrong, Please try again later")
         console.error("Failed to upload data to the database");
         // Additional logic or feedback for failure
       }
@@ -218,6 +219,7 @@ const RestaurantLandingPage = () => {
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </label>
         <br />
+        {error && <p className="error">{error}</p>}
         <button type="submit">Submit</button>
       </form>
 
@@ -282,21 +284,25 @@ const RestaurantLandingPage = () => {
                 className="modal-input"
                 type="number"
                 placeholder="Price"
-                {...register("price")}
+                {...register("price", { valueAsNumber: true })}
               />
               <br />
               <input
                 className="modal-input"
                 type="number"
                 placeholder="Minimum Price"
-                {...register("minimumPrice")}
+                {...register("minimumPrice", { valueAsNumber: true })}
               />
-              {error && (
-                <p className="error">{error}</p>
-              )}
+              {updateError && <p className="error">{updateError}</p>}
 
               <div className="btn-chamber">
-                <button className="modal-button cnfm" type="submit">
+                <button
+                  disabled={!isValid}
+                  className={
+                    isValid ? "modal-button cnfm" : "modal-button cnfm2"
+                  }
+                  type="submit"
+                >
                   Confirm
                 </button>
                 <button

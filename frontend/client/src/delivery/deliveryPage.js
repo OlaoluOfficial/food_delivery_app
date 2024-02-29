@@ -4,6 +4,7 @@ import axios from "axios";
 const DeliveryPersonnelPage = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
+  const [availableOrder, setAvailableOrder] = useState([]);
   const [acceptedOrder, setAcceptedOrder] = useState([]);
   const [deliveredOrder, setDeliveredOrder] = useState([]);
 
@@ -19,6 +20,11 @@ const DeliveryPersonnelPage = () => {
       const actualData = data.data;
       setOrders(actualData);
 
+
+       const updateAvailableOrder = actualData.filter(
+         (item) => item.status == "Available"
+       );
+      setAvailableOrder(updateAvailableOrder);
       // set accepted orders state
       const updateAcceptedOrder = actualData.filter(
         (item) => item.status == "Accepted"
@@ -101,17 +107,17 @@ const DeliveryPersonnelPage = () => {
     } catch (error) {
       console.error("Error accepting order:", error);
     }
-    setSelectedOrder(null); // Reset the selected order
+    // setSelectedOrder(null); // Reset the selected order
   };
 
   return (
     <div>
       <h2>Delivery Personnel Page</h2>
       <ul>
-        {orders.map((order) => (
+        {availableOrder.map((order) => (
           <li key={order.orderId}>
             Order #{order.orderId} - Status: {order.status}
-            <button onClick={() => handleSelection(order)}>Accept</button>
+            <button onClick={() => handleSelection(order)}>View</button>
           </li>
         ))}
       </ul>
@@ -124,7 +130,7 @@ const DeliveryPersonnelPage = () => {
               <div>
                 <div className="selectedOrder">
                   <div className="selectedOrder-header">
-                    <p>Order #{order.id}</p>
+                    <p>Order #{order.orderId}</p>
                     <p>Status: {order.status}</p>
                   </div>
                   <div className="selectedOrder-details">
@@ -144,7 +150,7 @@ const DeliveryPersonnelPage = () => {
                     </div>
                   </div>
                   <button onClick={() => handleAcceptOrder(order.orderId)}>
-                    Accept Order
+                   { order.status == "Accepted" ? "Delivered Order" : "Accept Order"}
                   </button>
                   <button onClick={() => handleCancel(order.orderId)}>
                     Cancel

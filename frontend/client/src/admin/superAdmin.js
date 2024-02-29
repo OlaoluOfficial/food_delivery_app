@@ -17,8 +17,8 @@ const schema = z.object({
 const SuperAdminPage = () => {
   const [admin, setAdmin] = useState([]);
   const [modalOpen2, setModalOpen2] = useState(false);
-  const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState("");
+  const [error, setError] = useState("");
 
   const {
     register,
@@ -28,10 +28,14 @@ const SuperAdminPage = () => {
 
   const fetchAdmin = async () => {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/allrestaurants");
+      const response = await fetch(
+        "http://localhost:2300/api/v1/allrestaurants"
+      );
       if (response.ok) {
         const data = await response.json();
-        setAdmin(data);
+        console.log(data);
+        setAdmin(data.restaurants);
+        console.log(admin);
       } else {
         setError("Failed to fetch data from the database");
         console.error("Failed to fetch data from the database");
@@ -58,12 +62,15 @@ const SuperAdminPage = () => {
 
   const handleAddRestaurant = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/createrestaurants", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:2300/api/v1/createrestaurants",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         response.json().then(alert("Registration successful!"));
         // Registration successful, show success message or redirect to another page
@@ -71,12 +78,14 @@ const SuperAdminPage = () => {
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        alert(data.error); // Display the error message sent by the server
+        setError(data.response);
+        // alert(data.restaurant.error); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle other errors (e.g., network error)
-      setError("An error occurred during login. Please try again later."); // Set the registration error message
+      // alert(error.response);
+      setError("An error occurred during creation. Please try again later."); // Set the registration error message
     }
   };
 
@@ -86,7 +95,7 @@ const SuperAdminPage = () => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/deleterestaurants/${Id}`,
+        `http://localhost:2300/api/v1/deleterestaurant/${Id}`,
         {
           method: "DELETE",
         }
@@ -95,11 +104,12 @@ const SuperAdminPage = () => {
       if (response.ok) {
         console.log("Data successfully deleted from the database");
         // Refetch the updated list of foods
-          setSelectedId("");
-          closeModal2();
+        setSelectedId("");
+        closeModal2();
         fetchAdmin();
       } else {
         console.error("Failed to delete data from the database");
+        alert("Something went wrong, Please try again later");
         // Additional logic or feedback for failure
       }
     } catch (error) {
@@ -141,6 +151,7 @@ const SuperAdminPage = () => {
           </label>
           <br />
 
+          {error && <p className="error">{error}</p>}
           <button
             disabled={!isValid}
             type="submit"
@@ -164,7 +175,7 @@ const SuperAdminPage = () => {
               <div className="click-order3">
                 <FaTrash
                   className="click-order3-icon"
-                  onClick={() => openModal2(e.id)}
+                  onClick={() => openModal2(e._id)}
                 ></FaTrash>
               </div>
             </div>
@@ -181,7 +192,7 @@ const SuperAdminPage = () => {
               />
               <h3>Delete Product</h3>
               <p>Are you sure you want to delete this item?</p>
-
+              
               <div className="btn-chamber2">
                 <button
                   className="modal-button cnfm"

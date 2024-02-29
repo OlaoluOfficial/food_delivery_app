@@ -43,7 +43,7 @@ function FPPage() {
   async function login(data) {
     try {
       const response = await axios.post(
-        "http://localhost:2300/api/v1/auth/login",
+        "http://localhost:2300/api/v1/auth/changepassword",
         data
       );
       if (response.ok) {
@@ -51,8 +51,8 @@ function FPPage() {
           setUserInfo(userInfo);
         });
         // Registration successful, show success message or redirect to another page
-        alert("Login successful!");
-        navigate("/restaurant");
+        alert("Password change successful!");
+        navigate("/admin/login");
         // Reset the form and clear input fields
         setLoginError("");
       } else {
