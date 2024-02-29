@@ -18,7 +18,15 @@ const restaurantSchema = new Schema({
   registeredBy: {
     type: String,
     default:'admin'
-    }
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
 },
 {
   timestamps: true // Automatically add createdAt and updatedAt properties

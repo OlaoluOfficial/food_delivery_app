@@ -1,4 +1,6 @@
 const Order = require('../../models/order');
+const User = require('../../models/user');
+const Restaurant = require('../../models/restaurant');
 const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
@@ -6,28 +8,16 @@ class OrderController {
       const {
         product,
         price,
-        customerName,
-        customerAddress,
-        customerEmail,
-        customerPhoneNumber,
-        restaurantName,
-        restaurantAddress,
-        restaurantPhoneNumber,
-        restaurantEmail,
+        customer,
+        restaurant,
       } = req.body;
 
-      // Create a new order instance
+      
       const order = new Order({
         product,
         price,
-        customerName,
-        customerAddress,
-        customerEmail,
-        customerPhoneNumber,
-        restaurantName,
-        restaurantAddress,
-        restaurantPhoneNumber,
-        restaurantEmail,
+        customer,
+        restaurant,
       });
 
       // Save the order to the database
@@ -45,9 +35,7 @@ class OrderController {
   static async getAllOrders(req, res) {
     try {
       const orders = await Order.find({});
-      res
-        .status(200)
-        .json({ message: 'Orders fetched successfully', data: orders });
+      res.status(200).json({ message: 'Orders fetched successfully', data: orders });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -83,12 +71,19 @@ class OrderController {
       if (!updatedOrder) {
         return res.status(404).json({ message: 'Order not found' });
       }
+      const customer = await User.findOne({
+        _id: updatedOrder.customer
+      })
+
+      const restaurant = await Restaurant.findOne({
+        _id: updatedOrder.restaurant
+      })
 
       const mailOptions = {
         from: 'olaoluofficial@gmail.com',
-        to: [updatedOrder.customerEmail, updatedOrder.restaurantEmail],
+        to: [customer.email, restaurant.email],
         subject: 'Order Updated',
-        text: `Your order with ID ${updatedOrder.id} has been updated.`,
+        text: `Your order with ID ${updatedOrder.id} has been updated to "${updateData.status.toUpperCase()}".`,
       };
 
       sendEmailNotification(mailOptions);

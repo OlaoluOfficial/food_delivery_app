@@ -1,16 +1,9 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  customerName: { 
-    type: String, 
-    required: true 
-  },
-  customerAddress: { 
-    type: String, 
-    required: true 
-  },
-  customerPhoneNumber: { 
-    type: String, 
+  customer: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
     required: true 
   },
   product: { 
@@ -26,30 +19,15 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  restaurantName: {
-    type: String,
-    required: true 
-  },
-  restaurantAddress: { 
-    type: String, 
-    required: true 
-  },
-  restaurantPhoneNumber: { 
-    type: String, 
+  restaurant: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Restaurant', 
     required: true 
   },
   orderTime: { 
     type: Date, 
     default: Date.now 
   },
-  restaurantEmail: {
-    type: String,
-    required: true
-  },
-  customerEmail: {
-    type: String,
-    required: true
-  }
 });
 
 const Order = mongoose.model('Order', orderSchema);

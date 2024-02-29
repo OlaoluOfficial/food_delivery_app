@@ -22,8 +22,8 @@ const userSchema = new Schema({
   },
   role: { 
     type: String, 
-    enum: ['customer', 'restaurant', 'admin', 'delivery'], 
-    required: true 
+    enum: ['customer', 'restaurant', 'admin', 'delivery'],
+    default: 'customer',
   },
   address: { 
     type:String,
@@ -31,7 +31,7 @@ const userSchema = new Schema({
   }
 },
 {
-  timestamps: true 
+  timestamps: true
 });
 
 const User = model('User', userSchema);

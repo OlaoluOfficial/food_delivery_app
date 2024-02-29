@@ -52,10 +52,14 @@ class AuthController {
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
+      }
+      if (user.role == 'restaurant') {
+        if (password === '123456789') {
+          return res.status(419).json({ msg: "Please change your password!"})
+        }
       }
       const payload = {
         user: {
@@ -76,8 +80,8 @@ class AuthController {
     }
   }
 
-  static async  changePassword (req, res) {
-    const userId = req.user._id;
+  static async changePassword (req, res) {
+    const userId = req.user.id;
     const value = req.body;
         
     try {
@@ -92,7 +96,6 @@ class AuthController {
         const hashedPassword = await bcrypt.hash(value.newPassword, salt);
         const restaurant = await User.findByIdAndUpdate(
           { _id: userId },
-          // { password: value.currentPassword },
           { password: hashedPassword },
           { new: true }
         );
