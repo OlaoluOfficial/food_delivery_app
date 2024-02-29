@@ -1,7 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  position: relative;
+}
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #4c2506f4 !important;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
 .restaurant-page-container {
   background-color: #fff2e8;
 }
+.admin-hero-section {
+  background-image: linear-gradient(to right bottom, #120a0253, #23110364),
+    url(./admin-hero-img.jpg);
+  height: 100vh;
+  background-size: cover;
+  position: relative;
+  margin-bottom: 8rem;
+}
+.admin-primary-heading {
+  color: #fff2e8;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0%, -50%);
+  background-color: #fd7e14;
+  border-radius: 0 10rem 10rem 0;
+  width: 35%;
+  padding: 4rem 3rem;
+  letter-spacing: 1px;
+}
+.primary-heading-paragraph {
+  display: block;
+  font-size: 1.6rem;
+  color: #fff2e8;
+  font-weight: 400;
+  margin-top: 1rem;
+}
+em {
+  font-size: 1.2rem;
+}
+.form-section {
+  /* margin-bottom: 8rem; */
+  padding: 0rem 6rem 0rem 6rem;
+}
+.hotel-icon {
+  width: 4rem;
+  fill: #fd7e14;
+}
+.form-section-container {
+  display: flex;
+  /* align-items: top; */
+  gap: 5rem;
+}
+.management-icon {
+  font-size: 6rem;
+}
+.form-description {
+  width: 50%;
+}
+.heading-tertiary {
+  margin-bottom: 2rem;
+}
+.form-container {
+  width: 50%;
+  padding: 2rem;
+}
+fieldset {
+  border-color: #fd7e14;
+  border-radius: 0 2.5rem 2.5rem 0;
+}
+.legend {
+  text-align: center;
+}
+.form {
+}
+.form-list {
+  list-style: none;
+  padding: 2rem;
+}
+.form-list-item {
+  margin-bottom: 2.5rem;
+}
+.form-list-item input {
+  margin-left: 2rem;
+  width: 25rem;
+  height: 3rem;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.form-list-item input:focus {
+  outline: none;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #fd7e14;
+}
 
+.submit-btn {
+  border: none;
+  border-radius: 0 2rem 2rem 0;
+  background-color: #fd7e14;
+  color: #fff2e8;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1.6rem;
+}
+.submit-icon {
+  width: 3rem;
+  fill: #fff2e8;
+}
+.section-dishes {
+  margin-bottom: 8rem;
+  padding: 6rem 6rem 0rem 6rem;
+  background-color: #f7f7f7;
+}
+.dishes-icon {
+  width: 4rem;
+  fill: #fd7e14;
+}
 .main-course2 {
   padding: 0 3rem;
   padding-bottom: 8rem;
@@ -55,14 +181,14 @@
 .click-order2 {
   display: flex;
   background-color: #fff;
-  justify-content:space-between;
+  justify-content: space-between;
   padding-bottom: 1rem;
   /* border: 1px solid; */
   width: 6rem;
   margin-left: 78%;
 }
 
-.click-order2-icon{
+.click-order2-icon {
   color: #fd7e14;
   cursor: pointer;
 }

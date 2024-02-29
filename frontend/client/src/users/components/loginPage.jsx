@@ -19,7 +19,6 @@ const schema = z.object({
 
 function LoginPage() {
   const [loginError, setLoginError] = useState(null);
-  const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
@@ -62,7 +61,7 @@ function LoginPage() {
         alert(data.data.message); // Display the error message sent by the server
       }
     } catch (error) {
-      if (error.response.status == 400) {
+      if (error.response.status === 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else {
         setLoginError("An error occurred, please try again later");

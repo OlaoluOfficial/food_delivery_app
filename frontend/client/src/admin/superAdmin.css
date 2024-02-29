@@ -1,5 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  position: relative;
+}
+body {
+  font-size: 2.4rem;
+  font-family: sans-serif;
+  color: #4c2506f4 !important;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+.section-admin-hero {
+  background-image: linear-gradient(to right bottom, #120a028e, #2311038d),
+    url(./admin-hero-img.jpeg);
+  height: 100vh;
+  background-size: cover;
+  position: relative;
+  margin-bottom: 8rem;
+}
 .restaurant-page-container {
   background-color: #fff2e8;
+}
+.admin-secondary-heading {
 }
 
 .main-course3 {

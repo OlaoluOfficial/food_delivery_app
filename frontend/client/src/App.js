@@ -14,7 +14,6 @@ import RestaurantLandingPage from "./restaurant/landingPage";
 import RestaurantAdminPage from "./restaurant/newItemUpload";
 import DeliveryPersonnelPage from "./delivery/deliveryPage";
 import SuperAdminPage from "./admin/superAdmin";
-
 const App = () => {
   return (
     <UserContextProvider>
