@@ -1,16 +1,9 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  customerName: { 
-    type: String, 
-    required: true 
-  },
-  customerAddress: { 
-    type: String, 
-    required: true 
-  },
-  customerPhoneNumber: { 
-    type: String, 
+  customer: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
     required: true 
   },
   product: { 
@@ -19,23 +12,16 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['placed', 'confirmed', 'in_progress', 'delivered', 'cancelled'],
+    enum: ['placed', 'confirmed', 'delivered'],
     default: 'placed',
   },
   price: {
     type: Number,
     required: true,
   },
-  restaurantName: {
-    type: String,
-    required: true 
-  },
-  restaurantAddress: { 
-    type: String, 
-    required: true 
-  },
-  restaurantPhoneNumber: { 
-    type: String, 
+  restaurant: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Restaurant', 
     required: true 
   },
   orderTime: { 

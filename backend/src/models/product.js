@@ -21,7 +21,11 @@ const productSchema = new mongoose.Schema({
     ref: 'Restaurant', 
     required: true 
   },
-});
+  productPictures: [String],
+
+},
+{ timestamps: true }
+);
 
 const Product = mongoose.model('Product', productSchema);
 
