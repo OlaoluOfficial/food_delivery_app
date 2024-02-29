@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
-const route = require("./server/routes/restaurantRoutes");
+const route = require("./server/routes/restaurant.routes");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -10,7 +10,8 @@ const authRoutes = require("./server/routes/auth.routes");
 const connectDB = require("./database/db");
 const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
-const cartRoutes = require("./server/routes/cart.routes");
+const cartRoutes = require("./server/routes/cart.routes")
+const restaurantRoutes = require("./server/routes/restaurant.routes")
 
 const app = express();
 
@@ -41,11 +42,12 @@ app.use(
 );
 app.use("/User_Images", express.static(path.join(__dirname, "User_Images")));
 
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/orders", orderRoutes);
-app.use("/api/v1/products", productRoutes);
-app.use("/api/v1/carts", cartRoutes);
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/orders', orderRoutes)
+app.use('/api/v1/products', productRoutes)
+app.use('/api/v1/restaurants', restaurantRoutes)
+app.use('/api/v1/carts', cartRoutes)
 
 const { lookup } = require("dns").promises;
 const os = require("os");
