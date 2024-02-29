@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import "./landingPage.css";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { FaTrash, FaPen, FaXmark } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
+import Modal from "react-modal";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  description: z.string(),
+  price: z.number(),
+  minimumPrice: z.number(),
+});
 
 const RestaurantLandingPage = () => {
   const [foods, setFoods] = useState([]);
@@ -10,7 +21,18 @@ const RestaurantLandingPage = () => {
   const [minPrice, setMinPrice] = useState("");
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState("");
-  // const {register} = useform()
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [error, setError] = useState("");
+  const [updateError, setUpdateError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({ resolver: zodResolver(schema) });
 
   const fetchFoods = async () => {
     try {
@@ -36,7 +58,25 @@ const RestaurantLandingPage = () => {
     setImage(selectedImage);
   };
 
-  const handleSubmit = async (e) => {
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setSelectedItem("");
+    setModalOpen(false);
+  };
+
+  const openModal2 = (id) => {
+    setSelectedId(id);
+    setModalOpen2(true);
+  };
+  const closeModal2 = () => {
+    setSelectedId("");
+    setModalOpen2(false);
+  };
+
+  const handleSubmits = async (e) => {
     e.preventDefault();
     const dataForm = {
       name: foodName,
@@ -61,44 +101,83 @@ const RestaurantLandingPage = () => {
         body: formData,
       });
 
+    //   if (response.ok) {
+    //     alert("Data successfully uploaded to the database");
+    //     // Refetch the updated list of foods
+    //     fetchFoods();
+    //   } else {
+    //     console.error("Failed to upload data to the database");
+    //     // Additional logic or feedback for failure
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
+    // // setFoods([...foods, dataForm]);
+    // console.log(foods);
+        if (response.ok) {
+          alert(response.data.message);
+          // Refetch the updated list of foods
+          fetchFoods();
+        } else {
+          setError("Failed to upload data to the database");
+          // console.error("Failed to upload data to the database");
+          // Additional logic or feedback for failure
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const handleDelete = async (foodId) => {
+    try {
+      // Simulated API endpoint for deleting data from the database
+      const response = await fetch(
+        `http://localhost:2300/api/v1/products/${foodId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
       if (response.ok) {
-        alert("Data successfully uploaded to the database");
+        setSelectedId("");
+        closeModal2();
         // Refetch the updated list of foods
         fetchFoods();
       } else {
+        alert("Something went wrong, Please try again later");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleEdit = async (data) => {
+    // Implement the logic to edit a food item (e.g., redirect to an edit page)
+    try {
+      // Simulate API request using fetch or Axios
+      const response = await fetch(
+        `http://localhost:2300/api/v1/products/${selectedId.id}`,
+        {
+          method: "PUT",
+          body: data,
+        }
+      );
+
+      if (response.ok) {
+        alert("Data successfully uploaded to the database");
+        setSelectedItem("");
+        closeModal();
+        // Refetch the updated list of foods
+        fetchFoods();
+      } else {
+        setUpdateError("Something went wrong, Please try again later");
         console.error("Failed to upload data to the database");
         // Additional logic or feedback for failure
       }
     } catch (error) {
       console.error("Error:", error);
     }
-    // setFoods([...foods, dataForm]);
-    console.log(foods);
-  };
-
-  const handleDelete = async (foodId) => {
-    try {
-      // Simulated API endpoint for deleting data from the database
-      const response = await fetch(`YOUR_API_ENDPOINT/${foodId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        console.log("Data successfully deleted from the database");
-        // Refetch the updated list of foods
-        fetchFoods();
-      } else {
-        console.error("Failed to delete data from the database");
-        // Additional logic or feedback for failure
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleEdit = (food) => {
-    // Implement the logic to edit a food item (e.g., redirect to an edit page)
-    console.log("Editing food:", food);
   };
 
   return (

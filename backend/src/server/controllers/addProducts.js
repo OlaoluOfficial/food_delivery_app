@@ -1,13 +1,12 @@
 const Product = require("../../models/product");
-const Restaurant =  require( "../../models/restaurant") ;
 const fs = require("fs").promises;
 
 const uploadItem = async (req, res) => {
   const userRole = req.user.role;
   const productPics = req.files;
-//   const restaurantId = req.user._id;
+  const restaurantId = req.user._id;
 //   const regNo = req.user.registrationNo;
-  const { productName, description, price, minimumPrice, restaurant} = req.body;
+  const { productName, description, price, minimumPrice} = req.body;
 
   if (userRole !== "restaurant" ) {
     return res
@@ -16,17 +15,10 @@ const uploadItem = async (req, res) => {
   }
 
   try {
-    const prodPics = productPics.map((file) => file.path);
-
-    let isRestaurantRegister= await Restaurant.findOne({ name : restaurant});
-
-    if(!isRestaurantRegister)
-    return res.status(422).json({ message: "Restaurant not found" });
-
-   
+    const prodPics = productPics.map((file) => file.path);  
 
     const product = new Product({
-      restaurant: isRestaurantRegister._id,
+      restaurant: restaurantId,
       name: productName,
       description: description,
       price: price,

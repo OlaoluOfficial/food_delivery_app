@@ -1,30 +1,49 @@
 import React, { useState, useEffect } from "react";
-import data from "./data.json";
 import "./superAdmin.css";
-import { FaTrash } from "react-icons/fa";
-import img from "../users/img/EatRite-logo.png";
+import { FaTrash, FaXmark } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import Modal from "react-modal";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  restaurantName: z.string().min(2),
+  restaurantLocation: z.string().min(2),
+  restaurantEmail: z.string().min(2),
+  restaurantTel: z.number().min(2),
+  restaurantDescription: z.string().min(2),
+});
 
 const SuperAdminPage = () => {
-  const [restaurantName, setRestaurantName] = useState("");
-  const [restaurantLocation, setRestaurantLocation] = useState("");
-  const [restaurantEmail, setRestaurantEmail] = useState("");
-  const [restaurantTel, setRestaurantTel] = useState("");
   const [admin, setAdmin] = useState([]);
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({ resolver: zodResolver(schema) });
+
   const fetchAdmin = async () => {
-    // try {
-    //   const response = await fetch("");
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     setFoods(data);
-    //   } else {
-    //     console.error("Failed to fetch data from the database");
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    setAdmin(data);
+    try {
+      const response = await fetch(
+        "http://localhost:2300/api/v1/allrestaurants"
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setAdmin(data.restaurants);
+        console.log(admin);
+      } else {
+        setError("Failed to fetch data from the database");
+        console.error("Failed to fetch data from the database");
+      }
+    } catch (error) {
+      setError(error.response.data.msg);
+      console.error("Error:", error);
+    }
   };
   useEffect(() => {
     // Simulated API endpoint for fetching data from the database
@@ -32,56 +51,65 @@ const SuperAdminPage = () => {
     fetchAdmin();
   }, []);
 
-  const handleAddRestaurant = async (e) => {
-    e.preventDefault();
-    const dataForm = {
-      restaurantName: restaurantName,
-      restaurantLocation: restaurantLocation,
-      restaurantEmail: restaurantEmail,
-      restaurantTel: restaurantTel,
-    };
+  const openModal2 = (id) => {
+    setSelectedId(id);
+    setModalOpen2(true);
+  };
+  const closeModal2 = () => {
+    setSelectedId("");
+    setModalOpen2(false);
+  };
 
+  const handleAddRestaurant = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/api/restaurant", {
-        method: "POST",
-        body: JSON.stringify(dataForm),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:2300/api/v1/createrestaurants",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         response.json().then(alert("Registration successful!"));
         // Registration successful, show success message or redirect to another page
         fetchAdmin();
-
-        // You can reset the form after adding the restaurant
-        setRestaurantName("");
-        setRestaurantLocation("");
-        setRestaurantEmail("");
-        setRestaurantTel("");
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        alert(data.error); // Display the error message sent by the server
+        setError(data.response);
+        // alert(data.restaurant.error); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle other errors (e.g., network error)
-      setError("An error occurred during login. Please try again later."); // Set the registration error message
+      // alert(error.response);
+      setError("An error occurred during creation. Please try again later."); // Set the registration error message
     }
   };
+
+  //post request for adding a delivery person
+
   const handleDelete = async (Id) => {
     try {
       // Simulated API endpoint for deleting data from the database
-      const response = await fetch(`YOUR_API_ENDPOINT/${Id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:2300/api/v1/deleterestaurant/${Id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         console.log("Data successfully deleted from the database");
         // Refetch the updated list of foods
+        setSelectedId("");
+        closeModal2();
         fetchAdmin();
       } else {
         console.error("Failed to delete data from the database");
+        alert("Something went wrong, Please try again later");
         // Additional logic or feedback for failure
       }
     } catch (error) {
@@ -119,39 +147,23 @@ const SuperAdminPage = () => {
             <div className="form-container">
               <fieldset>
                 <legend className="legend">Restaurant Manager</legend>
-                <form onSubmit={handleAddRestaurant}>
+                <form onSubmit={handleSubmit(handleAddRestaurant)}>
                   <ul className="form-list">
                     <li className="form-list-item">
                       <label>Restaurant Name:</label>
-                      <input
-                        type="text"
-                        value={restaurantName}
-                        onChange={(e) => setRestaurantName(e.target.value)}
-                      />
+                      <input type="text" {...register("restaurantName")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Location:</label>
-                      <input
-                        type="text"
-                        value={restaurantLocation}
-                        onChange={(e) => setRestaurantLocation(e.target.value)}
-                      />
+                      <input type="text" {...register("restaurantLocation")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Email:</label>
-                      <input
-                        type="email"
-                        value={restaurantEmail}
-                        onChange={(e) => setRestaurantEmail(e.target.value)}
-                      />
+                      <input type="email" {...register("restaurantEmail")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Tel:</label>
-                      <input
-                        type="tel"
-                        value={restaurantTel}
-                        onChange={(e) => setRestaurantTel(e.target.value)}
-                      />
+                      <input type="tel" {...register("restaurantTel")} />
                     </li>
                     <button type="submit" className="addAdmin-btn submit-btn">
                       Add Restaurant

@@ -9,7 +9,7 @@ class AuthMiddleware {
 
 
       if (!token) {
-        return res.status(401).json({ msg: "No token, authorization denied" });
+        return res.status(401).json({ msg: "No Token, authorization denied, Login again" });
       }
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.user.id);

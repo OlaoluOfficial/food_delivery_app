@@ -192,3 +192,90 @@ fieldset {
   color: #fd7e14;
   cursor: pointer;
 }
+
+.modal-container {
+  /* max-width: 60vw; */
+  /* border:1px solid; */
+  margin-top: 5rem;
+}
+.modal {
+  max-width: 40vw;
+  border: 1px solid;
+  border-radius: 15px;
+  margin: 5rem auto;
+  padding: 2rem 4rem;
+  height: 50vh;
+  position: relative;
+  background-color: #fff2e8;
+}
+
+.modal2 {
+  max-width: 40vw;
+  border: 1px solid;
+  border-radius: 15px;
+  margin: 5rem auto;
+  padding: 2rem 4rem;
+  height: 33vh;
+  position: relative;
+  background-color: #fff2e8;
+}
+
+.modal h3 {
+  margin: 2rem 0;
+}
+
+.modal2 h3 {
+  margin: 2rem 0;
+}
+
+.modal-form {
+  position: relative;
+}
+.modal-icon {
+  font-size: 2rem;
+  position: absolute;
+  right: 14px;
+  cursor: pointer;
+}
+
+.modal-button {
+  width: 7rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.modal-input {
+  width: 95%;
+  margin: auto;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-chamber {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  position: absolute;
+  right: 2px;
+  /* border:1px solid; */
+}
+
+.btn-chamber2 {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  position: absolute;
+  right: 35px;
+  /* border:1px solid; */
+}
+
+.cnfm{
+  border: none;
+  background-color: #fd7e14;
+  color: #fff;
+}
+
+.cnfm2{
+  border: none;
+  background-color: #deb887;
+  color: #fff;
+}
