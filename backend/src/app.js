@@ -12,6 +12,7 @@ const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
 const cartRoutes = require("./server/routes/cart.routes")
 const restaurantRoutes = require("./server/routes/restaurant.routes")
+const paymentRoutes = require('./server/routes/payment.routes')
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use('/api/v1/orders', orderRoutes)
 app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/restaurants', restaurantRoutes)
 app.use('/api/v1/carts', cartRoutes)
+app.use('/api/v1/pay', paymentRoutes)
 
 const { lookup } = require("dns").promises;
 const os = require("os");

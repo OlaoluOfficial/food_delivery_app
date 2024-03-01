@@ -83,7 +83,7 @@ class OrderController {
         from: 'olaoluofficial@gmail.com',
         to: [customer.email, restaurant.email],
         subject: 'Order Updated',
-        text: `Your order with ID ${updatedOrder.id} has been updated to "${updateData.status.toUpperCase()}".`,
+        text: `Your order with ID ${updatedOrder.id.substring(0, 4)} has been updated to "${updateData.status.toUpperCase()}".`,
       };
 
       sendEmailNotification(mailOptions);
