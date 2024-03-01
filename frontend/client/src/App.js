@@ -19,6 +19,7 @@ import FPPage from "./admin/FPPage";
 import DeliveryLoginPage from "./delivery/delliveryLoginPage";
 import PrimaryPage from "./admin/primaryPage";
 import AdminDeliveryPage from "./admin/adminDeliveryPage";
+import NotFound from "./NotFound";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/specialoffers" element={<SpecialOffer />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </UserContextProvider>
