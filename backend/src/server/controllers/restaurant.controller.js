@@ -160,7 +160,7 @@ class RestaurantController {
     const userRole = 'restaurant'; //req.user.role;
     const productPics = req.files;
     const restaurantId = req.user.id;
-    //   const regNo = req.user.registrationNo;
+
     const { productName, description, price, minimumPrice} = req.body;
     
     if (userRole !== "restaurant" ) {
