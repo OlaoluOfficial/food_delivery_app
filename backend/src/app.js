@@ -56,8 +56,10 @@ const os = require("os");
 
 const PORT = process.env.PORT || 2300;
 app.enable("trust proxy");
+app.use("/api/v1/carts", cartRoutes);
+app.use("/api/v1/products", productRoutes);
 
-app.use((err, _req, res, _next) => {
+app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     // A Multer error occurred during file upload
     console.log(err.code);
