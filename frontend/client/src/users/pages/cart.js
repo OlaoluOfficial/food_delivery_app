@@ -82,11 +82,11 @@ function Cart() {
   };
 
   useEffect(() => {
-    getDelivery()
+    getDelivery();
   }, []);
 
   const handleCheckout = async () => {
-    const total = getTotalPrice() + delivery;
+    const total = parseInt(getTotalPrice() + delivery);
     console.log(total);
     try {
       const payload = {
