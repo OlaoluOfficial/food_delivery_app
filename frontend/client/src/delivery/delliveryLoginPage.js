@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../users/userContext";
-import loginImg from "../users/img/login-img.jpg";
+import loginImg from "./delivery-login-img.jpeg";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import logo from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
   username: z
@@ -71,14 +72,14 @@ function DeliveryLoginPage() {
     }
   }
   return (
-    <div className="login-clip">
+    <div className="login-clip delivery-login-clip">
       <div className="login-flex-box">
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
         <form onSubmit={handleSubmit(login)} className="login-container">
-          <h2 className="log">Login 🔐</h2>
-          <div>
+          <h3 className="log">Rider Login 🔐</h3>
+          <div className="margin-bottom margin-top">
             <input
               className="input-name"
               type="text"
@@ -90,9 +91,9 @@ function DeliveryLoginPage() {
               <p className="error">{errors.username.message}</p>
             )}
           </div>
-          <div className="Password-input-container">
+          <div className="Password-input-container margin-bottom">
             <input
-              className="input-password"
+              className="input-password "
               type={type}
               id="password"
               placeholder="Password"
@@ -111,11 +112,12 @@ function DeliveryLoginPage() {
             <span className="error password-error">{loginError}</span>
           )}
           {/* <button disabled={!isValid} type="submit" className={ isValid ? "btnLog" : "btnLog2" }>Login</button> */}
-          <button type="submit" className="btnLog">
+          <button type="submit" className="btnLog margin-bottom">
             Login
           </button>
         </form>
       </div>
+      <img className="login-logo" src={logo} alt="eatrite" />
     </div>
   );
 }

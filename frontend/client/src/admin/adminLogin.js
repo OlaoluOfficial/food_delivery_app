@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../users/userContext";
-import loginImg from "../users/img/login-img.jpg";
+import loginImg from "../admin/admin-hero-img.jpeg";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import logo from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
   username: z
@@ -71,16 +72,16 @@ function AdminLoginPage() {
     }
   }
   return (
-    <div className="login-clip">
+    <div className="login-clip admin-login-clip">
       <div className="login-flex-box">
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
         <form onSubmit={handleSubmit(login)} className="login-container">
-          <h2 className="log">Login 🔐</h2>
-          <div>
+          <h3 className="log">Admin Login 🔐</h3>
+          <div className="margin-top margin-bottom">
             <input
-              className="input-name"
+              className="input-name "
               type="text"
               placeholder="Username"
               id="logIn"
@@ -90,7 +91,7 @@ function AdminLoginPage() {
               <p className="error">{errors.username.message}</p>
             )}
           </div>
-          <div className="Password-input-container">
+          <div className="Password-input-container margin-bottom">
             <input
               className="input-password"
               type={type}
@@ -116,6 +117,7 @@ function AdminLoginPage() {
           </button>
         </form>
       </div>
+      <img className="login-logo" src={logo} alt="eatrite" />
     </div>
   );
 }

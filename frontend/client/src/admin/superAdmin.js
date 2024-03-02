@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
+import img from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
   restaurantName: z.string().min(2),
@@ -89,8 +90,6 @@ const SuperAdminPage = () => {
     }
   };
 
-  //post request for adding a delivery person
-
   const handleDelete = async (Id) => {
     try {
       // Simulated API endpoint for deleting data from the database
@@ -141,7 +140,8 @@ const SuperAdminPage = () => {
                 Super Admin, you can add new restaurants and track restaurant
                 orders and deliveries. The system also includes features for
                 managing restaurant subscribsion, tracking performance metrics,
-                and facilitating communication you and the restaurants. →
+                and facilitating communication between you and the restaurants.
+                →
               </p>
             </div>
             <div className="form-container">
@@ -165,10 +165,15 @@ const SuperAdminPage = () => {
                       <label>Restaurant Tel:</label>
                       <input type="tel" {...register("restaurantTel")} />
                     </li>
-                    <button type="submit" className="addAdmin-btn submit-btn">
-                      Add Restaurant
-                    </button>
                   </ul>
+
+                  <button
+                    type="submit"
+                    disabled={!isValid}
+                    className="addAdmin-btn"
+                  >
+                    {isValid ? <>Add Restaurant</> : <s>Add Restaurant</s>}
+                  </button>
                 </form>
               </fieldset>
             </div>
@@ -195,11 +200,41 @@ const SuperAdminPage = () => {
                 <div className="click-order3">
                   <FaTrash
                     className="click-order3-icon"
-                    onClick={() => handleDelete(e.id)}
+                    onClick={() => openModal2(e._id)}
                   ></FaTrash>
                 </div>
               </div>
             ))}
+            <div className="modal-container">
+              <Modal
+                isOpen={modalOpen2}
+                onRequestClose={closeModal2}
+                className="modal2"
+              >
+                <FaXmark
+                  className="modal-icon"
+                  onClick={() => setModalOpen2(false)}
+                />
+                <h3>Delete Product</h3>
+                <p>Are you sure you want to delete this item?</p>
+
+                <div className="btn-chamber2">
+                  <button
+                    className="modal-button cnfm"
+                    type="submit"
+                    onClick={() => handleDelete(selectedId)}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="modal-button"
+                    onClick={() => setModalOpen2(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Modal>
+            </div>
           </div>
         </section>
       </div>
