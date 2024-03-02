@@ -12,8 +12,7 @@ class OrderController {
         restaurant,
       } = req.body;
 
-      const isRestaurant = await Restaurant.findOne({ name: restaurant });
-      // if (isRestaurant) {
+    
       const order = new Order({
         product,
         price,

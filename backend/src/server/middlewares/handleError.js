@@ -1,11 +1,9 @@
 module.exports.dbSchemaErrors = (err) => {
-  let errors = {};
-
+  let errorMessage="";
   if (err.message.includes("User validation failed")) {
     Object.values(err.errors).forEach((item ) => {
-      const errorMessage = item.message.replace(/Path `/g, "");
-      errors[item.path] = errorMessage;
-    
+      errorMessage = item.message.replace(/Path `/g, "");
+     
     });
   } else {
     const key = Object.keys(err.keyPattern);
@@ -17,57 +15,48 @@ module.exports.dbSchemaErrors = (err) => {
       return "Username already exist";
     }
   }
-  return errors;
+  return errorMessage;
+  
 };
 
 module.exports.JoiErrorHandler = (error) => {
   // let errors = "";
-  const errors = {
-    firstName: "",
-    lastName: "",
-    Phone: "",
-    altPhoneNumber: "",
-    Email: "",
-    Password: "",
-    confirmPassword: "",
-    userType: "",
-  };
+ let errorMessage="";
   var errorType = error.details[0].type;
-  var errorLabel = error.details[0].context.label;
+  // var errorLabel = error.details[0].context.label;
 
   switch (errorType) {
     case "string.empty":
-      errors[errorLabel] = error.message;
+      errorMessage = error.message;
       break;
     case "string.pattern.base":
-      errors[errorLabel] = error.message;
+      errorMessage = error.message;
       break;
     case "any.required":
-      errors[errorLabel] = error.message;
+      errorMessage = error.message;
       break;
     case "string.email":
-      errors[errorLabel] += error.message;
+      errorMessage += error.message;
       break;
     case "any.only":
-      errors[errorLabel] = error.message;
+      errorMessage = error.message;
       break;
     default:
-      errors[errorLabel] = error.message;
+      errorMessage += error.message;
       break;
   }
-  return errors;
+  return errorMessage;
 };
 
-module.exports.itemSchemaErrors = (err) => {
-  let errors = {};
-
-  if (
-    err._message.includes("item validation failed" || "Product validation failed")
-  ) {
-    Object.values(err.errors).forEach(({ item }) => {
-      errors[item.path] = item.message;
+module.exports.productsSchemaErrors = (err) => {
+  // let errors = {};
+ let errorMessage=""
+  if (err.message.includes("Product validation failed")) {
+    Object.values(err.errors).forEach((item ) => {
+      errorMessage = item.message.replace(/Path `/g, "");
+      
     });
-  }
+  } 
+  return errorMessage;
 
-  return errors;
 };
