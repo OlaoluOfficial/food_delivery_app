@@ -1,4 +1,4 @@
-const { Schema, model, default: mongoose } = require('mongoose');
+const { Schema, model, default: mongoose } = require("mongoose");
 
 const restaurantSchema = new Schema({
   name: { 
@@ -33,6 +33,6 @@ const restaurantSchema = new Schema({
 }
 );
 
-const Restaurant = model('Restaurant', restaurantSchema);
+const Restaurant = model("Restaurant", restaurantSchema);
 
 module.exports = Restaurant;

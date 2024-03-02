@@ -1,0 +1,41 @@
+.marquee-inner-wrapper {
+  /* border: 1px solid; */
+  height: 27vh;
+  width: 98%;
+  background-color: #fff;
+  box-shadow: 0 0 10px #0000001a;
+  padding: 10px;
+  margin: auto;
+}
+.marquee-wrapper{
+    background-color:#fff2e8 ;
+    padding-top: 5rem;
+}
+/* .card-wrapper {
+  border: 1px solid;
+} */
+
+.marqueeImage {
+  width: 15rem;
+  /* border: 1px solid; */
+}
+
+.marqueeImage1 {
+  width: 15rem;
+  height: 14rem;
+  /* border: 1px solid; */
+}
+
+.marquee-inner {
+  margin-right: 4rem;
+  /* border: 1px solid; */
+}
+
+.marquee-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    /* border: 1px solid; */
+    margin: 0;
+}

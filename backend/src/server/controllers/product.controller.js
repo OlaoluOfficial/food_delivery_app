@@ -4,6 +4,7 @@ const fs = require("fs").promises;
 class ProductController {
   static async createProduct(req, res) {
     try {
+      console.log(req.body)
       const { name, description, price, minimumPrice, restaurant } = req.body;
 
       const product = new Product({
