@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import "./cart.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Cart() {
   const [cart, setCart] = useState([]);
   const [delivery, setDelivery] = useState(0);
+  const [total, setTotal] = useState("");
+  const [user, setUser] = useState("");
+  const [error, setError] = useState("");
 
-  const products = [
-    { id: 1, name: "Product 1", price: 10.99 },
-    { id: 2, name: "Product 2", price: 19.99 },
-    { id: 3, name: "Product 3", price: 5.99 },
-  ];
-
-  const addToCart = (product) => {
-    const updatedCart = [...cart];
-    const existingItem = updatedCart.find((item) => item.id === product.id);
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      updatedCart.push({ ...product, quantity: 1 });
-    }
-
-    setCart(updatedCart);
+  const getCart = async () => {
+    let cartItems = await axios.get("http://localhost:2300/api/v1/carts");
+    cartItems.json();
+    setCart(cartItems);
   };
+  useEffect(() => {
+    getCart();
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    let User = await axios.get("http://localhost:2300/api/v1/users/getProfile");
+    User.json();
+    setUser(User);
+  };
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
 
   const updateQuantity = (productId, newQuantity) => {
     // Update the quantity of the specified product in the cart
@@ -33,9 +37,22 @@ function Cart() {
     setCart(updatedCart);
   };
 
-  const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    setCart(updatedCart);
+  const removeFromCart = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:2300/api/v1/carts/${productId}`
+      );
+      if (response.ok) {
+        let data = response.json();
+        alert(data.data.message);
+        getCart();
+      } else {
+        let data = response.json();
+        setError("Something went Wrong, Please try again later");
+      }
+    } catch (error) {
+      setError("Something went Wrong, Please try again later");
+    }
   };
 
   const handleIncrement = (productId) => {
@@ -60,6 +77,42 @@ function Cart() {
       .toFixed(2);
   };
 
+  const getDelivery = () => {
+    setDelivery(getTotalPrice() * 0.2);
+  };
+
+  useEffect(() => {
+    getDelivery()
+  }, []);
+
+  const handleCheckout = async () => {
+    const total = getTotalPrice() + delivery;
+    console.log(total);
+    try {
+      const payload = {
+        amount: total,
+        txRef: "ref-1000",
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        name: user.name,
+        redirectUrl: "http://localhost:2300/",
+      };
+      let response = await axios.post(
+        "http://localhost:2300/api/v1/pay",
+        payload
+      );
+      if (response.ok) {
+        let data = response.json();
+        alert(data.data.message);
+      } else {
+        let data = response.json();
+        setError(data.data.message);
+      }
+    } catch (error) {
+      setError(error.response.data);
+    }
+  };
+
   return (
     <div className="outer-container">
       <div className="cartContainer">
@@ -77,14 +130,6 @@ function Cart() {
               <h5>TOTAL</h5>
             </div>
           </div>
-          {/* <ul>
-            {products.map((product) => (
-              <li key={product.id}>
-                {product.name} - ${product.price.toFixed(2)}
-                <button onClick={() => addToCart(product)}>Add to Cart</button>
-              </li>
-            ))}
-          </ul> */}
 
           <ul>
             {cart.map((item) => (
@@ -126,17 +171,19 @@ function Cart() {
             <h4>Order Summary</h4>
           </div>
           <div className="rightCartSec-up">
-            <h5>ITEMS {cart.length}</h5> <h5>${getTotalPrice()}</h5>
+            <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
           </div>
           <div className="rightCartSec-up">
             <h5>Delivery fee</h5>
-            <h5>{delivery}</h5>
+            <h5>{delivery.toFixed(2)}</h5>
           </div>
           <div className="rightCartSec-up">
             <h5>TOTAL COST</h5>
-            <h5>{getTotalPrice() + delivery}</h5>
+            <h5>{(parseInt(getTotalPrice()) + delivery).toFixed(2)}</h5>
           </div>
-          <button className="cartButton">Check out</button>
+          <button className="cartButton" onClick={handleCheckout}>
+            Check out
+          </button>
         </div>
       </div>
     </div>

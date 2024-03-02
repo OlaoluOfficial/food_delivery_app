@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
-import img from "../users/img/EatRite-logo.png"
+import img from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
   restaurantName: z.string().min(2),
@@ -29,9 +29,7 @@ const SuperAdminPage = () => {
 
   const fetchAdmin = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:2300/api/v1/allrestaurants"
-      );
+      const response = await fetch("http://localhost:2300/api/v1/restaurants");
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -63,15 +61,12 @@ const SuperAdminPage = () => {
 
   const handleAddRestaurant = async (data) => {
     try {
-      const response = await fetch(
-        "http://localhost:2300/api/v1/createrestaurants",
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:2300/api/v1/restaurants", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
       if (response.ok) {
         response.json().then(alert("Registration successful!"));
         // Registration successful, show success message or redirect to another page
@@ -94,7 +89,7 @@ const SuperAdminPage = () => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/deleterestaurant/${Id}`,
+        `http://localhost:2300/api/v1/restaurant/${Id}`,
         {
           method: "DELETE",
         }
@@ -164,7 +159,7 @@ const SuperAdminPage = () => {
                       <label>Restaurant Tel:</label>
                       <input type="tel" {...register("restaurantTel")} />
                     </li>
-                    
+
                     <button
                       type="submit"
                       disabled={!isValid}

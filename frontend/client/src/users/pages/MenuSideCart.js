@@ -40,8 +40,8 @@ export default function SideCart({ menu, selectedId }) {
     check();
   }, [selectedId]);
 
-  const addToCart = async (item, price) => {
-    const cart = { ...item, offeredPrice: price };
+  const addToCart = async (ProductId, Price) => {
+    const cart = { productId : ProductId, price: Price, quantity: 1 };
     try {
       const response = await axios.post("http://localhost:2300/api/v1/carts", cart)
         if (response.status === 201) {
@@ -65,7 +65,7 @@ export default function SideCart({ menu, selectedId }) {
     if (!isNaN(userOffer) && userOffer >= minimumPrice) {
       // Accept the offer
       setStatus("Offer Accepted");
-      addToCart(selectedFood, userOffer);
+      addToCart(selectedFood._id, userOffer);
     } else {
       // Show an error (you might want to handle this differently)
       setStatus("Negotiate Higher 😔");
