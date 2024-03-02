@@ -39,8 +39,8 @@ class AuthController {
           data: user,
         });
     } catch (error) {
+      console.log(error)
       const errors = errorHandler.dbSchemaErrors(error);
-      // console.log(errors)
       return res.status(403).json({ Message: errors });
     }
   }

@@ -157,10 +157,10 @@ class RestaurantController {
   }
 
   static async addProduct (req, res) {
-    const userRole = 'restaurant'; //req.user.role;
+    const userRole = req.user.role;
     const productPics = req.files;
     const restaurantId = req.user.id;
-
+    let prodPics=[]
     const { productName, description, price, minimumPrice} = req.body;
     
     if (userRole !== "restaurant" ) {
@@ -168,13 +168,13 @@ class RestaurantController {
     }
     
     try {
-      const prodPics = productPics.map((file) => file.path);  
+         prodPics = productPics.map((file) => file.path);  
     
       const product = new Product({
         restaurant: restaurantId,
         name: productName,
-        description: description,
-        price: price,
+        description,
+        price,
         productPictures: [],
         minimumPrice
       });

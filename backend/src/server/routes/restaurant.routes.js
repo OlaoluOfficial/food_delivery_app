@@ -10,7 +10,7 @@ routes.get('/:id',AuthMiddleware.authenticateUser, RestaurantController.getResta
 routes.post('/', AuthMiddleware.authenticateUser, RestaurantController.createRestaurant );
 routes.delete('/:id', AuthMiddleware.authenticateUser, RestaurantController.deleteRestaurant);
 routes.get('/:id/products', RestaurantController.getRestaurantProducts);
-routes.post('/:id/addProducts', AuthMiddleware.authenticateUser, uploadProducts.array('productImages', 3), RestaurantController.addProduct); // Upload image for product
+routes.post('/addProducts', AuthMiddleware.authenticateUser, uploadProducts.array('productImages', 3), RestaurantController.addProduct); // Upload image for product
 // todo: getRestaurantByRegNo
 
 module.exports= routes;

@@ -1,9 +1,11 @@
 module.exports.dbSchemaErrors = (err) => {
-  let errors = { name: "", email: "" };
+  let errors = {};
 
-  if (err.message.includes("user validation failed")) {
-    Object.values(err.errors).forEach(({ restaurant }) => {
-      errors[restaurant.path] = restaurant.message;
+  if (err.message.includes("User validation failed")) {
+    Object.values(err.errors).forEach((item ) => {
+      const errorMessage = item.message.replace(/Path `/g, "");
+      errors[item.path] = errorMessage;
+    
     });
   } else {
     const key = Object.keys(err.keyPattern);
@@ -56,14 +58,14 @@ module.exports.JoiErrorHandler = (error) => {
   return errors;
 };
 
-module.exports.RestaurantSchemaErrors = (err) => {
+module.exports.itemSchemaErrors = (err) => {
   let errors = {};
 
   if (
-    err._message.includes("Restaurant validation failed" || "Product validation failed")
+    err._message.includes("item validation failed" || "Product validation failed")
   ) {
-    Object.values(err.errors).forEach(({ restaurant }) => {
-      errors[restaurant.path] = restaurant.message;
+    Object.values(err.errors).forEach(({ item }) => {
+      errors[item.path] = item.message;
     });
   }
 

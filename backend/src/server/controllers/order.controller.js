@@ -12,12 +12,13 @@ class OrderController {
         restaurant,
       } = req.body;
 
-      
+      const isRestaurant = await Restaurant.findOne({ name: restaurant });
+      // if (isRestaurant) {
       const order = new Order({
         product,
         price,
         customer,
-        restaurant,
+        restaurant
       });
 
       // Save the order to the database
@@ -26,7 +27,8 @@ class OrderController {
       res
         .status(200)
         .json({ message: 'Order Successfully Created', data: order });
-    } catch (error) {
+    // } 
+  }catch (error) {
       console.log(error.message);
       return new Error('Could not create order');
     }
