@@ -40,10 +40,11 @@ function LoginPage() {
   };
 
   async function login(data) {
+    let Data = {...data, role: "customer"}
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        data,
+        Data,
         { withCredentials: true }
       );
       if (response.status == 200) {

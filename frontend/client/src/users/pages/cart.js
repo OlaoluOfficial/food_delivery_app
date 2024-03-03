@@ -8,7 +8,6 @@ import { FaTrash } from "react-icons/fa6";
 function Cart() {
   const [cart, setCart] = useState([]);
   const [delivery, setDelivery] = useState(0);
-  const [total, setTotal] = useState("");
   const [user, setUser] = useState("");
   const [error, setError] = useState("");
   const { addCart } = useCart();
@@ -19,7 +18,6 @@ function Cart() {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data.items);
         setCart(response.data.items);
         addCart(response.data.items.length);
       })
@@ -40,17 +38,6 @@ function Cart() {
     );
     setUser(User);
   };
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
-
-  // const updateQuantity = (productId, newQuantity) => {
-  //   // Update the quantity of the specified product in the cart
-  //   const updatedCart = cart.map((item) =>
-  //     item.id === productId ? { ...item, quantity: newQuantity } : item
-  //   );
-  //   setCart(updatedCart);
-  // };
 
   const removeFromCart = async (productId) => {
     try {
@@ -59,12 +46,10 @@ function Cart() {
         { withCredentials: true }
       );
       if (response.status == 200) {
-        let data = response.json();
-        alert(data.data.msg);
-        getCart();
+        console.log(response);
+        setCart(response.data.items)
         getDelivery();
       } else {
-        let data = response.json();
         setError("Something went Wrong, Please try again later");
       }
     } catch (error) {
@@ -75,21 +60,19 @@ function Cart() {
   const handleIncrement = (productId) => {
     console.log(productId);
     const updatedCart = cart.map((item) => {
-      return (
-        item._id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
+      return item._id === productId
+        ? { ...item, quantity: item.quantity + 1 }
+        : item;
     });
     setCart(updatedCart);
-    getDelivery()
+    getDelivery();
   };
 
   const handleDecrement = (productId) => {
     const updatedCart = cart.map((item) => {
-      return (
-        item._id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+      return item._id === productId && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item;
     });
     setCart(updatedCart);
     getDelivery();
@@ -105,7 +88,6 @@ function Cart() {
     setDelivery(getTotalPrice() * 0.1);
   };
 
- 
   const handleCheckout = async () => {
     const total = parseInt(getTotalPrice() + delivery);
     try {
@@ -124,7 +106,7 @@ function Cart() {
       if (response.status == 200) {
         let data = response.json();
         alert(data.data.message);
-        setDelivery('')
+        setDelivery("");
       } else {
         let data = response.json();
         setError(data.data.message);

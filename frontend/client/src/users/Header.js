@@ -2,18 +2,22 @@ import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
 import UserContext from "./userContext";
-import {useCart} from './CartContext'
+import { useCart } from "./CartContext";
 
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
-  const {cartItemCount} = useCart()
+  const { cartItemCount } = useCart();
   useEffect(() => {
     fetch("http://localhost:2300/api/v1/users/getProfile", {
       credentials: "include",
     }).then((response) => {
-      response.json().then((userInfo) => {
-        setUserInfo(userInfo);
-      });
+      if (response.ok) {
+        response.json().then((userInfo) => {
+          setUserInfo(userInfo);
+        });
+      } else {
+        setUserInfo(null);
+      }
     });
   }, [setUserInfo]);
 
