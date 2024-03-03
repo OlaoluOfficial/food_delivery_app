@@ -251,18 +251,24 @@ a {
 .input-password {
   margin-left: 3rem;
 }
+.input-role {
+  font-size: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  margin-left: 2.3rem;
+}
 
-.Password-input-container{
+.Password-input-container {
   position: relative;
 }
-.icons{
+.icons {
   position: absolute;
   right: 1px;
   top: 8px;
   font-size: 20px;
 }
 
-.password-error{
+.password-error {
   margin-left: 3rem;
 }
 
@@ -301,7 +307,6 @@ input::placeholder {
   transition: background-color 0.3s ease;
   border-radius: 0 5rem 5rem 0;
 }
-
 
 .btnLog {
   height: 35px;

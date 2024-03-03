@@ -43,34 +43,34 @@ function AdminLoginPage() {
   };
 
   async function login(data) {
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:2300/api/v1/auth/login",
-    //     data
-    //   );
-    //   if (response.ok) {
-    //     response.json().then((userInfo) => {
-    //       setUserInfo(userInfo);
-    //     });
-    //     // Registration successful, show success message or redirect to another page
-    //     alert("Login successful!");
-    //     navigate("/");
-    //     // Reset the form and clear input fields
-    //     setLoginError("");
-    //   } else {
-    //     // Registration failed, handle error response from the server
-    //     const data = await response.json();
-    //     alert(data.data.message); // Display the error message sent by the server
-    //   }
-    // } catch (error) {
-    //   if (error.response.status == 400) {
-    //     setLoginError(error.response.data.msg); // Set the registration error message
-    //   } else {
-    //     setLoginError("An error occurred, please try again later");
-    //   }
-    //   // Handle other errors (e.g., network error)
-    // }
-    console.log(data);
+    try {
+      const response = await axios.post(
+        "http://localhost:2300/api/v1/auth/login",
+        data
+      );
+      if (response.ok) {
+        response.json().then((userInfo) => {
+          setUserInfo(userInfo);
+        });
+        // Registration successful, show success message or redirect to another page
+        alert("Login successful!");
+        navigate("/");
+        // Reset the form and clear input fields
+        setLoginError("");
+      } else {
+        // Registration failed, handle error response from the server
+        const data = await response.json();
+        alert(data.data.message); // Display the error message sent by the server
+      }
+      // Handle other errors (e.g., network error)
+    } catch (error) {
+      if (error.response.status == 400) {
+        setLoginError(error.response.data.msg); // Set the registration error message
+      } else {
+        setLoginError("An error occurred, please try again later");
+      }
+
+    }
   }
   return (
     <div className="login-clip">
@@ -110,7 +110,7 @@ function AdminLoginPage() {
               )}
             </div>
           </div>
-          <div>
+          <div className="input-role">
             <input
               {...register("role", { required: true })}
               type="radio"
