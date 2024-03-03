@@ -60,7 +60,9 @@ module.exports.RestaurantSchemaErrors = (err) => {
   let errors = {};
 
   if (
-    err._message.includes("Restaurant validation failed" || "Product validation failed")
+    err._message.includes(
+      "Restaurant validation failed" || "Product validation failed"
+    )
   ) {
     Object.values(err.errors).forEach(({ restaurant }) => {
       errors[restaurant.path] = restaurant.message;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import BensCard from "./BensCard";
 import MenuSideCart from "./MenuSideCart";
 import axios from "axios";
-import data from "../data.json";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 export default function MenuContainer() {
@@ -37,7 +36,6 @@ export default function MenuContainer() {
       axios
         .get(url)
         .then((response) => {
-          console.log(response)
           setMenus(response.data.data);
         })
         .catch((error) => {

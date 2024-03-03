@@ -26,18 +26,16 @@ class AuthController {
         email,
         phone,
         role,
-        address
+        address,
       });
 
       await user.save();
 
-      return res
-        .status(201)
-        .json({
-          status: 200,
-          message: "User created successfully",
-          data: user,
-        });
+      return res.status(201).json({
+        status: 200,
+        message: "User created successfully",
+        data: user,
+      });
     } catch (error) {
       const errors = errorHandler.dbSchemaErrors(error);
       // console.log(errors)
@@ -56,9 +54,9 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (user.role == 'restaurant') {
-        if (password === '123456789') {
-          return res.status(419).json({ msg: "Please change your password!"})
+      if (user.role == "restaurant") {
+        if (password === "123456789") {
+          return res.status(419).json({ msg: "Please change your password!" });
         }
       }
       const payload = {
@@ -69,7 +67,9 @@ class AuthController {
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 3600000,
       });
-      res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
+      res.cookie("foodieToken", token, {
+        maxAge: 1000 * 60 * 60
+      });
 
       return res
         .status(200)
@@ -80,10 +80,10 @@ class AuthController {
     }
   }
 
-  static async changePassword (req, res) {
+  static async changePassword(req, res) {
     const userId = req.user.id;
     const value = req.body;
-        
+
     try {
       const userExist = await User.findById({ _id: userId });
       // console.log(userExist);
@@ -99,15 +99,19 @@ class AuthController {
           { password: hashedPassword },
           { new: true }
         );
-        if(restaurant)
-        return res.status(201).json({ message: "Password changed successfully" });
-      } else  return res.status(403).json({ message: "Current password is incorrect" });
+        if (restaurant)
+          return res
+            .status(201)
+            .json({ message: "Password changed successfully" });
+      } else
+        return res
+          .status(403)
+          .json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-     return res.status(417).json({ Error: error });
+      return res.status(417).json({ Error: error });
     }
   }
-  
 }
 
 module.exports = AuthController;

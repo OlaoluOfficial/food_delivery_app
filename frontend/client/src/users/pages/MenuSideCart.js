@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useCart } from "../CartContext";
 
 export default function SideCart({ menu, selectedId }) {
   const [allMenu, setAllMenu] = useState([]);
   const [selectedFood, setSelectedFood] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
   const [status, setStatus] = useState("");
-  const [res, setRes] = useState("")
+  const [res, setRes] = useState("");
+
   const navigate = useNavigate();
 
   const handleOfferChange = (event) => {
@@ -41,14 +43,18 @@ export default function SideCart({ menu, selectedId }) {
   }, [selectedId]);
 
   const addToCart = async (ProductId, Price) => {
-    const cart = { productId : ProductId, price: Price, quantity: 1 };
+    const cart = { productId: ProductId, price: Price, quantity: 1 };
     try {
-      const response = await axios.post("http://localhost:2300/api/v1/carts", cart)
-        if (response.status === 201) {
-          setSelectedFood({});
-        } else {
-          setRes(response.data.message)
-        }
+      const response = await axios.post(
+        "http://localhost:2300/api/v1/carts",
+        cart,
+        { withCredentials: true }
+      );
+      if (response.status == 200) {
+        setSelectedFood("");
+      } else {
+        setRes(response.data.message);
+      }
     } catch (error) {
       if (error.response.status === 401) {
         alert("Please login to your account");
@@ -103,16 +109,5 @@ export default function SideCart({ menu, selectedId }) {
         <p className="sideCartPara">Please add an item to cart</p>
       )}
     </div>
-
-    // <div
-    //   className={selectedFood ? "side-cart-container" : "side-cart-container-2"}
-    // >
-    //   <h1>Side Cart</h1>
-    //   {selectedFood ? (
-    //     <p>{selectedId}</p>
-    //   ) : (
-    //     <p className="sideCartPara">Please add an item to cart</p>
-    //   )}
-    // </div>
   );
 }

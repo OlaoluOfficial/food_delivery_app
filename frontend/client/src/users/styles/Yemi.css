@@ -192,6 +192,14 @@ LOGIN  REGISTERATION AND  PAGE
   background-repeat: no-repeat;
   height: 100vh;
 }
+.delivery-login-clip {
+  background-image: linear-gradient(to right bottom, #f5f5f57d, #f5f5f57d),
+    url(../../delivery/delivery-login-img.jpeg);
+}
+.admin-login-clip {
+  background-image: linear-gradient(to right bottom, #f5f5f57d, #f5f5f57d),
+    url(../../admin/admin-hero-img.jpeg);
+}
 
 .beansrite-box {
   display: flex;
@@ -209,6 +217,10 @@ LOGIN  REGISTERATION AND  PAGE
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.reg-flex-box {
+  height: 90%;
+  width: 70%;
 }
 .login-img-box {
   max-width: 60%;
@@ -251,8 +263,30 @@ a {
 .input-password {
   margin-left: 3rem;
 }
+.margin-bottom {
+  margin-bottom: 0.5rem;
+}
+.margin-bottom-big {
+  margin-bottom: rem;
+}
+
+.margin-top {
+  margin-top: 3rem;
+}
+.margin-top-big {
+  margin-top: 6rem;
+}
+.login-logo {
+  width: 10rem;
+  height: 10rem;
+  z-index: 300000000000000000;
+  position: relative;
+  top: 69%;
+  left: 100%;
+}
+
 .input-role {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   display: flex;
   gap: 1rem;
   margin-left: 2.3rem;
@@ -369,7 +403,7 @@ reg:active {
 
 .log {
   margin-top: 2rem;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: rgb(111, 42, 12);
   text-align: center;
 }

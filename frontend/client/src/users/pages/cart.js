@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./cart.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useCart } from "../CartContext";
+import { FaTrash } from "react-icons/fa6";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -9,43 +11,58 @@ function Cart() {
   const [total, setTotal] = useState("");
   const [user, setUser] = useState("");
   const [error, setError] = useState("");
+  const { addCart } = useCart();
 
-  const getCart = async () => {
-    let cartItems = await axios.get("http://localhost:2300/api/v1/carts");
-    cartItems.json();
-    setCart(cartItems);
+  const getCart = () => {
+    axios
+      .get("http://localhost:2300/api/v1/carts", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data.items);
+        setCart(response.data.items);
+        addCart(response.data.items.length);
+      })
+      .catch((error) => {
+        setError(error);
+      });
   };
   useEffect(() => {
     getCart();
     getUser();
+    getDelivery();
   }, []);
 
   const getUser = async () => {
-    let User = await axios.get("http://localhost:2300/api/v1/users/getProfile");
-    User.json();
+    let User = await axios.get(
+      "http://localhost:2300/api/v1/users/getProfile",
+      { withCredentials: true }
+    );
     setUser(User);
   };
   // useEffect(() => {
   //   getUser();
   // }, []);
 
-  const updateQuantity = (productId, newQuantity) => {
-    // Update the quantity of the specified product in the cart
-    const updatedCart = cart.map((item) =>
-      item.id === productId ? { ...item, quantity: newQuantity } : item
-    );
-    setCart(updatedCart);
-  };
+  // const updateQuantity = (productId, newQuantity) => {
+  //   // Update the quantity of the specified product in the cart
+  //   const updatedCart = cart.map((item) =>
+  //     item.id === productId ? { ...item, quantity: newQuantity } : item
+  //   );
+  //   setCart(updatedCart);
+  // };
 
   const removeFromCart = async (productId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:2300/api/v1/carts/${productId}`
+        `http://localhost:2300/api/v1/carts/${productId}`,
+        { withCredentials: true }
       );
-      if (response.ok) {
+      if (response.status == 200) {
         let data = response.json();
-        alert(data.data.message);
+        alert(data.data.msg);
         getCart();
+        getDelivery();
       } else {
         let data = response.json();
         setError("Something went Wrong, Please try again later");
@@ -56,19 +73,26 @@ function Cart() {
   };
 
   const handleIncrement = (productId) => {
-    const updatedCart = cart.map((item) =>
-      item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-    );
+    console.log(productId);
+    const updatedCart = cart.map((item) => {
+      return (
+        item._id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    });
     setCart(updatedCart);
+    getDelivery()
   };
 
   const handleDecrement = (productId) => {
-    const updatedCart = cart.map((item) =>
-      item.id === productId && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    );
+    const updatedCart = cart.map((item) => {
+      return (
+        item._id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    });
     setCart(updatedCart);
+    getDelivery();
   };
 
   const getTotalPrice = () => {
@@ -78,16 +102,12 @@ function Cart() {
   };
 
   const getDelivery = () => {
-    setDelivery(getTotalPrice() * 0.2);
+    setDelivery(getTotalPrice() * 0.1);
   };
 
-  useEffect(() => {
-    getDelivery();
-  }, []);
-
+ 
   const handleCheckout = async () => {
     const total = parseInt(getTotalPrice() + delivery);
-    console.log(total);
     try {
       const payload = {
         amount: total,
@@ -101,9 +121,10 @@ function Cart() {
         "http://localhost:2300/api/v1/pay",
         payload
       );
-      if (response.ok) {
+      if (response.status == 200) {
         let data = response.json();
         alert(data.data.message);
+        setDelivery('')
       } else {
         let data = response.json();
         setError(data.data.message);
@@ -133,22 +154,37 @@ function Cart() {
 
           <ul>
             {cart.map((item) => (
-              <li key={item.id}>
+              <li key={item._id}>
                 <div className="leftCartSec-Headers">
-                  <img src={item.image} alt="item" />
-                  <p>{item.name}</p>
-                  <button onClick={() => removeFromCart(item.id)}>
-                    Remove
-                  </button>
-                  <div>
-                    <div>
-                      <button onClick={handleDecrement}>-</button>
-                      <input type="number" value={item.quantity} readOnly />
-                      <button onClick={handleIncrement}>+</button>
+                  <div className="cart-item-removal">
+                    <div className="cart-item">
+                      <img src={item.product.image} alt="item" />
+                      <p>{item.product.name}</p>
                     </div>
-                    <p>{item.price.toFixed(2)}</p>
 
-                    <p>{item.price.toFixed(2) * item.quantity}</p>
+                    <FaTrash
+                      className="cart-trash-icon"
+                      onClick={() => removeFromCart(item._id)}
+                    ></FaTrash>
+                  </div>
+
+                  <div className="leftCartSec-down">
+                    <div>
+                      <button onClick={() => handleDecrement(item._id)}>
+                        -
+                      </button>
+                      <input type="number" value={item.quantity} readOnly />
+                      <button onClick={() => handleIncrement(item._id)}>
+                        +
+                      </button>
+                    </div>
+                    <div className="cart-prices">
+                      <div className="cart-price-each">
+                        <p>{item.price}</p>
+                        <span>Each</span>
+                      </div>
+                      <p>{item.price.toFixed(2) * item.quantity}</p>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -173,9 +209,9 @@ function Cart() {
           <div className="rightCartSec-up">
             <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
           </div>
-          <div className="rightCartSec-up">
-            <h5>Delivery fee</h5>
-            <h5>{delivery.toFixed(2)}</h5>
+          <div className="rightCartSec-up light">
+            <h5 className="light">Delivery fee</h5>
+            <h5 className="light">{delivery.toFixed(2)}</h5>
           </div>
           <div className="rightCartSec-up">
             <h5>TOTAL COST</h5>

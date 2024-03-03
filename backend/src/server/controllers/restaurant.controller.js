@@ -8,19 +8,20 @@ class RestaurantController {
   static async createRestaurant(req, res) {
     try {
       const userRole = req.user.role;
+      console.log(userRole)
       if (userRole == 'admin') {
-        const { description, name, location, phoneNumber, email } = req.body;
+        const {name, location, phoneNumber, email } = req.body;
         let password = '123456789';
         const salt = await bcrypt.genSalt(10);
         let hashedPassword = await bcrypt.hash(password, salt);
 
         const newRestaurant = new Restaurant({
           name,
-          description,
           location,
           phoneNumber,
           email,
-          password: hashedPassword
+          password: hashedPassword,
+          role: "restaurant"
         });
 
         const savedRestaurant = await newRestaurant.save();

@@ -13,9 +13,9 @@ const Schema = z.object({
   username: z
     .string()
     .min(3, { message: "Username must be at least 3 characters." }),
-  tel: z
-    .number({invalid_type_error: "Phone Number is required"})
-    .min(11, { message: "Phone Number should be atleast 11 numbers" }),
+  phone: z
+    .string()
+    .min(11, { message: "Phone Number must be at least 11 characters." }),
   address: z
     .string()
     .min(10, { message: "Address must be atleast 10 characters long" }),
@@ -67,7 +67,7 @@ function RegisterPage() {
   }
   return (
     <div className="login-clip">
-      <div className="login-flex-box">
+      <div className="login-flex-box reg-flex-box">
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
@@ -125,7 +125,7 @@ function RegisterPage() {
               id="username"
               placeholder="Phone Number"
               type="number"
-              {...register("tel", { valueAsNumber: true })}
+              {...register("phone")}
             />
             {errors.tel && <p className="error">{errors.tel.message}</p>}
           </div>

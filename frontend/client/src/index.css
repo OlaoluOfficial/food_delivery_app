@@ -55,13 +55,6 @@ body {
   list-style: none;
 }
 .nav-cart {
-  width: 5rem;
-  height: 5rem;
-  color: #ffffff;
-  transition: all 0.4s;
-  margin-top: 20px;
-  padding-right: 10px;
-  margin-right: 50px;
 }
 .nav-cart:hover {
   color: #e39b61;
@@ -124,6 +117,19 @@ body {
   color: #fd7e14;
 }
 
+.cart-icon-container {
+  display: flex;
+  width: 5rem;
+  height: 5rem;
+  color: #ffffff;
+  transition: all 0.4s;
+  margin-top: 20px;
+  /* padding-right: 10px; */
+  margin-right: 50px;
+}
+.cart-icon-container span{
+color: #ffffff;
+}
 /* MENU SECTION */
 /*****************
 MAIN MENU

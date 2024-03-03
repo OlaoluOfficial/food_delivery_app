@@ -27,8 +27,6 @@ body {
   background-color: #fff2e8;
   min-height: 100vh;
 }
-.admin-secondary-heading {
-}
 
 .main-course3 {
   padding: 0 3rem;
@@ -101,21 +99,26 @@ body {
 .addAdmin-btn {
   background-color: #fd7e14;
   border: none;
-  padding: 10px;
-  color: #fff;
-  border-radius: 5px;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   cursor: pointer;
+
+  border-radius: 0 2rem 2rem 0;
+  color: #fff2e8;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1.6rem;
+
   /* right: 38px; */
 }
 
 .addAdmin-btn2 {
   background-color: #efbd80;
   border: none;
-  padding: 10px;
-  color: #fff;
-  border-radius: 5px;
-  margin-top: 1rem;
   cursor: pointer;
   /* right: 38px; */
+  border-radius: 0 2rem 2rem 0;
+  color: #fff2e8;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1.6rem;
 }

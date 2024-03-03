@@ -8,11 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
-  restaurantName: z.string().min(2),
-  restaurantLocation: z.string().min(2),
-  restaurantEmail: z.string().min(2),
-  restaurantTel: z.number().min(2),
-  restaurantDescription: z.string().min(2),
+  name: z.string().min(2),
+  location: z.string().min(2),
+  email: z.string(),
+  phoneNumber: z.string().min(11),
 });
 
 const SuperAdminPage = () => {
@@ -32,9 +31,8 @@ const SuperAdminPage = () => {
       const response = await fetch("http://localhost:2300/api/v1/restaurants");
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setAdmin(data.restaurants);
-        console.log(admin);
+
       } else {
         setError("Failed to fetch data from the database");
         console.error("Failed to fetch data from the database");
@@ -89,9 +87,10 @@ const SuperAdminPage = () => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/restaurant/${Id}`,
+        `http://localhost:2300/api/v1/restaurants/${Id}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -135,7 +134,8 @@ const SuperAdminPage = () => {
                 Super Admin, you can add new restaurants and track restaurant
                 orders and deliveries. The system also includes features for
                 managing restaurant subscribsion, tracking performance metrics,
-                and facilitating communication you and the restaurants. →
+                and facilitating communication between you and the restaurants.
+                →
               </p>
             </div>
             <div className="form-container">
@@ -145,31 +145,30 @@ const SuperAdminPage = () => {
                   <ul className="form-list">
                     <li className="form-list-item">
                       <label>Restaurant Name:</label>
-                      <input type="text" {...register("restaurantName")} />
+                      <input type="text" {...register("name")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Location:</label>
-                      <input type="text" {...register("restaurantLocation")} />
+                      <input type="text" {...register("location")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Email:</label>
-                      <input type="email" {...register("restaurantEmail")} />
+                      <input type="email" {...register("email")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Tel:</label>
-                      <input type="tel" {...register("restaurantTel")} />
+                      <input
+                        type="tel"
+                        {...register("phoneNumber")}
+                      />
                     </li>
 
                     <button
                       type="submit"
                       disabled={!isValid}
-                      className={
-                        isValid
-                          ? "addAdmin-btn submit-btn"
-                          : "addAdmin-btn2 submit-btn"
-                      }
+                      className="addAdmin-btn"
                     >
-                      Add Restaurant
+                      {isValid ? <>Add Restaurant</> : <s>Add Restaurant</s>}
                     </button>
                   </ul>
                 </form>
