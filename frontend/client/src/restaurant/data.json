@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Jollof Rice",
+    "price": 2500,
+    "image": "../beansLogo. png",
+    "id": 1,
+    "minimumPrice": 2000,
+    "description": "tasty garnished jollof rice with drumsticks"
+  },
+  {
+    "name": "Fried Rice",
+    "price": "3500",
+    "image": "./beansLogo.jpg",
+    "id": 2,
+"minimumPrice": 2000,
+    "description": "tasty garnished jollof rice with drumsticks"
+  },
+  {
+    "name": "Semo and Egusi",
+    "price": "3000",
+    "image": "./beansLogo.jpg",
+    "id": 3,
+"minimumPrice": 2000,
+    "description": "tasty garnished jollof rice with drumsticks"
+  }
+]
