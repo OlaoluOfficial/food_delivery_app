@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Restaurant= require("../../models/restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -47,8 +48,16 @@ class AuthController {
 
   static async login(req, res) {
     try {
-      const { email, password } = req.body;
-      let user = await User.findOne({ email });
+      const { email, password, role } = req.body;
+      let user;
+      if(role ==="restaurant"){
+        
+        user = await Restaurant.findOne({ email });
+      }
+      else{
+        user = await User.findOne({ email });
+
+      }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
@@ -56,7 +65,7 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (user.role == 'restaurant') {
+      if (role == 'restaurant') {
         if (password === '123456789') {
           return res.status(419).json({ msg: "Please change your password!"})
         }
