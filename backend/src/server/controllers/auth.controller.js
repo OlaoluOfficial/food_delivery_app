@@ -85,7 +85,7 @@ class AuthController {
         .json({ message: "Login Successful", data: { user, token } });
     } catch (err) {
       console.error(err.message);
-      return res.status(500).send("Server Error");
+      return res.status(500).send("Error logging in!");
     }
   }
 
@@ -116,7 +116,16 @@ class AuthController {
      return res.status(417).json({ Error: error });
     }
   }
-  
+
+  static async logout (req, res) {
+    try {
+      res.clearCookie('foodieToken'); 
+      res.status(200).json({ message: 'Logout Successful' });
+    } catch (error) {
+      console.error(error.message);
+      return res.status(500).send('Error logging out!')
+    }
+  }  
 }
 
 module.exports = AuthController;
