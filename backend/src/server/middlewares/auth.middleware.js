@@ -7,7 +7,6 @@ class AuthMiddleware {
       // const token = req.header("Authorization");
       const token = req.cookies.foodieToken;
 
-
       if (!token) {
         return res.status(401).json({ msg: "No Token, authorization denied, Login again" });
       }
