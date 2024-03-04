@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Restaurant = require("../../models/restaurant")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -47,8 +48,13 @@ class AuthController {
 
   static async login(req, res) {
     try {
-      const { email, password } = req.body;
-      let user = await User.findOne({ email });
+      const { email, password, role } = req.body;
+      let user;
+      if (role === 'restaurant') {
+        user = await Restaurant.findOne({ email });
+      } else {
+        user = await User.findOne({ email });
+      }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
@@ -70,10 +76,9 @@ class AuthController {
         expiresIn: 3600000,
       });
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
+      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
 
-      return res
-        .status(200)
-        .json({ message: "Login Successful", data: { user, token } });
+      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");

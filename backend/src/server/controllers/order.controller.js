@@ -60,6 +60,7 @@ class OrderController {
   static async updateOrder(req, res) {
     try {
       const { orderId } = req.params;
+      const postmanId = req.user.id;
       const updateData = req.body;
 
       const updatedOrder = await Order.findOneAndUpdate(
@@ -78,6 +79,9 @@ class OrderController {
       const restaurant = await Restaurant.findOne({
         _id: updatedOrder.restaurant
       })
+      updatedOrder.postman = postmanId;
+
+      await updatedOrder.save();
 
       const mailOptions = {
         from: 'olaoluofficial@gmail.com',
