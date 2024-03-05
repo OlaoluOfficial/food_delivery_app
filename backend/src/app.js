@@ -13,6 +13,7 @@ const productRoutes = require("./server/routes/product.routes");
 const cartRoutes = require("./server/routes/cart.routes")
 const restaurantRoutes = require("./server/routes/restaurant.routes")
 const paymentRoutes = require('./server/routes/payment.routes')
+const searchRoutes = require('./server/routes/search.routes')
 
 const app = express();
 
@@ -50,16 +51,15 @@ app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/restaurants', restaurantRoutes)
 app.use('/api/v1/carts', cartRoutes)
 app.use('/api/v1/pay', paymentRoutes)
+app.use('/api/v1/search', searchRoutes)
 
 const { lookup } = require("dns").promises;
 const os = require("os");
 
 const PORT = process.env.PORT || 2300;
 app.enable("trust proxy");
-app.use("/api/v1/carts", cartRoutes);
-app.use("/api/v1/products", productRoutes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   if (err instanceof multer.MulterError) {
     // A Multer error occurred during file upload
     console.log(err.code);
