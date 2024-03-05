@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+  customer: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
   },
   product: {
     type: String,
@@ -12,22 +12,27 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["placed", "confirmed", "delivered"],
-    default: "placed",
+    enum: ['placed', 'confirmed', 'delivered'],
+    default: 'placed',
   },
   price: {
     type: Number,
     required: true,
   },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Restaurant",
-    required: true,
+  restaurant: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Restaurant', 
+    required: true 
   },
   orderTime: {
     type: Date,
     default: Date.now,
   },
+  postman: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  }
 });
 
 const Order = mongoose.model("Order", orderSchema);

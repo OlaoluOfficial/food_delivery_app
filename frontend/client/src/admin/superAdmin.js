@@ -6,6 +6,7 @@ import { z } from "zod";
 import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
+import img from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -28,6 +29,7 @@ const SuperAdminPage = () => {
 
   const fetchAdmin = async () => {
     try {
+      const response = await fetch("http://localhost:2300/api/v1/restaurants");
       const response = await fetch("http://localhost:2300/api/v1/restaurants");
       if (response.ok) {
         const data = await response.json();
@@ -59,6 +61,12 @@ const SuperAdminPage = () => {
 
   const handleAddRestaurant = async (data) => {
     try {
+      const response = await fetch("http://localhost:2300/api/v1/restaurants", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
       const response = await fetch("http://localhost:2300/api/v1/restaurants", {
         method: "POST",
         body: JSON.stringify(data),
@@ -198,10 +206,41 @@ const SuperAdminPage = () => {
                   <FaTrash
                     className="click-order3-icon"
                     onClick={() => openModal2(e._id)}
+                    onClick={() => openModal2(e._id)}
                   ></FaTrash>
                 </div>
               </div>
             ))}
+            <div className="modal-container">
+              <Modal
+                isOpen={modalOpen2}
+                onRequestClose={closeModal2}
+                className="modal2"
+              >
+                <FaXmark
+                  className="modal-icon"
+                  onClick={() => setModalOpen2(false)}
+                />
+                <h3>Delete Product</h3>
+                <p>Are you sure you want to delete this item?</p>
+
+                <div className="btn-chamber2">
+                  <button
+                    className="modal-button cnfm"
+                    type="submit"
+                    onClick={() => handleDelete(selectedId)}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="modal-button"
+                    onClick={() => setModalOpen2(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Modal>
+            </div>
             <div className="modal-container">
               <Modal
                 isOpen={modalOpen2}

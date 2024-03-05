@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./cart.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -190,6 +191,7 @@ function Cart() {
           </div>
           <div className="rightCartSec-up">
             <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
+            <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
           </div>
           <div className="rightCartSec-up light">
             <h5 className="light">Delivery fee</h5>
@@ -198,7 +200,11 @@ function Cart() {
           <div className="rightCartSec-up">
             <h5>TOTAL COST</h5>
             <h5>{(parseInt(getTotalPrice()) + delivery).toFixed(2)}</h5>
+            <h5>{(parseInt(getTotalPrice()) + delivery).toFixed(2)}</h5>
           </div>
+          <button className="cartButton" onClick={handleCheckout}>
+            Check out
+          </button>
           <button className="cartButton" onClick={handleCheckout}>
             Check out
           </button>

@@ -6,7 +6,6 @@ class AuthMiddleware {
     try {
       // const token = req.header("Authorization");
       const token = req.cookies.foodieToken;
-      console.log(token);
 
       if (!token) {
         return res

@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Restaurant = require("../../models/restaurant")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -45,8 +46,13 @@ class AuthController {
 
   static async login(req, res) {
     try {
-      const { email, password } = req.body;
-      let user = await User.findOne({ email });
+      const { email, password, role } = req.body;
+      let user;
+      if (role === 'restaurant') {
+        user = await Restaurant.findOne({ email });
+      } else {
+        user = await User.findOne({ email });
+      }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
@@ -54,9 +60,9 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (user.role == "restaurant") {
-        if (password === "123456789") {
-          return res.status(419).json({ msg: "Please change your password!" });
+      if (user.role == 'restaurant') {
+        if (password === '123456789') {
+          return res.status(419).json({ msg: "Please change your password!"})
         }
       }
       const payload = {
@@ -67,26 +73,22 @@ class AuthController {
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 3600000,
       });
-      res.cookie("foodieToken", token, {
-        maxAge: 1000 * 60 * 60
-      });
+      res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
+      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
 
-      return res
-        .status(200)
-        .json({ message: "Login Successful", data: { user, token } });
+      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
     } catch (err) {
       console.error(err.message);
-      return res.status(500).send("Server Error");
+      return res.status(500).send("Error logging in!");
     }
   }
 
-  static async changePassword(req, res) {
+  static async changePassword (req, res) {
     const userId = req.user.id;
     const value = req.body;
 
     try {
       const userExist = await User.findById({ _id: userId });
-      // console.log(userExist);
       let verifyPassword = await bcrypt.compare(
         value.currentPassword,
         userExist.password
@@ -112,6 +114,16 @@ class AuthController {
       return res.status(417).json({ Error: error });
     }
   }
+
+  static async logout (req, res) {
+    try {
+      res.clearCookie('foodieToken'); 
+      res.status(200).json({ message: 'Logout Successful' });
+    } catch (error) {
+      console.error(error.message);
+      return res.status(500).send('Error logging out!')
+    }
+  }  
 }
 
 module.exports = AuthController;

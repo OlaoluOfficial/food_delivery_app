@@ -72,6 +72,7 @@ export default function SideCart({ menu, selectedId }) {
       // Accept the offer
       setStatus("Offer Accepted");
       addToCart(selectedFood._id, userOffer);
+      addToCart(selectedFood._id, userOffer);
     } else {
       // Show an error (you might want to handle this differently)
       setStatus("Negotiate Higher 😔");
