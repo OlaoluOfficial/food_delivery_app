@@ -91,7 +91,6 @@ class AuthController {
         
     try {
       const userExist = await User.findById({ _id: userId });
-      // console.log(userExist);
       let verifyPassword = await bcrypt.compare(
         value.currentPassword,
         userExist.password
