@@ -17,12 +17,11 @@ require("dotenv").config();
 class AuthController {
   static async register(req, res) {
     try {
-      let { username, password, email, phone, role, fullname, address } = req.body;
+      let { password, email, phone, role, fullname, address } = req.body;
 
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
       let user = new User({
-        username,
         fullname,
         password,
         email,
