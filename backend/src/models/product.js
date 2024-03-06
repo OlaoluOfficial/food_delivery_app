@@ -13,7 +13,7 @@ const productSchema = new Schema({
     type: Number, 
     required: true 
   },
-  minimum_price: { 
+  minimumPrice: { 
     type: Number, 
     required: true 
   },

@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const Restaurant = require("../../models/restaurant")
+const Restaurant= require("../../models/restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -17,31 +17,29 @@ require("dotenv").config();
 class AuthController {
   static async register(req, res) {
     try {
-      let { username, password, email, phone, role, address } = req.body;
+      let { password, email, phone, role, fullname, address } = req.body;
 
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
       let user = new User({
-        username,
+        fullname,
         password,
         email,
         phone,
         role,
-        address
+        address,
       });
 
       await user.save();
 
-      return res
-        .status(201)
-        .json({
-          status: 200,
-          message: "User created successfully",
-          data: user,
-        });
+      return res.status(201).json({
+        status: 200,
+        message: "User created successfully",
+        data: user,
+      });
     } catch (error) {
+      console.log(error)
       const errors = errorHandler.dbSchemaErrors(error);
-      // console.log(errors)
       return res.status(403).json({ Message: errors });
     }
   }
@@ -50,10 +48,13 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if (role === 'restaurant') {
+      if(role ==="restaurant"){
+        
         user = await Restaurant.findOne({ email });
-      } else {
+      }
+      else{
         user = await User.findOne({ email });
+
       }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
@@ -62,7 +63,7 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (user.role == 'restaurant') {
+      if (role == 'restaurant') {
         if (password === '123456789') {
           return res.status(419).json({ msg: "Please change your password!"})
         }
@@ -88,7 +89,7 @@ class AuthController {
   static async changePassword (req, res) {
     const userId = req.user.id;
     const value = req.body;
-        
+
     try {
       const userExist = await User.findById({ _id: userId });
       let verifyPassword = await bcrypt.compare(
@@ -103,12 +104,17 @@ class AuthController {
           { password: hashedPassword },
           { new: true }
         );
-        if(restaurant)
-        return res.status(201).json({ message: "Password changed successfully" });
-      } else  return res.status(403).json({ message: "Current password is incorrect" });
+        if (restaurant)
+          return res
+            .status(201)
+            .json({ message: "Password changed successfully" });
+      } else
+        return res
+          .status(403)
+          .json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-     return res.status(417).json({ Error: error });
+      return res.status(417).json({ Error: error });
     }
   }
 

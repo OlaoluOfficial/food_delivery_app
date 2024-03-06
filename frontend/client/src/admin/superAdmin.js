@@ -6,16 +6,20 @@ import { z } from "zod";
 import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
+import Cookies from "js-cookie";
+import AdminLoginPage from "./adminLogin";
+
 
 const schema = z.object({
-  restaurantName: z.string().min(2),
-  restaurantLocation: z.string().min(2),
-  restaurantEmail: z.string().min(2),
-  restaurantTel: z.number().min(2),
-  restaurantDescription: z.string().min(2),
+  name: z.string().min(2),
+  location: z.string().min(2),
+  email: z.string(),
+  phoneNumber: z.string().min(11),
 });
 
 const SuperAdminPage = () => {
+    const token = Cookies.get("foodieToken");
+    const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [admin, setAdmin] = useState([]);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
@@ -32,9 +36,7 @@ const SuperAdminPage = () => {
       const response = await fetch("http://localhost:2300/api/v1/restaurants");
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setAdmin(data.restaurants);
-        console.log(admin);
       } else {
         setError("Failed to fetch data from the database");
         console.error("Failed to fetch data from the database");
@@ -67,14 +69,15 @@ const SuperAdminPage = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
+
       if (response.ok) {
-        response.json().then(alert("Registration successful!"));
         // Registration successful, show success message or redirect to another page
+        alert("Registration successful!");
         fetchAdmin();
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        setError(data.response);
+        alert(data.data.message);
         // alert(data.restaurant.error); // Display the error message sent by the server
       }
     } catch (error) {
@@ -89,9 +92,10 @@ const SuperAdminPage = () => {
     try {
       // Simulated API endpoint for deleting data from the database
       const response = await fetch(
-        `http://localhost:2300/api/v1/restaurant/${Id}`,
+        `http://localhost:2300/api/v1/restaurants/${Id}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -113,6 +117,7 @@ const SuperAdminPage = () => {
 
   return (
     <>
+     {isLoggedIn ? (
       <div className="restaurant-page-container">
         <section className="section-admin-hero">
           <img className="hero-img" src={img} alt="hero-img" />
@@ -135,7 +140,8 @@ const SuperAdminPage = () => {
                 Super Admin, you can add new restaurants and track restaurant
                 orders and deliveries. The system also includes features for
                 managing restaurant subscribsion, tracking performance metrics,
-                and facilitating communication you and the restaurants. →
+                and facilitating communication between you and the restaurants.
+                →
               </p>
             </div>
             <div className="form-container">
@@ -145,31 +151,27 @@ const SuperAdminPage = () => {
                   <ul className="form-list">
                     <li className="form-list-item">
                       <label>Restaurant Name:</label>
-                      <input type="text" {...register("restaurantName")} />
+                      <input type="text" {...register("name")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Location:</label>
-                      <input type="text" {...register("restaurantLocation")} />
+                      <input type="text" {...register("location")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Email:</label>
-                      <input type="email" {...register("restaurantEmail")} />
+                      <input type="email" {...register("email")} />
                     </li>
                     <li className="form-list-item">
                       <label>Restaurant Tel:</label>
-                      <input type="tel" {...register("restaurantTel")} />
+                      <input type="tel" {...register("phoneNumber")} />
                     </li>
 
                     <button
                       type="submit"
                       disabled={!isValid}
-                      className={
-                        isValid
-                          ? "addAdmin-btn submit-btn"
-                          : "addAdmin-btn2 submit-btn"
-                      }
+                      className="addAdmin-btn"
                     >
-                      Add Restaurant
+                      {isValid ? <>Add Restaurant</> : <s>Add Restaurant</s>}
                     </button>
                   </ul>
                 </form>
@@ -186,57 +188,94 @@ const SuperAdminPage = () => {
             <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
           </svg>
           <h2>Restaurants</h2>
-          <div className="main-course3">
-            {admin.map((e) => (
-              <div className="overall3">
-                <h4 className="dish-name3">{e.name}</h4>
-                <div className="description3">
-                  <p>{e.email}</p>
-                  <p>{e.tel}</p>
+          {admin ? (
+            <div className="main-course3">
+              {admin.map((e) => (
+                <div className="overall3">
+                  <h4 className="dish-name3">{e.name}</h4>
+                  <div className="description3">
+                    <p>{e.email}</p>
+                    <p>{e.tel}</p>
+                  </div>
+                  <p className="admin-loc">{e.location}</p>
+                  <div className="click-order3">
+                    <FaTrash
+                      className="click-order3-icon"
+                      onClick={() => openModal2(e._id)}
+                    ></FaTrash>
+                  </div>
                 </div>
-                <p className="admin-loc">{e.location}</p>
-                <div className="click-order3">
-                  <FaTrash
-                    className="click-order3-icon"
-                    onClick={() => openModal2(e._id)}
-                  ></FaTrash>
-                </div>
-              </div>
-            ))}
-            <div className="modal-container">
-              <Modal
-                isOpen={modalOpen2}
-                onRequestClose={closeModal2}
-                className="modal2"
-              >
-                <FaXmark
-                  className="modal-icon"
-                  onClick={() => setModalOpen2(false)}
-                />
-                <h3>Delete Product</h3>
-                <p>Are you sure you want to delete this item?</p>
-
-                <div className="btn-chamber2">
-                  <button
-                    className="modal-button cnfm"
-                    type="submit"
-                    onClick={() => handleDelete(selectedId)}
-                  >
-                    Confirm
-                  </button>
-                  <button
-                    className="modal-button"
+              ))}
+              <div className="modal-container">
+                <Modal
+                  isOpen={modalOpen2}
+                  onRequestClose={closeModal2}
+                  className="modal2"
+                >
+                  <FaXmark
+                    className="modal-icon"
                     onClick={() => setModalOpen2(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Modal>
+                  />
+                  <h3>Delete Product</h3>
+                  <p>Are you sure you want to delete this item?</p>
+
+                  <div className="btn-chamber2">
+                    <button
+                      className="modal-button cnfm"
+                      type="submit"
+                      onClick={() => handleDelete(selectedId)}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="modal-button"
+                      onClick={() => setModalOpen2(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Modal>
+              </div>
+              <div className="modal-container">
+                <Modal
+                  isOpen={modalOpen2}
+                  onRequestClose={closeModal2}
+                  className="modal2"
+                >
+                  <FaXmark
+                    className="modal-icon"
+                    onClick={() => setModalOpen2(false)}
+                  />
+                  <h3>Delete Product</h3>
+                  <p>Are you sure you want to delete this item?</p>
+
+                  <div className="btn-chamber2">
+                    <button
+                      className="modal-button cnfm"
+                      type="submit"
+                      onClick={() => handleDelete(selectedId)}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="modal-button"
+                      onClick={() => setModalOpen2(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Modal>
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="delivery-error">No data available</p>
+          )}
         </section>
       </div>
-    </>
+      ) : (
+        <AdminLoginPage />
+        )}
+        </>
   );
 };
 

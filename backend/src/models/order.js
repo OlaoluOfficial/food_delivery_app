@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   customer: { 
@@ -6,9 +6,9 @@ const orderSchema = new mongoose.Schema({
     ref: 'User', 
     required: true 
   },
-  product: { 
+  product: {
     type: String,
-    required: true 
+    required: true,
   },
   status: {
     type: String,
@@ -24,9 +24,9 @@ const orderSchema = new mongoose.Schema({
     ref: 'Restaurant', 
     required: true 
   },
-  orderTime: { 
-    type: Date, 
-    default: Date.now 
+  orderTime: {
+    type: Date,
+    default: Date.now,
   },
   postman: {
     type: mongoose.Schema.Types.ObjectId, 
@@ -35,6 +35,6 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;

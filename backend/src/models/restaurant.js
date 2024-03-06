@@ -15,15 +15,16 @@ const restaurantSchema = new Schema({
     type: String,
     required: true
   },
+  password:{
+    type: String,
+    required: true,
+    default:"123456789"
+  },
   registeredBy: {
     type: String,
     default:'admin'
   },
   email: {
-    type: String,
-    required: true
-  },
-  password: {
     type: String,
     required: true
   }

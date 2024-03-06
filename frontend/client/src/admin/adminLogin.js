@@ -1,20 +1,20 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../users/userContext";
-import loginImg from "../users/img/login-img.jpg";
+import loginImg from "../admin/admin-hero-img.jpeg";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import logo from "../users/img/EatRite-logo.png";
 
 const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters." }),
+  email: z.string(),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
+  role: z.string(),
 });
 
 function AdminLoginPage() {
@@ -45,15 +45,12 @@ function AdminLoginPage() {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        data
+        data, {withCredentials: true}
       );
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
+      if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
         alert("Login successful!");
-        navigate("/");
+        navigate("/admin");
         // Reset the form and clear input fields
         setLoginError("");
       } else {
@@ -61,36 +58,36 @@ function AdminLoginPage() {
         const data = await response.json();
         alert(data.data.message); // Display the error message sent by the server
       }
+      // Handle other errors (e.g., network error)
     } catch (error) {
-      if (error.response.status == 400) {
+      if (error.response == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else {
         setLoginError("An error occurred, please try again later");
       }
-      // Handle other errors (e.g., network error)
     }
   }
   return (
-    <div className="login-clip">
+    <div className="login-clip admin-login-clip">
       <div className="login-flex-box">
         <div className="login-img-box">
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
         <form onSubmit={handleSubmit(login)} className="login-container">
-          <h2 className="log">Login 🔐</h2>
-          <div>
+          <h3 className="log">Admin Login 🔐</h3>
+          <div className="margin-top margin-bottom">
             <input
-              className="input-name"
-              type="text"
+              className="input-name "
+              type="email"
               placeholder="Username"
               id="logIn"
-              {...register("username")}
+              {...register("email")}
             />
             {errors.username && (
               <p className="error">{errors.username.message}</p>
             )}
           </div>
-          <div className="Password-input-container">
+          <div className="Password-input-container margin-bottom">
             <input
               className="input-password"
               type={type}
@@ -107,6 +104,23 @@ function AdminLoginPage() {
               )}
             </div>
           </div>
+          <div className="input-role">
+            <input
+              {...register("role", { required: true })}
+              type="radio"
+              id="roleRestaurant"
+              value="restaurant"
+            />
+            <label htmlFor="roleRestaurant">Restaurant</label>
+
+            <input
+              {...register("role", { required: true })}
+              type="radio"
+              id="roleSuperAdmin"
+              value="admin"
+            />
+            <label htmlFor="roleSuperAdmin">Admin</label>
+          </div>
           {loginError && (
             <span className="error password-error">{loginError}</span>
           )}
@@ -116,6 +130,7 @@ function AdminLoginPage() {
           </button>
         </form>
       </div>
+      <img className="login-logo" src={logo} alt="eatrite" />
     </div>
   );
 }
