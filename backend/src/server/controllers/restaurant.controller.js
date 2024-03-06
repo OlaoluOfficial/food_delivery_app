@@ -17,11 +17,12 @@ class RestaurantController {
 
         const newRestaurant = new Restaurant({
           name,
-          description,
           location,
           phoneNumber,
+          description,
           email,
           password: hashedPassword,
+          role: "restaurant",
         });
 
         const savedRestaurant = await newRestaurant.save();

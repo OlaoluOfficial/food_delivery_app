@@ -9,9 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters." }),
+  email: z.string(),
+
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
@@ -41,15 +40,14 @@ function LoginPage() {
   };
 
   async function login(data) {
+    let Data = {...data, role: "customer"}
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        data
+        Data,
+        { withCredentials: true }
       );
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
+      if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
         alert("Login successful!");
         navigate("/");
@@ -61,7 +59,7 @@ function LoginPage() {
         alert(data.data.message); // Display the error message sent by the server
       }
     } catch (error) {
-      if (error.response.status === 400) {
+      if (error.response == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else {
         setLoginError("An error occurred, please try again later");
@@ -81,13 +79,11 @@ function LoginPage() {
             <input
               className="input-name"
               type="text"
-              placeholder="Username"
+              placeholder="Email"
               id="logIn"
-              {...register("username")}
+              {...register("email")}
             />
-            {errors.username && (
-              <p className="error">{errors.username.message}</p>
-            )}
+            {errors.username && <p className="error">{errors.email.message}</p>}
           </div>
           <div className="Password-input-container">
             <input

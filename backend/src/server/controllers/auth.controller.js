@@ -27,18 +27,16 @@ class AuthController {
         email,
         phone,
         role,
-        address
+        address,
       });
 
       await user.save();
 
-      return res
-        .status(201)
-        .json({
-          status: 200,
-          message: "User created successfully",
-          data: user,
-        });
+      return res.status(201).json({
+        status: 200,
+        message: "User created successfully",
+        data: user,
+      });
     } catch (error) {
       console.log(error)
       const errors = errorHandler.dbSchemaErrors(error);
@@ -91,7 +89,7 @@ class AuthController {
   static async changePassword (req, res) {
     const userId = req.user.id;
     const value = req.body;
-        
+
     try {
       const userExist = await User.findById({ _id: userId });
       let verifyPassword = await bcrypt.compare(
@@ -106,12 +104,17 @@ class AuthController {
           { password: hashedPassword },
           { new: true }
         );
-        if(restaurant)
-        return res.status(201).json({ message: "Password changed successfully" });
-      } else  return res.status(403).json({ message: "Current password is incorrect" });
+        if (restaurant)
+          return res
+            .status(201)
+            .json({ message: "Password changed successfully" });
+      } else
+        return res
+          .status(403)
+          .json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-     return res.status(417).json({ Error: error });
+      return res.status(417).json({ Error: error });
     }
   }
 
