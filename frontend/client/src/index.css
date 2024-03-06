@@ -54,8 +54,7 @@ body {
   gap: 6rem;
   list-style: none;
 }
-.nav-cart {
-}
+
 .nav-cart:hover {
   color: #e39b61;
 }

@@ -6,6 +6,9 @@ import { z } from "zod";
 import Modal from "react-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
+import Cookies from "js-cookie";
+import AdminLoginPage from "./adminLogin";
+
 
 const schema = z.object({
   name: z.string().min(2),
@@ -15,6 +18,8 @@ const schema = z.object({
 });
 
 const SuperAdminPage = () => {
+    const token = Cookies.get("foodieToken");
+    const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [admin, setAdmin] = useState([]);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
@@ -112,6 +117,7 @@ const SuperAdminPage = () => {
 
   return (
     <>
+     {isLoggedIn ? (
       <div className="restaurant-page-container">
         <section className="section-admin-hero">
           <img className="hero-img" src={img} alt="hero-img" />
@@ -266,7 +272,10 @@ const SuperAdminPage = () => {
           )}
         </section>
       </div>
-    </>
+      ) : (
+        <AdminLoginPage />
+        )}
+        </>
   );
 };
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import DeliveryLoginPage from "./delliveryLoginPage";
 
 const DeliveryPersonnelPage = () => {
+    const token = Cookies.get("foodieToken");
+    const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
   const [availableOrder, setAvailableOrder] = useState([]);
@@ -109,72 +113,78 @@ const DeliveryPersonnelPage = () => {
   };
 
   return (
-    <div>
-      <h2>Delivery Personnel Page</h2>
-      <ul>
-        {availableOrder.map((order) => (
-          <li key={order.orderId}>
-            Order #{order.orderId} - Status: {order.status}
-            <button onClick={() => handleSelection(order)}>View</button>
-          </li>
-        ))}
-      </ul>
-
-      {selectedOrder && (
+    <>
+      {isLoggedIn ? (
         <div>
-          <h3>Selected Order</h3>
-          {selectedOrder.map((order) => {
-            return (
-              <div>
-                <div className="selectedOrder">
-                  <div className="selectedOrder-header">
-                    <p>Order #{order.orderId}</p>
-                    <p>Status: {order.status}</p>
-                  </div>
-                  <div className="selectedOrder-details">
-                    <div className="orderDetails">
-                      <p>{order.name}</p>
-                      <p>{order.price}</p>
-                    </div>
-                    <div className="restaurantDetails">
-                      <h5>{order.restaurantName}</h5>
-                      <p>{order.restaurantAddress}</p>
-                      <p>{order.restaurantContact}</p>
-                    </div>
-                    <div className="customerDetails">
-                      <h5>{order.customerName}</h5>
-                      <p>{order.customerAddress}</p>
-                      <p>{order.customerContact}</p>
-                    </div>
-                  </div>
-                  <button onClick={() => handleAcceptOrder(order.orderId)}>
-                    Accept Order
-                  </button>
-                  <button onClick={() => handleCancel(order.orderId)}>
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-      <div>
-        <h3>Accepted Orders</h3>
-        {acceptedOrder && (
+          <h2>Delivery Personnel Page</h2>
           <ul>
-            {acceptedOrder.map((order) => (
+            {availableOrder.map((order) => (
               <li key={order.orderId}>
                 Order #{order.orderId} - Status: {order.status}
-                <button onClick={() => handleDelivered(order.orderId)}>
-                  Delivered
-                </button>
+                <button onClick={() => handleSelection(order)}>View</button>
               </li>
             ))}
           </ul>
-        )}
-      </div>
-    </div>
+
+          {selectedOrder && (
+            <div>
+              <h3>Selected Order</h3>
+              {selectedOrder.map((order) => {
+                return (
+                  <div>
+                    <div className="selectedOrder">
+                      <div className="selectedOrder-header">
+                        <p>Order #{order.orderId}</p>
+                        <p>Status: {order.status}</p>
+                      </div>
+                      <div className="selectedOrder-details">
+                        <div className="orderDetails">
+                          <p>{order.name}</p>
+                          <p>{order.price}</p>
+                        </div>
+                        <div className="restaurantDetails">
+                          <h5>{order.restaurantName}</h5>
+                          <p>{order.restaurantAddress}</p>
+                          <p>{order.restaurantContact}</p>
+                        </div>
+                        <div className="customerDetails">
+                          <h5>{order.customerName}</h5>
+                          <p>{order.customerAddress}</p>
+                          <p>{order.customerContact}</p>
+                        </div>
+                      </div>
+                      <button onClick={() => handleAcceptOrder(order.orderId)}>
+                        Accept Order
+                      </button>
+                      <button onClick={() => handleCancel(order.orderId)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <div>
+            <h3>Accepted Orders</h3>
+            {acceptedOrder && (
+              <ul>
+                {acceptedOrder.map((order) => (
+                  <li key={order.orderId}>
+                    Order #{order.orderId} - Status: {order.status}
+                    <button onClick={() => handleDelivered(order.orderId)}>
+                      Delivered
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      ) : (
+        <DeliveryLoginPage />
+      )}
+    </>
   );
 };
 
