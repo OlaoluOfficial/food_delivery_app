@@ -17,12 +17,13 @@ require("dotenv").config();
 class AuthController {
   static async register(req, res) {
     try {
-      let { username, password, email, phone, role, address } = req.body;
+      let { username, password, email, phone, role, fullname, address } = req.body;
 
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
       let user = new User({
         username,
+        fullname,
         password,
         email,
         phone,
@@ -79,10 +80,9 @@ class AuthController {
         expiresIn: 3600000,
       });
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
+      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
 
-      return res
-        .status(200)
-        .json({ message: "Login Successful", data: { user, token } });
+      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
@@ -95,7 +95,6 @@ class AuthController {
         
     try {
       const userExist = await User.findById({ _id: userId });
-      // console.log(userExist);
       let verifyPassword = await bcrypt.compare(
         value.currentPassword,
         userExist.password
