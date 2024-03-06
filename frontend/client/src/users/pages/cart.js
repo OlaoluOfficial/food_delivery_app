@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useState, useEffect } from "react";
 import "./cart.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -37,7 +36,7 @@ function Cart() {
       "http://localhost:2300/api/v1/users/getProfile",
       { withCredentials: true }
     );
-    setUser(User);
+     setUser(User.data);
   };
 
   const removeFromCart = async (productId) => {
@@ -48,7 +47,7 @@ function Cart() {
       );
       if (response.status == 200) {
         console.log(response);
-        setCart(response.data.items)
+        setCart(response.data.items);
         getDelivery();
       } else {
         setError("Something went Wrong, Please try again later");
@@ -86,7 +85,7 @@ function Cart() {
   };
 
   const getDelivery = () => {
-    setDelivery(getTotalPrice() * 0.1);
+    return (getTotalPrice() * 0.1).toFixed(2);
   };
 
   const handleCheckout = async () => {
@@ -97,23 +96,23 @@ function Cart() {
         txRef: "ref-1000",
         email: user.email,
         phoneNumber: user.phoneNumber,
-        name: user.name,
-        redirectUrl: "http://localhost:2300/",
+        name: user.username,
+        redirectUrl: "http://localhost:2300",
       };
+
       let response = await axios.post(
         "http://localhost:2300/api/v1/pay",
-        payload
+        payload, {withCredentials:true}
       );
       if (response.status == 200) {
-        let data = response.json();
-        alert(data.data.message);
-        setDelivery("");
+        const redirectUrl = response.data.data
+        window.open(redirectUrl);
       } else {
-        let data = response.json();
-        setError(data.data.message);
+        setError(response.data.message);
       }
     } catch (error) {
-      setError(error.response.data);
+      console.log(error)
+      setError(error);
     }
   };
 
@@ -122,7 +121,7 @@ function Cart() {
       <div className="cartContainer">
         <div className="leftCartSec">
           <div className="leftCartSec-up">
-            <h4>Shopping Cart</h4>
+            <h4>Cart</h4>
             <h5>{cart.length} Items</h5>
           </div>
 
@@ -191,20 +190,17 @@ function Cart() {
           </div>
           <div className="rightCartSec-up">
             <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
-            <h5>ITEMS {cart.length}</h5> <h5>{getTotalPrice()}</h5>
           </div>
           <div className="rightCartSec-up light">
             <h5 className="light">Delivery fee</h5>
-            <h5 className="light">{delivery.toFixed(2)}</h5>
+            <h5 className="light">{getDelivery()}</h5>
           </div>
           <div className="rightCartSec-up">
             <h5>TOTAL COST</h5>
-            <h5>{(parseInt(getTotalPrice()) + delivery).toFixed(2)}</h5>
-            <h5>{(parseInt(getTotalPrice()) + delivery).toFixed(2)}</h5>
+            <h5>
+              {(parseInt(getTotalPrice()) + parseInt(getDelivery())).toFixed(2)}
+            </h5>
           </div>
-          <button className="cartButton" onClick={handleCheckout}>
-            Check out
-          </button>
           <button className="cartButton" onClick={handleCheckout}>
             Check out
           </button>

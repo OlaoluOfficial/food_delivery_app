@@ -48,9 +48,6 @@ function LoginPage() {
         { withCredentials: true }
       );
       if (response.status == 200) {
-        // response.json().then((userInfo) => {
-        //   setUserInfo(userInfo);
-        // });
         // Registration successful, show success message or redirect to another page
         alert("Login successful!");
         navigate("/");

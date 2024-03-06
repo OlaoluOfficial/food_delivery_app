@@ -25,7 +25,7 @@ export default function MenuContainer() {
     let url = "http://localhost:2300/api/v1/products";
     if (search != "") {
       axios
-        .get(`http://localhost:2300/api/v1/products/${search}`)
+        .get(`http://localhost:2300/api/v1/search?q=${search}`)
         .then((response) => {
           setMenus(response.data.data);
         })

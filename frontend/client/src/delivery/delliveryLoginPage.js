@@ -43,7 +43,7 @@ function DeliveryLoginPage() {
   };
 
   async function login(data) {
-    let Data = { ...data, role: "customer" };
+    let Data = { ...data, role: "postman" };
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",

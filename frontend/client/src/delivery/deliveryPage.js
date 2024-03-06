@@ -20,14 +20,13 @@ const DeliveryPersonnelPage = () => {
       const actualData = data.data;
       setOrders(actualData);
 
-
-       const updateAvailableOrder = actualData.filter(
-         (item) => item.status == "Available"
-       );
+      const updateAvailableOrder = actualData.filter(
+        (item) => item.status == "placed"
+      );
       setAvailableOrder(updateAvailableOrder);
       // set accepted orders state
       const updateAcceptedOrder = actualData.filter(
-        (item) => item.status == "Accepted"
+        (item) => item.status == "confirmed"
       );
       setAcceptedOrder(updateAcceptedOrder);
 
@@ -55,10 +54,9 @@ const DeliveryPersonnelPage = () => {
       // Send a request to your backend API to mark the order as accepted
       axios
         .put(`http://localhost:2300/api/v1/orders/${orderId}`, {
-          status: "Accepted",
+          status: "confirmed",
         })
         .then(() => {
-          
           // Update the local state to reflect the accepted order
           setOrders((prevOrders) =>
             prevOrders.map((order) =>
@@ -150,7 +148,7 @@ const DeliveryPersonnelPage = () => {
                     </div>
                   </div>
                   <button onClick={() => handleAcceptOrder(order.orderId)}>
-                   Accept Order
+                    Accept Order
                   </button>
                   <button onClick={() => handleCancel(order.orderId)}>
                     Cancel

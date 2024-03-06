@@ -35,7 +35,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
-  /* border: 1px solid; */
+
 }
 .overall3 {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
@@ -121,4 +121,8 @@ body {
   padding: 0.5rem;
   width: 100%;
   font-size: 1.6rem;
+}
+.delivery-error{
+  text-align: center;
+  margin-top: 2rem;
 }

@@ -22,14 +22,11 @@ const Schema = z.object({
 });
 
 function RegisterPage() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors},
   } = useForm({ resolver: zodResolver(Schema) });
-  const [validationError, setValidationError] = useState(null);
   const [registrationError, setRegistrationError] = useState(null);
   // const history = useHistory(); // Access the history object
   const navigate = useNavigate();
@@ -48,9 +45,6 @@ function RegisterPage() {
         // Optionally, redirect to the login page
         navigate("/login"); // Use navigate to redirect to '/login'
         // Reset the form and clear input fields
-
-        setPassword("");
-        setValidationError("");
         setRegistrationError("");
       } else {
         // Registration failed, handle error response from the server
@@ -87,11 +81,11 @@ function RegisterPage() {
             <input
               className="input-email"
               id="username"
-              placeholder="Username"
+              placeholder="Full Name"
               type="text"
-              {...register("username")}
+              {...register("fullName")}
             />
-            {errors.username && (
+            {errors.fullName && (
               <p className="error">{errors.username.message}</p>
             )}
           </div>

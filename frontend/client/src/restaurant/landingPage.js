@@ -77,16 +77,15 @@ const RestaurantLandingPage = () => {
   const handleSubmits = async (e) => {
     e.preventDefault();
 
-    if (foodName || price || image || desc || minPrice == "" || 0) {
+    if (
+      foodName == "" ||
+      price == "" ||
+      desc == "" ||
+      image == "" ||
+      minPrice == ""
+    ) {
       setError("Please fill out all input fields");
     } else {
-      const dataForm = {
-        name: foodName,
-        price: price,
-        minimumPrice: minPrice,
-        image: image,
-        description: desc,
-      };
       // Simulated API endpoint for uploading data to the database
       const formData = new FormData();
       formData.append("name", foodName);
@@ -107,6 +106,10 @@ const RestaurantLandingPage = () => {
           alert(response.data.message);
           // Refetch the updated list of foods
           fetchFoods();
+          setFoodName("");
+          setDesc("");
+          setPrice("");
+          setMinPrice("");
         } else {
           setError("Failed to upload data to the database");
           // console.error("Failed to upload data to the database");

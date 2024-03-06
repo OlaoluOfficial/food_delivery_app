@@ -22,13 +22,16 @@ function Header() {
   }, [setUserInfo]);
 
   function logout() {
-    fetch("http://localhost:5000/logout", {
+    fetch("http://localhost:2300/api/v1/auth/logout", {
       credentials: "include",
       method: "POST",
     });
     setUserInfo(null);
   }
-  const username = userInfo?.username;
+  const username =
+    userInfo && userInfo.username ? userInfo.username.split(" ") : null;
+  const name = username ? username[0] : null;
+
   return (
     <div className="Header">
       <div className="nav-flex-container">
@@ -54,10 +57,10 @@ function Header() {
               <a className="nav-btn" onClick={logout}>
                 Logout
               </a>
-              <span className="nav-btn nav-btn-colored">{username}</span>
+              <span className="nav-btn nav-btn-colored">{name}</span>
             </>
           )}
-          {!username && (
+          {!name && (
             <>
               <Link className="nav-btn" to="/login">
                 Log-In
