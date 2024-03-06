@@ -35,7 +35,7 @@ function PrimaryPage() {
             </div>
           </Link>
         </div>
-        <img className="hero-img margin-top-big" src={logo} alt="logo" />
+        <img className="hero-img-admin margin-top-big" src={logo} alt="logo" />
       </div>
       {/* //   ) : ( */}
       {/* //     <AdminLoginPage /> */}

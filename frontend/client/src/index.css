@@ -111,6 +111,17 @@ body {
   left: 50%;
   transform: translate(-50%, -40%);
 }
+.hero-img-admin {
+  width: 35rem;
+  height: 35rem;
+  /* background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14); */
+  padding: 5rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+}
 .heading-primary {
   color: #fff2e8;
   font-size: 10.5rem;
