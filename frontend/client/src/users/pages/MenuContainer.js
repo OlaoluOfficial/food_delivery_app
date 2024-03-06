@@ -23,10 +23,10 @@ export default function MenuContainer() {
   // }, []);
 
   useEffect(() => {
-    let url = "http://localhost:2300/api/v1/products";
+    let url = "http://localhost:2300/api/v1/products/";
     if (search != "") {
       axios
-        .get(`http://localhost:2300/api/v1/products/${search}`)
+        .get(`http://localhost:2300/api/v1/products/`)
         .then((response) => {
           setMenus(response.data.data);
         })
@@ -37,7 +37,7 @@ export default function MenuContainer() {
       axios
         .get(url)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           setMenus(response.data.data);
         })
         .catch((error) => {

@@ -6,7 +6,7 @@ import UserContext from "./userContext";
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
   useEffect(() => {
-    fetch("http://localhost:5000/profile", {
+    fetch("http://localhost:2300//api/v1/users/", {
       credentials: "include",
     }).then((response) => {
       response.json().then((userInfo) => {
@@ -16,7 +16,7 @@ function Header() {
   }, [setUserInfo]);
 
   function logout() {
-    fetch("http://localhost:5000/logout", {
+    fetch("http://localhost:2300/logout", {
       credentials: "include",
       method: "POST",
     });
