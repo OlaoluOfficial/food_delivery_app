@@ -1,78 +1,81 @@
 .primaryCard {
-    background-color: #fd7e14;
-    padding: 2rem;
-    margin: 1rem;
-    cursor: pointer;
-    border-radius: 10px;
-    width: 40rem;
-    height: 28rem;
-    transition: transform 1s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  background-color: #fd7e14;
+  padding: 2rem;
+  margin: 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 40rem;
+  height: 28rem;
+  transition: transform 1s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .primaryCard:hover {
-    transform: translateY(-20px);
-    background-color: #efbd80;
+  transform: translateY(-20px);
+  background-color: #efbd80;
 }
 
 .adminIcon {
-    width: 7rem;
-    height: 7rem;
-    margin: 2rem;
+  width: 7rem;
+  height: 7rem;
+  margin: 2rem;
 }
 
 .primaryCard h3 {
-    color: white;
+  color: white;
 }
 
 .container1 {
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 8%;
-    /* border: 1px solid; */
-    margin: 4rem auto;
-    gap: 5rem;
-    /* overflow-x: hidden; */
-    width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 8%;
+  /* border: 1px solid; */
+  margin: 4rem auto;
+  gap: 5rem;
+  /* overflow-x: hidden; */
+  width: 80vw;
 }
 
 .container13 {
-    overflow-x: hidden;
-    background-image: linear-gradient(to right bottom, rgba(54, 48, 30, 0.699), #77777788), url("../users/img/background-food2.jpg");
-    /* filter: blur(8px); */
-    /* -webkit-filter: blur(8px); */
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding-top: 1rem;
-    /* width: 99vw; */
-    min-height: 100vh;
+  overflow-x: hidden;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(54, 48, 30, 0.699),
+      #77777788
+    ),
+    url("../users/img/background-food2.jpg");
+  /* filter: blur(8px); */
+  /* -webkit-filter: blur(8px); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 1rem;
+  /* width: 99vw; */
+  min-height: 100vh;
 }
 
-
-
 @media only screen and (max-width: 768px) {
-    .container1 {
-        padding: 5% 5%;
-        /* Adjust padding for smaller screens */
-    }
+  .container1 {
+    padding: 5% 5%;
+    /* Adjust padding for smaller screens */
+  }
 
-    .primaryCard {
-        width: 100%;
-        /* Make cards occupy full width on small screens */
-        height: auto;
-        /* Adjust height to fit content */
-        margin: 1rem 0;
-        /* Add margin at the top and bottom for spacing */
-    }
+  .primaryCard {
+    width: 100%;
+    /* Make cards occupy full width on small screens */
+    height: auto;
+    /* Adjust height to fit content */
+    margin: 1rem 0;
+    /* Add margin at the top and bottom for spacing */
+  }
 
-    .primaryCard img {
-        width: 5rem;
-        /* Reduce image size for smaller screens */
-        height: 5rem;
-        margin: 1rem 0;
-        /* Adjust margin for spacing */
-    }
+  .primaryCard img {
+    width: 5rem;
+    /* Reduce image size for smaller screens */
+    height: 5rem;
+    margin: 1rem 0;
+    /* Adjust margin for spacing */
+  }
 }

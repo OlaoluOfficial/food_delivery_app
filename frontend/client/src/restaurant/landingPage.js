@@ -15,7 +15,7 @@ const schema = z.object({
 });
 
 const RestaurantLandingPage = () => {
-    const token = Cookies.get("foodieToken");
+  const token = Cookies.get("foodieToken");
   const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [foods, setFoods] = useState([]);
   const [foodName, setFoodName] = useState("");

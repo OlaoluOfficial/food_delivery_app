@@ -11,10 +11,10 @@ import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 
 const schema = z.object({
-  confirmPassword: z
+  currentPassword: z
     .string()
     .min(8, { message: "Password must be at least 8 characters." }),
-  password: z
+  newPassword: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
 });
@@ -50,10 +50,7 @@ function FPPage() {
         "http://localhost:2300/api/v1/auth/changepassword",
         data
       );
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
+      if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
         alert("Password change successful!");
         navigate("/admin/login");
@@ -82,7 +79,7 @@ function FPPage() {
               <img src={loginImg} alt="login-img" className="login-img" />
             </div>
             <form onSubmit={handleSubmit(login)} className="login-container">
-              <h2 className="log">Login 🔐</h2>
+              <h2 className="log">Change Password 🔐</h2>
 
               <div className="Password-input-container">
                 <input
@@ -90,7 +87,7 @@ function FPPage() {
                   type={type}
                   id="password"
                   placeholder="Password"
-                  {...register("password")}
+                  {...register("currentPassword")}
                 />
                 {icon && <div onClick={handleToggle}>{icon}</div>}
                 <div>
@@ -105,9 +102,9 @@ function FPPage() {
                 <input
                   className="input-name"
                   type={type}
-                  placeholder="Confirm Password"
+                  placeholder="New Password"
                   id="logIn"
-                  {...register("confirmPassword")}
+                  {...register("newPassword")}
                 />
                 {icon && <div onClick={handleToggle}>{icon}</div>}
                 <div>

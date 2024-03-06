@@ -66,7 +66,7 @@ function RegisterPage() {
           <img src={loginImg} alt="login-img" className="login-img" />
         </div>
         <form className="login-container" onSubmit={handleSubmit(signUp)}>
-          <h2 className="log">Sign-up</h2>
+          <h2 className="log2">Sign-up</h2>
           <div>
             <input
               className="input-name"

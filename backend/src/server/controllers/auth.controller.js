@@ -5,39 +5,54 @@ const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
 require("dotenv").config();
 
-// function generateRandomRegistrationNumber(length) {
-//   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-//   let registrationNumber = "";
-//   for (let i = 0; i < length; i++) {
-//     const randomIndex = Math.floor(Math.random() * characters.length);
-//     registrationNumber += characters.charAt(randomIndex);
-//   }
-//   return registrationNumber;
-// }
+
 class AuthController {
   static async register(req, res) {
-    console.log(req.body)
     try {
       let { password, email, phone, role, username, address } = req.body;
 
-      const salt = await bcrypt.genSalt(10);
-      password = await bcrypt.hash(password, salt);
-      let user = new User({
-        username,
-        password,
-        email,
-        phone,
-        role,
-        address,
-      });
+      if (role == "delivery") {
+        let password = "123456789";
+        const salt = await bcrypt.genSalt(10);
+        let hashedPassword = await bcrypt.hash(password, salt);
 
-      await user.save();
+        let user = new User({
+          username,
+          password: hashedPassword,
+          email,
+          phone,
+          role,
+          address,
+        });
 
-      return res.status(201).json({
-        status: 200,
-        message: "User created successfully",
-        data: user,
-      });
+        await user.save();
+
+        return res.status(201).json({
+          status: 200,
+          message: "User created successfully",
+          data: user,
+        });
+      } else {
+        const salt = await bcrypt.genSalt(10);
+        let hashedPassword = await bcrypt.hash(password, salt);
+
+        let user = new User({
+          username,
+          password: hashedPassword,
+          email,
+          phone,
+          role,
+          address,
+        });
+
+        await user.save();
+
+        return res.status(201).json({
+          status: 200,
+          message: "User created successfully",
+          data: user,
+        });
+      }
     } catch (error) {
       console.log(error);
       const errors = errorHandler.dbSchemaErrors(error);
@@ -49,6 +64,11 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
+      if (role == "restaurant" || role == "delivery") {
+        if (password === "123456789") {
+          return res.status(419).json({ msg: "Please change your password!" });
+        }
+      }
       if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
       } else {
@@ -60,11 +80,6 @@ class AuthController {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
-      }
-      if (role == "restaurant") {
-        if (password === "123456789") {
-          return res.status(419).json({ msg: "Please change your password!" });
-        }
       }
       const payload = {
         user: {
@@ -78,12 +93,10 @@ class AuthController {
       const { password: userPassword, ...userDataWithoutPassword } =
         user.toObject();
 
-      return res
-        .status(200)
-        .json({
-          message: "Login Successful",
-          data: { user: userDataWithoutPassword, token },
-        });
+      return res.status(200).json({
+        message: "Login Successful",
+        data: { user: userDataWithoutPassword, token },
+      });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
@@ -92,23 +105,23 @@ class AuthController {
 
   static async changePassword(req, res) {
     const userId = req.user.id;
-    const value = req.body;
+    const { currentPassword, newPassword } = req.body;
 
     try {
       const userExist = await User.findById({ _id: userId });
       let verifyPassword = await bcrypt.compare(
-        value.currentPassword,
+        currentPassword,
         userExist.password
       );
       if (verifyPassword) {
         const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(value.newPassword, salt);
-        const restaurant = await User.findByIdAndUpdate(
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const person = await User.findByIdAndUpdate(
           { _id: userId },
           { password: hashedPassword },
           { new: true }
         );
-        if (restaurant)
+        if (person)
           return res
             .status(201)
             .json({ message: "Password changed successfully" });
