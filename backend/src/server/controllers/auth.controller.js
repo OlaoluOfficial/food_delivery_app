@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const Restaurant= require("../../models/restaurant");
+const Restaurant = require("../../models/restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -27,20 +27,18 @@ class AuthController {
         email,
         phone,
         role,
-        address
+        address,
       });
 
       await user.save();
 
-      return res
-        .status(201)
-        .json({
-          status: 200,
-          message: "User created successfully",
-          data: user,
-        });
+      return res.status(201).json({
+        status: 200,
+        message: "User created successfully",
+        data: user,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const errors = errorHandler.dbSchemaErrors(error);
       return res.status(403).json({ Message: errors });
     }
@@ -50,13 +48,15 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if(role ==="restaurant"){
-        
-        user = await Restaurant.findOne({ email });
+      if (role == "restaurant" || role == "delivery") {
+        if (password === "123456789") {
+          return res.status(419).json({ msg: "Please change your password!" });
+        }
       }
-      else{
+      if (role === "restaurant") {
+        user = await Restaurant.findOne({ email });
+      } else {
         user = await User.findOne({ email });
-
       }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
@@ -64,11 +64,6 @@ class AuthController {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
-      }
-      if (role == 'restaurant') {
-        if (password === '123456789') {
-          return res.status(419).json({ msg: "Please change your password!"})
-        }
       }
       const payload = {
         user: {
@@ -79,51 +74,62 @@ class AuthController {
         expiresIn: 3600000,
       });
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
-      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
+      const { password: userPassword, ...userDataWithoutPassword } =
+        user.toObject();
 
-      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
+      return res
+        .status(200)
+        .json({
+          message: "Login Successful",
+          data: { user: userDataWithoutPassword, token },
+        });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
     }
   }
 
-  static async changePassword (req, res) {
+  static async changePassword(req, res) {
     const userId = req.user.id;
-    const value = req.body;
-        
+    const { currentPassword, newPassword } = req.body;
+
     try {
       const userExist = await User.findById({ _id: userId });
       let verifyPassword = await bcrypt.compare(
-        value.currentPassword,
+        currentPassword,
         userExist.password
       );
       if (verifyPassword) {
         const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(value.newPassword, salt);
-        const restaurant = await User.findByIdAndUpdate(
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const person = await User.findByIdAndUpdate(
           { _id: userId },
           { password: hashedPassword },
           { new: true }
         );
-        if(restaurant)
-        return res.status(201).json({ message: "Password changed successfully" });
-      } else  return res.status(403).json({ message: "Current password is incorrect" });
+        if (person)
+          return res
+            .status(201)
+            .json({ message: "Password changed successfully" });
+      } else
+        return res
+          .status(403)
+          .json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-     return res.status(417).json({ Error: error });
+      return res.status(417).json({ Error: error });
     }
   }
 
-  static async logout (req, res) {
+  static async logout(req, res) {
     try {
-      res.clearCookie('foodieToken'); 
-      res.status(200).json({ message: 'Logout Successful' });
+      res.clearCookie("foodieToken");
+      res.status(200).json({ message: "Logout Successful" });
     } catch (error) {
       console.error(error.message);
-      return res.status(500).send('Error logging out!')
+      return res.status(500).send("Error logging out!");
     }
-  }  
+  }
 }
 
 module.exports = AuthController;

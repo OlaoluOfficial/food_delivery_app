@@ -11,9 +11,7 @@ module.exports.dbSchemaErrors = (err) => {
       return "Phone Number already exist";
     } else if (key[0] === "email") {
       return "Email address already exist";
-    } else if (key[0] === "username") {
-      return "Username already exist";
-    }
+    } 
   }
   return errorMessage;
   
