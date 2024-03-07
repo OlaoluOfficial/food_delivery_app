@@ -51,13 +51,13 @@ body {
 
 .title {
   margin-bottom: 32px;
-  font-size: 40px;
+  /* font-size: 40px; */
   color: #2d1909;
 }
 
 .inputContainer {
-  width: 500px;
-  height: 60px;
+  width: 70%;
+  height: 5rem;
   border: 1px solid #431907;
   display: flex;
   align-items: center;

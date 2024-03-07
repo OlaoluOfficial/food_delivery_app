@@ -22,7 +22,7 @@ body {
   background-image: linear-gradient(to right bottom, #120a0253, #23110364),
     url(./admin-hero-img.jpg);
   height: 100vh;
-  background-size: cover;
+  background-size: 100%;
   position: relative;
   margin-bottom: 8rem;
 }
@@ -66,6 +66,7 @@ em {
 }
 .form-description {
   width: 50%;
+  line-height: 3rem;
 }
 .heading-tertiary {
   margin-bottom: 2rem;
@@ -80,6 +81,7 @@ fieldset {
 }
 .legend {
   text-align: center;
+  margin-bottom: 2rem;
 }
 .form {
 }
@@ -105,6 +107,7 @@ fieldset {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
   border-bottom: 3px solid #fd7e14;
 }
+/*  */
 
 .submit-btn {
   border: none;
@@ -120,7 +123,7 @@ fieldset {
   fill: #fff2e8;
 }
 .section-dishes {
-  margin-bottom: 8rem;
+  /* margin-bottom: 8rem; */
   padding: 6rem 6rem 0rem 6rem;
   background-color: #f7f7f7;
 }
@@ -140,8 +143,8 @@ fieldset {
 .overall2 {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  max-width: 30rem;
-  min-width: 27rem;
+  width: 35rem;
+  justify-content: center;
   padding: 10px;
 }
 .content-box2 {
@@ -268,14 +271,111 @@ fieldset {
   /* border:1px solid; */
 }
 
-.cnfm{
+.cnfm {
   border: none;
   background-color: #fd7e14;
   color: #fff;
 }
 
-.cnfm2{
+.cnfm2 {
   border: none;
   background-color: #deb887;
   color: #fff;
+}
+/* *********************
+MEDIA QUARY
+************************/
+
+@media all and (max-width: 530px) {
+  .admin-hero-section {
+    background-image: linear-gradient(to right bottom, #120a0253, #23110364),
+      url(./admin-hero-img.jpg);
+    height: 100vh;
+    /* background-size: 100%; */
+    /* background-size: auto; */
+    object-fit: contain;
+    width: 100vw;
+    position: relative;
+    margin-bottom: 8rem;
+  }
+  .hero-img {
+    width: 20rem;
+    height: 20rem;
+    /* background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14); */
+    /* padding: 5rem; */
+    /* border-radius: 50%; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+  }
+  .hero-img-admin {
+    display: none;
+  }
+  .admin-primary-heading {
+    font-size: 3rem;
+    color: #fff2e8;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(0%, -50%);
+    background-color: #fd7e14;
+    border-radius: 0 10rem 10rem 0;
+    width: 60%;
+    padding: 4rem 3rem;
+    letter-spacing: 1px;
+  }
+  .primary-heading-paragraph {
+    width: 50vw;
+    display: block;
+    font-size: 1.6rem;
+    color: #fff2e8;
+    font-weight: 400;
+    margin-top: 1rem;
+  }
+  .form-section-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.6rem;
+    display: block;
+    gap: 5rem;
+  }
+  .form-description {
+    width: auto;
+    margin-bottom: 3rem;
+  }
+  .form-container {
+    width: auto;
+  }
+  .form-list-item label {
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .form-list-item input {
+    margin-left: 0;
+  }
+  .heading-primary {
+    color: #fff2e8;
+    font-size: 6rem;
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    /* font-weight: 50 */
+  }
+  /* LOGIN AND SIGNUP QUARY */
+  .login-flex-box {
+    height: auto;
+    width: 80%;
+  }
+  .login-img-box {
+    height: auto;
+  }
+  .log2 {
+    margin-top: 2rem;
+    font-size: 2.5rem;
+    color: rgb(111, 42, 12);
+    text-align: center;
+    /* display: none; */
+  }
 }
