@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import Cookies from "js-cookie";
+import AdminLoginPage from "./adminLogin";
 
 const schema = z.object({
   confirmPassword: z
@@ -18,6 +20,8 @@ const schema = z.object({
 });
 
 function FPPage() {
+  const token = Cookies.get("foodieToken");
+  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [loginError, setLoginError] = useState(null);
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
@@ -70,64 +74,70 @@ function FPPage() {
     }
   }
   return (
-    <div className="login-clip">
-      <div className="login-flex-box">
-        <div className="login-img-box">
-          <img src={loginImg} alt="login-img" className="login-img" />
-        </div>
-        <form onSubmit={handleSubmit(login)} className="login-container">
-          <h2 className="log">Login 🔐</h2>
+    <>
+      {isLoggedIn ? (
+        <div className="login-clip">
+          <div className="login-flex-box">
+            <div className="login-img-box">
+              <img src={loginImg} alt="login-img" className="login-img" />
+            </div>
+            <form onSubmit={handleSubmit(login)} className="login-container">
+              <h2 className="log">Login 🔐</h2>
 
-          <div className="Password-input-container">
-            <input
-              className="input-password"
-              type={type}
-              id="password"
-              placeholder="Password"
-              {...register("password")}
-            />
-            {icon && <div onClick={handleToggle}>{icon}</div>}
-            <div>
-              {errors.password && (
-                <p className="error password-error">
-                  {errors.password.message}
-                </p>
+              <div className="Password-input-container">
+                <input
+                  className="input-password"
+                  type={type}
+                  id="password"
+                  placeholder="Password"
+                  {...register("password")}
+                />
+                {icon && <div onClick={handleToggle}>{icon}</div>}
+                <div>
+                  {errors.password && (
+                    <p className="error password-error">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div>
+                <input
+                  className="input-name"
+                  type={type}
+                  placeholder="Confirm Password"
+                  id="logIn"
+                  {...register("confirmPassword")}
+                />
+                {icon && <div onClick={handleToggle}>{icon}</div>}
+                <div>
+                  {errors.confirmPassword && (
+                    <p className="error">{errors.confirmPassword.message}</p>
+                  )}
+                </div>
+              </div>
+              {loginError && (
+                <span className="error password-error">{loginError}</span>
               )}
-            </div>
+              {/* <button disabled={!isValid} type="submit" className={ isValid ? "btnLog" : "btnLog2" }>Login</button> */}
+              <button type="submit" className="btnLog">
+                Change Password
+              </button>
+              <p className="register-question">
+                Don't have an account? <span className="reg-arrow">⤵</span>
+              </p>
+              <p className>
+                <Link className="reg" to="/register">
+                  Click to register
+                </Link>
+              </p>
+            </form>
           </div>
-          <div>
-            <input
-              className="input-name"
-              type={type}
-              placeholder="Confirm Password"
-              id="logIn"
-              {...register("confirmPassword")}
-            />
-            {icon && <div onClick={handleToggle}>{icon}</div>}
-            <div>
-              {errors.confirmPassword && (
-                <p className="error">{errors.confirmPassword.message}</p>
-              )}
-            </div>
-          </div>
-          {loginError && (
-            <span className="error password-error">{loginError}</span>
-          )}
-          {/* <button disabled={!isValid} type="submit" className={ isValid ? "btnLog" : "btnLog2" }>Login</button> */}
-          <button type="submit" className="btnLog">
-            Change Password
-          </button>
-          <p className="register-question">
-            Don't have an account? <span className="reg-arrow">⤵</span>
-          </p>
-          <p className>
-            <Link className="reg" to="/register">
-              Click to register
-            </Link>
-          </p>
-        </form>
-      </div>
-    </div>
+        </div>
+      ) : (
+        <AdminLoginPage />
+      )}
+    </>
   );
 }
 

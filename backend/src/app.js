@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
-const route = require("./server/routes/restaurantRoutes");
+const route = require("./server/routes/restaurant.routes");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -11,6 +11,9 @@ const connectDB = require("./database/db");
 const orderRoutes = require("./server/routes/order.routes");
 const productRoutes = require("./server/routes/product.routes");
 const cartRoutes = require("./server/routes/cart.routes");
+const restaurantRoutes = require("./server/routes/restaurant.routes");
+const paymentRoutes = require("./server/routes/payment.routes");
+const searchRoutes = require("./server/routes/search.routes");
 
 const app = express();
 
@@ -18,7 +21,7 @@ const app = express();
 connectDB();
 
 // MIDDLEWARES
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,17 +48,18 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/restaurants", restaurantRoutes);
 app.use("/api/v1/carts", cartRoutes);
+app.use("/api/v1/pay", paymentRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 const { lookup } = require("dns").promises;
 const os = require("os");
 
 const PORT = process.env.PORT || 2300;
 app.enable("trust proxy");
-app.use("/api/v1/carts", cartRoutes);
-app.use("/api/v1/products", productRoutes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   if (err instanceof multer.MulterError) {
     // A Multer error occurred during file upload
     console.log(err.code);

@@ -1,29 +1,23 @@
 const Order = require('../../models/order');
-
+const User = require('../../models/user');
+const Restaurant = require('../../models/restaurant');
+const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
     try {
       const {
         product,
         price,
-        customerName,
-        customerAddress,
-        customerPhoneNumber,
-        restaurantName,
-        restaurantAddress,
-        restaurantPhoneNumber,
+        customer,
+        restaurant,
       } = req.body;
 
-      // Create a new order instance
+    
       const order = new Order({
         product,
         price,
-        customerName,
-        customerAddress,
-        customerPhoneNumber,
-        restaurantName,
-        restaurantAddress,
-        restaurantPhoneNumber,
+        customer,
+        restaurant
       });
 
       // Save the order to the database
@@ -32,7 +26,8 @@ class OrderController {
       res
         .status(200)
         .json({ message: 'Order Successfully Created', data: order });
-    } catch (error) {
+    // } 
+  }catch (error) {
       console.log(error.message);
       return new Error('Could not create order');
     }
@@ -41,9 +36,7 @@ class OrderController {
   static async getAllOrders(req, res) {
     try {
       const orders = await Order.find({});
-      res
-        .status(200)
-        .json({ message: 'Orders fetched successfully', data: orders });
+      res.status(200).json({ message: 'Orders fetched successfully', data: orders });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -68,10 +61,11 @@ class OrderController {
   static async updateOrder(req, res) {
     try {
       const { orderId } = req.params;
+      const postmanId = req.user.id;
       const updateData = req.body;
 
       const updatedOrder = await Order.findOneAndUpdate(
-        { orderId: orderId },
+        { _id: orderId },
         updateData,
         { new: true }
       );
@@ -79,6 +73,25 @@ class OrderController {
       if (!updatedOrder) {
         return res.status(404).json({ message: 'Order not found' });
       }
+      const customer = await User.findOne({
+        _id: updatedOrder.customer
+      })
+
+      const restaurant = await Restaurant.findOne({
+        _id: updatedOrder.restaurant
+      })
+      updatedOrder.postman = postmanId;
+
+      await updatedOrder.save();
+
+      const mailOptions = {
+        from: 'olaoluofficial@gmail.com',
+        to: [customer.email, restaurant.email],
+        subject: 'Order Updated',
+        text: `Your order with ID ${updatedOrder.id.substring(0, 4)} has been updated to "${updateData.status.toUpperCase()}".`,
+      };
+
+      sendEmailNotification(mailOptions);
 
       res.status(200).json(updatedOrder);
     } catch (err) {

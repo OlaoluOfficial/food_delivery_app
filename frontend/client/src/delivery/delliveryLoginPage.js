@@ -43,10 +43,11 @@ function DeliveryLoginPage() {
   };
 
   async function login(data) {
+    let Data = { ...data, role: "postman" };
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        data
+        Data
       );
       if (response.ok) {
         response.json().then((userInfo) => {
@@ -54,7 +55,7 @@ function DeliveryLoginPage() {
         });
         // Registration successful, show success message or redirect to another page
         alert("Login successful!");
-        navigate("/");
+        navigate("/delivery");
         // Reset the form and clear input fields
         setLoginError("");
       } else {

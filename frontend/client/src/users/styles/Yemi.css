@@ -266,7 +266,7 @@ a {
   margin-left: 3rem;
 }
 .margin-bottom {
-  margin-bottom: 3rem;
+  margin-bottom: 0.5rem;
 }
 .margin-bottom-big {
   margin-bottom: rem;
@@ -283,9 +283,17 @@ a {
   height: 10rem;
   z-index: 300000000000000000;
   position: relative;
-  top: 65%;
+  top: 69%;
   left: 100%;
 }
+
+.input-role {
+  font-size: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  margin-left: 2.3rem;
+}
+
 .Password-input-container {
   position: relative;
 }

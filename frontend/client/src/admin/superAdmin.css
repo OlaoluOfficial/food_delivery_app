@@ -27,8 +27,6 @@ body {
   background-color: #fff2e8;
   min-height: 100vh;
 }
-.admin-secondary-heading {
-}
 
 .main-course3 {
   /* padding: 0 3rem; */
@@ -119,4 +117,8 @@ body {
   padding: 0.5rem;
   width: 100%;
   font-size: 1.6rem;
+}
+.delivery-error {
+  text-align: center;
+  margin-top: 2rem;
 }
