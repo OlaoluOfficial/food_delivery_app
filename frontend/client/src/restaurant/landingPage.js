@@ -95,7 +95,7 @@ const RestaurantLandingPage = () => {
       formData.append("name", foodName);
       formData.append("price", price);
       formData.append("minimumPrice", minPrice);
-      formData.append("image", image);
+      formData.append("productImages", image);
       formData.append("description", desc);
       console.log(formData);
 

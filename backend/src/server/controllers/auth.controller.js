@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const Restaurant= require("../../models/restaurant");
+const Restaurant = require("../../models/restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -16,13 +16,14 @@ require("dotenv").config();
 // }
 class AuthController {
   static async register(req, res) {
+    console.log(req.body)
     try {
-      let { password, email, phone, role, fullname, address } = req.body;
+      let { password, email, phone, role, username, address } = req.body;
 
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
       let user = new User({
-        fullname,
+        username,
         password,
         email,
         phone,
@@ -38,7 +39,7 @@ class AuthController {
         data: user,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const errors = errorHandler.dbSchemaErrors(error);
       return res.status(403).json({ Message: errors });
     }
@@ -48,13 +49,10 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if(role ==="restaurant"){
-        
+      if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
-      }
-      else{
+      } else {
         user = await User.findOne({ email });
-
       }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
@@ -63,9 +61,9 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (role == 'restaurant') {
-        if (password === '123456789') {
-          return res.status(419).json({ msg: "Please change your password!"})
+      if (role == "restaurant") {
+        if (password === "123456789") {
+          return res.status(419).json({ msg: "Please change your password!" });
         }
       }
       const payload = {
@@ -77,16 +75,22 @@ class AuthController {
         expiresIn: 3600000,
       });
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
-      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
+      const { password: userPassword, ...userDataWithoutPassword } =
+        user.toObject();
 
-      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
+      return res
+        .status(200)
+        .json({
+          message: "Login Successful",
+          data: { user: userDataWithoutPassword, token },
+        });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
     }
   }
 
-  static async changePassword (req, res) {
+  static async changePassword(req, res) {
     const userId = req.user.id;
     const value = req.body;
 
@@ -118,15 +122,15 @@ class AuthController {
     }
   }
 
-  static async logout (req, res) {
+  static async logout(req, res) {
     try {
-      res.clearCookie('foodieToken'); 
-      res.status(200).json({ message: 'Logout Successful' });
+      res.clearCookie("foodieToken");
+      res.status(200).json({ message: "Logout Successful" });
     } catch (error) {
       console.error(error.message);
-      return res.status(500).send('Error logging out!')
+      return res.status(500).send("Error logging out!");
     }
-  }  
+  }
 }
 
 module.exports = AuthController;

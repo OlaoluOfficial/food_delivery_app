@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
+import AdminHeader from "./adminHeader";
 
 const schema = z.object({
   username: z.string().min(2),
@@ -113,6 +114,7 @@ const AdminDeliveryPage = () => {
       {isLoggedIn ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
+            <AdminHeader />
             <img className="hero-img" src={img} alt="hero-img" />
             <h1 className="heading-primary">SuperAdmin</h1>
           </section>

@@ -1,0 +1,43 @@
+.Header1 {
+  z-index: 1000;
+  position: relative;
+  background-color: transparent !important;
+  /* background-image: linear-gradient(to right bottom, #190d02f6, #4c2506d6); */
+/* border:1px solid; */
+width: 95%;
+}
+
+.nav-flex-container1 {
+  display: flex;
+  padding-top: 2rem;
+  align-items: center;
+  background-color: transparent;
+}
+
+.nav-btn1 {
+  color: #fff2e8;
+  text-decoration: none;
+}
+.nav-btn-box1 {
+  /* margin-left: 30rem; */
+  display: flex;
+  gap: 4rem;
+  position: absolute;
+  right: 7rem;
+}
+.nav-btn1 {
+  display: inline-block;
+  border: 1px solid #fff2e8;
+  border-radius: 0 3rem 3rem 0;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s;
+}
+.nav-btn1:hover {
+  background-color: #fff2e8;
+  color: rgb(25, 13, 2);
+}
+.nav-btn-colored1 {
+  border-radius: 0 3rem 3rem 0;
+  background-color: #fff2e8;
+  color: rgb(25, 13, 2);
+}

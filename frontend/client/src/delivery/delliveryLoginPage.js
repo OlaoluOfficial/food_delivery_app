@@ -8,17 +8,20 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
+import AdminContext from "../admin/adminContext";
+
 
 const schema = z.object({
   username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters." }),
+  .string()
+  .min(3, { message: "Username must be at least 3 characters." }),
   password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+  .string()
+  .min(8, { message: "Password must be at least 8 characters" }),
 });
 
 function DeliveryLoginPage() {
+  const { setAdminInfo, adminInfo } = useContext(AdminContext);
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
@@ -54,8 +57,10 @@ function DeliveryLoginPage() {
           setUserInfo(userInfo);
         });
         // Registration successful, show success message or redirect to another page
+        setAdminInfo(response.data.data.user);
         alert("Login successful!");
         navigate("/delivery");
+        window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
       } else {

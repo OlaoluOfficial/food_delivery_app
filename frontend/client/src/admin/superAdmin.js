@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
+import AdminHeader from "./adminHeader";
 
 
 const schema = z.object({
@@ -118,8 +119,9 @@ const SuperAdminPage = () => {
   return (
     <>
      {isLoggedIn ? (
-      <div className="restaurant-page-container">
+        <div className="restaurant-page-container">
         <section className="section-admin-hero">
+          <AdminHeader />
           <img className="hero-img" src={img} alt="hero-img" />
           <h1 className="heading-primary">SuperAdmin</h1>
         </section>

@@ -8,16 +8,20 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
+import AdminContext from "./adminContext";
+
+
 
 const schema = z.object({
   email: z.string(),
   password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+  .string()
+  .min(8, { message: "Password must be at least 8 characters" }),
   role: z.string(),
 });
 
 function AdminLoginPage() {
+  const { setAdminInfo, adminInfo } = useContext(AdminContext);
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
@@ -49,8 +53,10 @@ function AdminLoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
+        setAdminInfo(response.data.data.user)
         alert("Login successful!");
         navigate("/admin");
+        window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
       } else {
