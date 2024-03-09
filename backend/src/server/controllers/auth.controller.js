@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const Restaurant= require("../../models/restaurant");
+const Restaurant = require("../../models/restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../middlewares/handleError");
@@ -38,7 +38,7 @@ class AuthController {
         data: user,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const errors = errorHandler.dbSchemaErrors(error);
       return res.status(403).json({ Message: errors });
     }
@@ -48,12 +48,15 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
+      if (role == "restaurant" || role == "delivery") {
+        if (password === "123456789") {
+          return res.status(419).json({ msg: "Please change your password!" });
+        }
+      }
       if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
-      }
-      else{
+      } else {
         user = await User.findOne({ email });
-
       }
       if (!user) {
         return res.status(400).json({ msg: "Invalid Credentials" });
@@ -86,7 +89,8 @@ class AuthController {
       }
 
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
-      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
+      const { password: userPassword, ...userDataWithoutPassword } =
+        user.toObject();
 
       resp = {
         code: 200,
@@ -102,25 +106,25 @@ class AuthController {
     }
   }
 
-  static async changePassword (req, res) {
+  static async changePassword(req, res) {
     const userId = req.user.id;
-    const value = req.body;
+    const { currentPassword, newPassword } = req.body;
 
     try {
       const userExist = await User.findById({ _id: userId });
       let verifyPassword = await bcrypt.compare(
-        value.currentPassword,
+        currentPassword,
         userExist.password
       );
       if (verifyPassword) {
         const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(value.newPassword, salt);
-        const restaurant = await User.findByIdAndUpdate(
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const person = await User.findByIdAndUpdate(
           { _id: userId },
           { password: hashedPassword },
           { new: true }
         );
-        if (restaurant)
+        if (person)
           return res
             .status(201)
             .json({ message: "Password changed successfully" });
@@ -134,15 +138,15 @@ class AuthController {
     }
   }
 
-  static async logout (req, res) {
+  static async logout(req, res) {
     try {
-      res.clearCookie('foodieToken'); 
-      res.status(200).json({ message: 'Logout Successful' });
+      res.clearCookie("foodieToken");
+      res.status(200).json({ message: "Logout Successful" });
     } catch (error) {
       console.error(error.message);
-      return res.status(500).send('Error logging out!')
+      return res.status(500).send("Error logging out!");
     }
-  }  
+  }
 }
 
 module.exports = AuthController;

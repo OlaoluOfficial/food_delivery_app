@@ -224,7 +224,7 @@ LOGIN  REGISTERATION AND  PAGE
 }
 .login-img-box {
   max-width: 60%;
-  height: 100%;
+  height: auto;
 }
 .login-img {
   width: 100%;
@@ -239,9 +239,11 @@ LOGIN  REGISTERATION AND  PAGE
 }
 
 .login-container {
+  width: 40%;
   display: flex;
   gap: 2.5rem;
   flex-direction: column;
+  padding-bottom: 3rem;
 }
 
 a {
@@ -252,7 +254,7 @@ a {
 .input-password,
 .input-email {
   margin-left: -1rem;
-  width: 93%;
+  width: 70%;
   padding: 10px;
   margin-bottom: 3px;
   border: 1px solid #ddd;
@@ -299,7 +301,8 @@ a {
   position: absolute;
   right: 1px;
   top: 8px;
-  font-size: 20px;
+  left: 70%;
+  font-size: 1.6rem;
 }
 
 .password-error {
@@ -317,7 +320,7 @@ input::placeholder {
 .btnLog,
 .btnReg {
   margin-left: 5rem;
-  width: 80%;
+  width: 70%;
   padding: 10px;
   background-color: #ff8c00;
   color: white;
@@ -402,6 +405,12 @@ reg:active {
 }
 
 .log {
+  margin-top: 2rem;
+  font-size: 2.5rem;
+  color: rgb(111, 42, 12);
+  text-align: center;
+}
+.log2 {
   margin-top: 2rem;
   font-size: 2.5rem;
   color: rgb(111, 42, 12);

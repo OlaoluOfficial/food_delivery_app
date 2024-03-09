@@ -37,8 +37,8 @@ function PrimaryPage() {
           <img className="hero-img margin-top-big" src={logo} alt="logo" />
         </div>
       ) : (
-        <AdminLoginPage /> )}
-     
+        <AdminLoginPage />
+      )}
     </>
   );
 }
