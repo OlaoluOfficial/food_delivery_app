@@ -60,6 +60,9 @@ function DeliveryLoginPage() {
         window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
+      } else if (response.status == 419) {
+        alert(response.data.msg);
+        navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();

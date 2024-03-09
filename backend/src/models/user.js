@@ -1,10 +1,9 @@
 const { Schema, model } = require("mongoose");
 
-const userSchema = new Schema(
-  {
+const userSchema = new Schema({
     username: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
@@ -13,7 +12,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
     phone: {
       type: String,
@@ -27,11 +26,16 @@ const userSchema = new Schema(
     },
     address: {
       type: String,
-      required: true,
     },
+    token: String,
+    resetPasswordExpires: Date ,
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

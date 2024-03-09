@@ -24,6 +24,8 @@ const AdminDeliveryPage = () => {
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
+  const [cError, setcError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -80,21 +82,25 @@ const AdminDeliveryPage = () => {
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        alert(data.data.Message); // Display the error message sent by the server
+        setcError(data.data.Message); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle other errors (e.g., network error)
-      setError("An error occurred during login. Please try again later."); // Set the registration error message
+      setcError("An error occurred during login. Please try again later."); // Set the registration error message
     }
   };
 
   const handleDelete = async (Id) => {
     try {
       // Simulated API endpoint for deleting data from the database
-      const response = await fetch(`http://localhost:2300/api/v1/users/${Id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:2300/api/v1/users/deleteUser/${Id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         setSelectedId("");
@@ -163,7 +169,7 @@ const AdminDeliveryPage = () => {
                         <input type="number" {...register("phone")} />
                       </li>
                     </ul>
-                    {error && <p className="delivery-error">{error}</p>}
+                    {cError && <p className="delivery-error">{cError}</p>}
                     <button
                       disabled={!isValid}
                       type="submit"
@@ -186,8 +192,8 @@ const AdminDeliveryPage = () => {
               <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
             </svg>
             <h2>Delivery Persons</h2>
-
-            {delivery ? (
+            {error && <p className="delivery-error">{error}</p>}
+            {delivery.length > 0 ? (
               <div className="main-course3">
                 {delivery.map((e) => (
                   <div className="overall3">

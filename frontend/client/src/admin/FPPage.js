@@ -120,14 +120,7 @@ function FPPage() {
               <button type="submit" className="btnLog">
                 Change Password
               </button>
-              <p className="register-question">
-                Don't have an account? <span className="reg-arrow">⤵</span>
-              </p>
-              <p className>
-                <Link className="reg" to="/register">
-                  Click to register
-                </Link>
-              </p>
+              
             </form>
           </div>
         </div>
