@@ -48,8 +48,7 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if(role ==="restaurant"){
-        
+      if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
       }
       else{
@@ -63,23 +62,40 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
-      if (role == 'restaurant') {
-        if (password === '123456789') {
-          return res.status(419).json({ msg: "Please change your password!"})
-        }
-      }
+      let resp;
       const payload = {
         user: {
           id: user.id,
         },
       };
+
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 3600000,
       });
+
+      if (role == 'restaurant' || role == 'delivery') {
+        if (password === '123456789') {
+          resp = {
+              code: 419,
+              status: 'success',
+              message: 'Logged in! Now change your password!!!',
+              token
+          }
+          return res.status(resp.code).json(resp);
+        }
+      }
+
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
       const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
 
-      return res.status(200).json({ message: "Login Successful", data: { user: userDataWithoutPassword, token } });
+      resp = {
+        code: 200,
+        status: 'success',
+        message: "Login Successful", 
+        data: { user: userDataWithoutPassword, token } 
+      }
+
+      return res.status(resp.code).json(resp);
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
