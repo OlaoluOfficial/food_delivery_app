@@ -58,8 +58,9 @@ function DeliveryLoginPage() {
         alert("Login successful!");
         navigate("/delivery");
         window.location.reload();
-        // Reset the form and clear input fields
+        // Reset the error state
         setLoginError("");
+        // check fro the default password state
       } else if (response.status == 419) {
         alert(response.data.msg);
         navigate("/change-password");
@@ -70,7 +71,7 @@ function DeliveryLoginPage() {
       }
     } catch (error) {
       if (error.response.status == 400) {
-        setLoginError(error.response.data.msg); // Set the registration error message
+        setLoginError(error.response.data.msg); // Set the login error message
       } else if (error.response.status == 419) {
         alert(error.response.data.msg);
         navigate("/change-password");

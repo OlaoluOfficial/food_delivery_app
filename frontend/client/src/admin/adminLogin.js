@@ -72,7 +72,7 @@ function AdminLoginPage() {
       if (error.response == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else if (error.response.status == 419) {
-        alert(error.response.data.msg);
+        alert(error.response.data.message);
         navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");

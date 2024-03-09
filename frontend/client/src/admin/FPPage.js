@@ -44,11 +44,11 @@ function FPPage() {
     }
   };
 
-  async function login(data) {
+  async function changePassword(data) {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/changepassword",
-        data
+        data, {withCredentials: true}
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
@@ -78,7 +78,10 @@ function FPPage() {
             <div className="login-img-box">
               <img src={loginImg} alt="login-img" className="login-img" />
             </div>
-            <form onSubmit={handleSubmit(login)} className="login-container">
+            <form
+              onSubmit={handleSubmit(changePassword)}
+              className="login-container"
+            >
               <h2 className="log">Change Password 🔐</h2>
 
               <div className="Password-input-container">
@@ -120,7 +123,6 @@ function FPPage() {
               <button type="submit" className="btnLog">
                 Change Password
               </button>
-              
             </form>
           </div>
         </div>

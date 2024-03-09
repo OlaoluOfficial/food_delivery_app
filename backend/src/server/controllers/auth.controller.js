@@ -96,11 +96,11 @@ class AuthController {
               message: 'Logged in! Now change your password!!!',
               token
           }
+          res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
           return res.status(resp.code).json(resp);
         }
-      }
+      }res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
 
-      res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
       const { password: userPassword, ...userDataWithoutPassword } =
         user.toObject();
 
