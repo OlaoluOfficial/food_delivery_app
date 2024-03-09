@@ -48,11 +48,6 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if (role == "restaurant" || role == "delivery") {
-        if (password === "123456789") {
-          return res.status(419).json({ msg: "Please change your password!" });
-        }
-      }
       if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
       } else {
