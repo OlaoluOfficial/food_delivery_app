@@ -60,6 +60,7 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
+      // initiate the resp object 
       let resp;
       const payload = {
         user: {
