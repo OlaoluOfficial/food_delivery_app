@@ -123,7 +123,14 @@ class AuthController {
     const { currentPassword, newPassword } = req.body;
 
     try {
-      const userExist = await User.findById({ _id: userId });
+      let userExist;
+      if (req.user.role === 'restaurant') {
+        userExist = await Restaurant.findById(userId);
+      } else {
+        userExist = await User.findById(userId);
+      }
+      if (!userExist) return res.status(404).json({ message: 'User not found' });
+      
       let verifyPassword = await bcrypt.compare(
         currentPassword,
         userExist.password
@@ -131,22 +138,27 @@ class AuthController {
       if (verifyPassword) {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(newPassword, salt);
-        const person = await User.findByIdAndUpdate(
-          { _id: userId },
-          { password: hashedPassword },
-          { new: true }
-        );
-        if (person)
-          return res
-            .status(201)
-            .json({ message: "Password changed successfully" });
+
+        // Update the password for the correct model
+        if (req.user.role === 'restaurant') {
+          await Restaurant.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+          );
+        } else {
+          await User.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+          );
+        }
+        return res.status(201).json({ message: 'Password changed successfully' });
       } else
-        return res
-          .status(403)
-          .json({ message: "Current password is incorrect" });
+        return res.status(403).json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-      return res.status(417).json({ Error: error });
+      return res.status(500).json({ message: "Error changing password" });
     }
   }
 
