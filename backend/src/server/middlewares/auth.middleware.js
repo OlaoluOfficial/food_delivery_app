@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Restaurant = require("../../models/restaurant");
 const jwt = require("jsonwebtoken");
 
 class AuthMiddleware {
@@ -8,12 +9,15 @@ class AuthMiddleware {
       const token = req.cookies.foodieToken;
 
       if (!token) {
-        return res
-          .status(401)
-          .json({ msg: "No Token, authorization denied, Login again" });
+        return res.status(401).json({ msg: "No Token, authorization denied, Login again" });
       }
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.user.id);
+      let user;
+      if (decoded.user.role === 'restaurant') {
+        user = await Restaurant.findById(decoded.user.id);
+      } else {
+        user = await User.findById(decoded.user.id);
+      }
 
       if (!user) {
         return res.status(401).json({ msg: "Token is not valid" });
