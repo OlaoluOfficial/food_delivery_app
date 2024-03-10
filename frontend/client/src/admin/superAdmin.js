@@ -9,6 +9,7 @@ import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
+import { jwtDecode } from "jwt-decode";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -18,19 +19,26 @@ const schema = z.object({
 });
 
 const SuperAdminPage = () => {
-  const token = Cookies.get("foodieToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [admin, setAdmin] = useState([]);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
   const [cError, setcError] = useState("");
+  const token = Cookies.get("foodieToken");
+  const [decode, setDecode] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
+
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
   const fetchAdmin = async () => {
     try {
@@ -63,6 +71,7 @@ const SuperAdminPage = () => {
   };
 
   const handleAddRestaurant = async (data) => {
+    const Data = { ...data, role: "restaurant" };
     try {
       const response = await fetch("http://localhost:2300/api/v1/restaurants", {
         method: "POST",
@@ -118,7 +127,7 @@ const SuperAdminPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {decode === "admin" ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
             <AdminHeader />

@@ -6,6 +6,7 @@ import { useCart } from "../CartContext";
 import { FaTrash } from "react-icons/fa6";
 import LoginPage from "../components/loginPage";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -14,7 +15,14 @@ function Cart() {
   const [error, setError] = useState("");
   const { addCart } = useCart();
   const token = Cookies.get("foodieToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
+  const [decode, setDecode] = useState("");
+
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
   const getCart = () => {
     axios
@@ -133,7 +141,7 @@ function Cart() {
 
   return (
     <>
-      {isLoggedIn ? (
+      {decode === "customer" ? (
         <div className="outer-container">
           <div className="cartContainer">
             <div className="leftCartSec">

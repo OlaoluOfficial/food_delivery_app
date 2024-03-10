@@ -9,6 +9,7 @@ import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
+import { jwtDecode } from "jwt-decode";
 
 const schema = z.object({
   username: z.string().min(2),
@@ -25,6 +26,7 @@ const AdminDeliveryPage = () => {
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
   const [cError, setcError] = useState("");
+  const [decode, setDecode] = useState("");
 
   const {
     register,
@@ -32,8 +34,14 @@ const AdminDeliveryPage = () => {
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
-  //fetch delivery personnel data
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
+  //fetch delivery personnel data
   const fetchDelivery = async () => {
     try {
       const response = await fetch(
@@ -118,7 +126,7 @@ const AdminDeliveryPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {(decode === "admin") ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
             <AdminHeader />

@@ -53,12 +53,19 @@ function AdminLoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        setAdminInfo(response.data.data.user);
+        if (response.data.data.user.role == "admin") {
+            setAdminInfo(response.data.data.user);
         alert("Login successful!");
         navigate("/admin");
         window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
+        } else {
+          alert("Login successful!");
+          navigate("/restaurant");
+          window.location.reload();
+        }  
+      
       } else if (response.status == 419) {
         alert(response.data.msg);
         navigate("/change-password");

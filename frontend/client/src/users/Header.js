@@ -63,7 +63,7 @@ function Header() {
           {!name && (
             <>
               <Link className="nav-btn" to="/login">
-                LogIn
+                Log In
               </Link>
             </>
           )}

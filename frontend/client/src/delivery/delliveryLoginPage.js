@@ -47,12 +47,9 @@ function DeliveryLoginPage() {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        Data
+        Data, {withCredentials: true}
       );
       if (response.status == 200) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
         // Registration successful, show success message or redirect to another page
         setAdminInfo(response.data.data.user);
         alert("Login successful!");
@@ -62,7 +59,7 @@ function DeliveryLoginPage() {
         setLoginError("");
         // check fro the default password state
       } else if (response.status == 419) {
-        alert(response.data.msg);
+        alert(response.data.message);
         navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
@@ -73,7 +70,7 @@ function DeliveryLoginPage() {
       if (error.response.status == 400) {
         setLoginError(error.response.data.msg); // Set the login error message
       } else if (error.response.status == 419) {
-        alert(error.response.data.msg);
+        alert(error.response.data.message);
         navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");

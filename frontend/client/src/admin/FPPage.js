@@ -8,7 +8,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode"
 import AdminLoginPage from "./adminLogin";
+import DeliveryLoginPage from "../delivery/delliveryLoginPage";
 
 const schema = z.object({
   currentPassword: z
@@ -22,6 +24,7 @@ const schema = z.object({
 function FPPage() {
   const token = Cookies.get("foodieToken");
   const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
+   const [decoded, setDecoded] = useState("");
   const [loginError, setLoginError] = useState(null);
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
@@ -33,6 +36,15 @@ function FPPage() {
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
+  
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecoded(decoded.role);
+    }
+  }, []);
+  
+  
   //password toggle function
   const handleToggle = () => {
     if (type === "password") {
@@ -50,11 +62,17 @@ function FPPage() {
         "http://localhost:2300/api/v1/auth/changepassword",
         data, {withCredentials: true}
       );
-      if (response.status == 200) {
+      if (response.status == 201) {
         // Registration successful, show success message or redirect to another page
+        if (decoded == "delivery") {
+          alert("Password change successful!");
+          navigate("/delivery/login");
+          // Reset the error state
+          setLoginError("");
+        }
         alert("Password change successful!");
         navigate("/admin/login");
-        // Reset the form and clear input fields
+        // Reset the error state
         setLoginError("");
       } else {
         // Registration failed, handle error response from the server
@@ -127,7 +145,7 @@ function FPPage() {
           </div>
         </div>
       ) : (
-        <AdminLoginPage />
+        (decoded == "delivery") ? (<DeliveryLoginPage />):( < AdminLoginPage />)
       )}
     </>
   );

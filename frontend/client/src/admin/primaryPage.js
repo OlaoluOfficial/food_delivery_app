@@ -6,14 +6,23 @@ import AdminLoginPage from "./adminLogin";
 import { FaTruckFast, FaUtensils, FaBuilding } from "react-icons/fa6";
 import logo from "../users/img/EatRite-logo.png";
 import AdminHeader from "./adminHeader";
+import { jwtDecode } from "jwt-decode";
 
 function PrimaryPage() {
   const token = Cookies.get("foodieToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
+  const [decode, setDecode] = useState("");
+ 
+  useEffect(() => {
+   if (token) {
+     var decoded = jwtDecode(token);
+     setDecode(decoded.user.role);
+   }
+  }, []);
+
 
   return (
     <>
-      {isLoggedIn ? (
+      {(decode === "admin") ? (
         <div className="container13">
           <AdminHeader />
           <div className="container1">
