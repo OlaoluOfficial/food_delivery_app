@@ -48,11 +48,6 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       let user;
-      if (role == "restaurant" || role == "delivery") {
-        if (password === "123456789") {
-          return res.status(419).json({ msg: "Please change your password!" });
-        }
-      }
       if (role === "restaurant") {
         user = await Restaurant.findOne({ email });
       } else {
@@ -65,24 +60,42 @@ class AuthController {
       if (!isMatch) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
+      // initiate the resp object 
+      let resp;
       const payload = {
         user: {
           id: user.id,
         },
       };
+
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: 3600000,
       });
+
+      if (role == 'restaurant' || role == 'delivery') {
+        if (password === '123456789') {
+          resp = {
+              code: 419,
+              status: 'success',
+              message: 'Logged in! Now change your password!!!',
+              token
+          }
+          return res.status(resp.code).json(resp);
+        }
+      }
+
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
       const { password: userPassword, ...userDataWithoutPassword } =
         user.toObject();
 
-      return res
-        .status(200)
-        .json({
-          message: "Login Successful",
-          data: { user: userDataWithoutPassword, token },
-        });
+      resp = {
+        code: 200,
+        status: 'success',
+        message: "Login Successful", 
+        data: { user: userDataWithoutPassword, token } 
+      }
+
+      return res.status(resp.code).json(resp);
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Error logging in!");
@@ -94,7 +107,14 @@ class AuthController {
     const { currentPassword, newPassword } = req.body;
 
     try {
-      const userExist = await User.findById({ _id: userId });
+      let userExist;
+      if (req.user.role === 'restaurant') {
+        userExist = await Restaurant.findById(userId);
+      } else {
+        userExist = await User.findById(userId);
+      }
+      if (!userExist) return res.status(404).json({ message: 'User not found' });
+      
       let verifyPassword = await bcrypt.compare(
         currentPassword,
         userExist.password
@@ -102,22 +122,27 @@ class AuthController {
       if (verifyPassword) {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(newPassword, salt);
-        const person = await User.findByIdAndUpdate(
-          { _id: userId },
-          { password: hashedPassword },
-          { new: true }
-        );
-        if (person)
-          return res
-            .status(201)
-            .json({ message: "Password changed successfully" });
+
+        // Update the password for the correct model
+        if (req.user.role === 'restaurant') {
+          await Restaurant.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+          );
+        } else {
+          await User.findByIdAndUpdate(
+            userId,
+            { password: hashedPassword },
+            { new: true }
+          );
+        }
+        return res.status(201).json({ message: 'Password changed successfully' });
       } else
-        return res
-          .status(403)
-          .json({ message: "Current password is incorrect" });
+        return res.status(403).json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
-      return res.status(417).json({ Error: error });
+      return res.status(500).json({ message: "Error changing password" });
     }
   }
 
