@@ -8,11 +8,14 @@ import Modal from "react-modal";
 import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
+import AdminHeader from "./adminHeader";
+import { jwtDecode } from "jwt-decode";
 
 const schema = z.object({
   username: z.string().min(2),
   phone: z.string().min(11),
   email: z.string().min(2),
+  address: z.string().min(2),
 });
 
 const AdminDeliveryPage = () => {
@@ -22,14 +25,23 @@ const AdminDeliveryPage = () => {
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
+  const [cError, setcError] = useState("");
+  const [decode, setDecode] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
-  //fetch delivery personnel data
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
+  //fetch delivery personnel data
   const fetchDelivery = async () => {
     try {
       const response = await fetch(
@@ -63,7 +75,7 @@ const AdminDeliveryPage = () => {
   };
   //post request for adding a delivery person
   const handleAddDelivery = async (data) => {
-    const Data = { ...data, role: "postman" };
+    const Data = { ...data, role: "delivery" };
     try {
       const response = await fetch("http://localhost:2300/api/v1/auth/signup", {
         method: "POST",
@@ -78,21 +90,25 @@ const AdminDeliveryPage = () => {
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        alert(data.error); // Display the error message sent by the server
+        setcError(data.data.Message); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle other errors (e.g., network error)
-      setError("An error occurred during login. Please try again later."); // Set the registration error message
+      setcError("An error occurred during login. Please try again later."); // Set the registration error message
     }
   };
 
   const handleDelete = async (Id) => {
     try {
       // Simulated API endpoint for deleting data from the database
-      const response = await fetch(`http://localhost:2300/api/v1/users/${Id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:2300/api/v1/users/deleteUser/${Id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         setSelectedId("");
@@ -110,9 +126,10 @@ const AdminDeliveryPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {(decode === "admin") ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
+            <AdminHeader />
             <img className="hero-img" src={img} alt="hero-img" />
             <h1 className="heading-primary">SuperAdmin</h1>
           </section>
@@ -152,10 +169,15 @@ const AdminDeliveryPage = () => {
                         <input type="email" {...register("email")} />
                       </li>
                       <li className="form-list-item">
+                        <label>Address:</label>
+                        <input type="text" {...register("address")} />
+                      </li>
+                      <li className="form-list-item">
                         <label>Phone Number:</label>
                         <input type="number" {...register("phone")} />
                       </li>
                     </ul>
+                    {cError && <p className="delivery-error">{cError}</p>}
                     <button
                       disabled={!isValid}
                       type="submit"
@@ -179,14 +201,17 @@ const AdminDeliveryPage = () => {
             </svg>
             <h2>Delivery Persons</h2>
             {error && <p className="delivery-error">{error}</p>}
-            {delivery ? (
+            {delivery.length > 0 ? (
               <div className="main-course3">
                 {delivery.map((e) => (
                   <div className="overall3">
                     <h4 className="dish-name3">{e.username}</h4>
                     <div className="description3">
-                      <p>{e.email}</p>
                       <p>{e.phone}</p>
+                    </div>
+                    <div className="delivery-address">
+                      <p>{e.email}</p>
+                      <p>{e.address}</p>
                     </div>
                     <div className="click-order3">
                       <FaTrash

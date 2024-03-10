@@ -51,6 +51,7 @@ function LoginPage() {
         // Registration successful, show success message or redirect to another page
         alert("Login successful!");
         navigate("/");
+        window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
       } else {

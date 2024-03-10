@@ -51,6 +51,7 @@ class ProductController {
     try {
       const productId = req.params.productId;
       const updateData = req.body;
+      console.log(req.body)
   
       const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
   

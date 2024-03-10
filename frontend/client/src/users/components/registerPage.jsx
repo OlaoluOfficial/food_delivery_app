@@ -32,11 +32,13 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   async function signUp(data) {
+    console.log("hfjgjgkjg")
     try {
-      const response = await fetch("http://localhost:2300/api/v1/auth/signUp", {
+      const response = await fetch("http://localhost:2300/api/v1/auth/signup", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
+        credentials: "include"
       });
 
       if (response.ok) {
@@ -83,7 +85,7 @@ function RegisterPage() {
               id="username"
               placeholder="Full Name"
               type="text"
-              {...register("fullName")}
+              {...register("username")}
             />
             {errors.fullName && (
               <p className="error">{errors.username.message}</p>
@@ -93,7 +95,7 @@ function RegisterPage() {
             <input
               className="input-password"
               type="password"
-              id="password"
+              // id="password"
               placeholder="Password"
               {...register("password")}
             />
@@ -116,7 +118,7 @@ function RegisterPage() {
           <div>
             <input
               className="input-email"
-              id="username"
+              // id="username"
               placeholder="Phone Number"
               type="number"
               {...register("phone")}
@@ -126,7 +128,7 @@ function RegisterPage() {
           <div>
             <input
               className="input-email"
-              id="username"
+              // id="username"
               placeholder="Address"
               type="text"
               {...register("address")}
@@ -138,7 +140,7 @@ function RegisterPage() {
           {registrationError && (
             <span className="error">{registrationError}</span>
           )}
-          <button className="btnReg">Register</button>
+          <button className="btnReg" type="submit">Register</button>
           {/* option */}
           <p className="register-question">
             Already have an account? <span className="reg-arrow">⤵</span>

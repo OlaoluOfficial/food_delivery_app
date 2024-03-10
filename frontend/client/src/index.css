@@ -71,7 +71,7 @@ body {
   text-decoration: none;
 }
 .nav-btn-box {
-  margin-left: 75rem;
+  margin-left: 60rem;
   display: flex;
   gap: 4rem;
 }
@@ -91,6 +91,7 @@ body {
   border-radius: 0 3rem 3rem 0;
   background-color: #fff2e8;
   color: rgb(25, 13, 2);
+  
 }
 /* .cart-icon-container {
   align-self: center;

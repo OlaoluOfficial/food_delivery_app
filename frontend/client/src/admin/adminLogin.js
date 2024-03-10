@@ -8,16 +8,20 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
+import AdminContext from "./adminContext";
+
+
 
 const schema = z.object({
   email: z.string(),
   password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+  .string()
+  .min(8, { message: "Password must be at least 8 characters" }),
   role: z.string(),
 });
 
 function AdminLoginPage() {
+  const { setAdminInfo, adminInfo } = useContext(AdminContext);
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
@@ -49,10 +53,22 @@ function AdminLoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
+        if (response.data.data.user.role == "admin") {
+            setAdminInfo(response.data.data.user);
         alert("Login successful!");
         navigate("/admin");
+        window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
+        } else {
+          alert("Login successful!");
+          navigate("/restaurant");
+          window.location.reload();
+        }  
+      
+      } else if (response.status == 419) {
+        alert(response.data.msg);
+        navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
@@ -62,6 +78,9 @@ function AdminLoginPage() {
     } catch (error) {
       if (error.response == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
+      } else if (error.response.status == 419) {
+        alert(error.response.data.message);
+        navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");
       }
@@ -79,7 +98,7 @@ function AdminLoginPage() {
             <input
               className="input-name "
               type="email"
-              placeholder="Username"
+              placeholder="email"
               id="logIn"
               {...register("email")}
             />

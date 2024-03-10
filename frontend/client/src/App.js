@@ -20,33 +20,36 @@ import PrimaryPage from "./admin/primaryPage";
 import AdminDeliveryPage from "./admin/adminDeliveryPage";
 import NotFound from "./NotFound";
 import { CartProvider } from "./users/CartContext";
+import { AdminContextProvider } from "./admin/adminContext";
 
 const App = () => {
   return (
     <UserContextProvider>
       <CartProvider>
-        <Router>
-          <Routes>
-            <Route path="/admin/delivery" element={<AdminDeliveryPage />} />
-            <Route path="/admin" element={<PrimaryPage />} />
-            <Route path="/delivery/login" element={<DeliveryLoginPage />} />
-            <Route path="/change-password" element={<FPPage />} />
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin/restaurant" element={<SuperAdminPage />} />
-            <Route path="/delivery" element={<DeliveryPersonnelPage />} />
-            <Route path="/restaurant" element={<RestaurantLandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/faqs" element={<FAQs />} />
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Homepage />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/specialoffers" element={<SpecialOffer />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
+        <AdminContextProvider>
+          <Router>
+            <Routes>
+              <Route path="/admin/delivery" element={<AdminDeliveryPage />} />
+              <Route path="/admin" element={<PrimaryPage />} />
+              <Route path="/delivery/login" element={<DeliveryLoginPage />} />
+              <Route path="/change-password" element={<FPPage />} />
+              <Route path="/admin/login" element={<AdminLoginPage />} />
+              <Route path="/admin/restaurant" element={<SuperAdminPage />} />
+              <Route path="/delivery" element={<DeliveryPersonnelPage />} />
+              <Route path="/restaurant" element={<RestaurantLandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/faqs" element={<FAQs />} />
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Homepage />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/specialoffers" element={<SpecialOffer />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Router>
+        </AdminContextProvider>
       </CartProvider>
     </UserContextProvider>
   );

@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import img from "../users/img/EatRite-logo.png";
 import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
+import AdminHeader from "./adminHeader";
+import { jwtDecode } from "jwt-decode";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -17,18 +19,26 @@ const schema = z.object({
 });
 
 const SuperAdminPage = () => {
-  const token = Cookies.get("foodieToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [admin, setAdmin] = useState([]);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
+  const [cError, setcError] = useState("");
+  const token = Cookies.get("foodieToken");
+  const [decode, setDecode] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
+
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
   const fetchAdmin = async () => {
     try {
@@ -61,6 +71,7 @@ const SuperAdminPage = () => {
   };
 
   const handleAddRestaurant = async (data) => {
+    const Data = { ...data, role: "restaurant" };
     try {
       const response = await fetch("http://localhost:2300/api/v1/restaurants", {
         method: "POST",
@@ -76,14 +87,14 @@ const SuperAdminPage = () => {
       } else {
         // Registration failed, handle error response from the server
         const data = response.json();
-        alert(data.data.message);
+        setcError(data.data.message);
         // alert(data.restaurant.error); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during login:", error);
       // Handle other errors (e.g., network error)
       // alert(error.response);
-      setError("An error occurred during creation. Please try again later."); // Set the registration error message
+      setcError("An error occurred during creation. Please try again later."); // Set the registration error message
     }
   };
 
@@ -116,9 +127,10 @@ const SuperAdminPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {decode === "admin" ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
+            <AdminHeader />
             <img className="hero-img" src={img} alt="hero-img" />
             <h1 className="heading-primary">SuperAdmin</h1>
           </section>
@@ -164,7 +176,7 @@ const SuperAdminPage = () => {
                         <label>Restaurant Tel:</label>
                         <input type="tel" {...register("phoneNumber")} />
                       </li>
-
+                      {cError && <p className="delivery-error">{cError}</p>}
                       <button
                         type="submit"
                         disabled={!isValid}
@@ -187,7 +199,8 @@ const SuperAdminPage = () => {
               <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
             </svg>
             <h2>Restaurants</h2>
-            {admin ? (
+            {error && <p className="error">{error}</p>}
+            {admin.length > 0 ? (
               <div className="main-course3">
                 {admin.map((e) => (
                   <div className="overall3">
