@@ -8,7 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
-import AdminContext from "../admin/adminContext";
+import { useAdmin } from "../admin/adminContext";
 
 const schema = z.object({
   email: z.string().min(3, { message: "Email must be at least 3 characters." }),
@@ -18,13 +18,14 @@ const schema = z.object({
 });
 
 function DeliveryLoginPage() {
-  const { setAdminInfo, adminInfo } = useContext(AdminContext);
+  const { loginUser } = useAdmin();
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -51,7 +52,8 @@ function DeliveryLoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        setAdminInfo(response.data.data.user);
+        // setAdminInfo(response.data.data.user);
+        loginUser(response.data.data.user)
         alert("Login successful!");
         navigate("/delivery");
         window.location.reload();

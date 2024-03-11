@@ -30,6 +30,7 @@ const SuperAdminPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
@@ -82,6 +83,7 @@ const SuperAdminPage = () => {
 
       if (response.ok) {
         // Registration successful, show success message or redirect to another page
+        reset()
         alert("Registration successful!");
         fetchAdmin();
       } else {

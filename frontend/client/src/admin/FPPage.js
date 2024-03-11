@@ -40,7 +40,7 @@ function FPPage() {
   useEffect(() => {
     if (token) {
       var decoded = jwtDecode(token);
-      setDecoded(decoded.role);
+      setDecoded(decoded.user.role);
     }
   }, []);
   
@@ -63,27 +63,31 @@ function FPPage() {
         data, {withCredentials: true}
       );
       if (response.status == 201) {
+        console.log(decoded)
         // Registration successful, show success message or redirect to another page
         if (decoded == "delivery") {
           alert("Password change successful!");
           navigate("/delivery/login");
           // Reset the error state
           setLoginError("");
+        } else {
+          alert("Password change successful!");
+          navigate("/admin/login");
+          // Reset the error state
+          setLoginError("");
         }
-        alert("Password change successful!");
-        navigate("/admin/login");
-        // Reset the error state
-        setLoginError("");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
+        console.log(response);
         alert(data.data.message); // Display the error message sent by the server
       }
     } catch (error) {
       if (error.response.status == 400) {
-        setLoginError(error.response.data.msg); // Set the registration error message
+        setLoginError(error.response.data.message); // Set the registration error message
       } else {
-        setLoginError("An error occurred, please try again later");
+        setLoginError(error.response.data.message);
+        // setLoginError("An error occurred, please try again later");
       }
       // Handle other errors (e.g., network error)
     }
@@ -129,8 +133,8 @@ function FPPage() {
                 />
                 {icon && <div onClick={handleToggle}>{icon}</div>}
                 <div>
-                  {errors.confirmPassword && (
-                    <p className="error">{errors.confirmPassword.message}</p>
+                  {errors.newPassword && (
+                    <p className="error">{errors.newPassword.message}</p>
                   )}
                 </div>
               </div>

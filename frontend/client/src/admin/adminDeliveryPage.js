@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
 import { jwtDecode } from "jwt-decode";
+import UserTable from "./UserTable";
 
 const schema = z.object({
   username: z.string().min(2),
@@ -31,6 +32,7 @@ const AdminDeliveryPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
@@ -85,6 +87,7 @@ const AdminDeliveryPage = () => {
       });
       if (response.ok) {
         response.json().then(alert("Registration successful!"));
+        reset()
         // Registration successful, show success message or redirect to another page
         fetchDelivery();
       } else {
@@ -126,7 +129,7 @@ const AdminDeliveryPage = () => {
 
   return (
     <>
-      {(decode === "admin") ? (
+      {decode === "admin" ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
             <AdminHeader />
@@ -203,7 +206,7 @@ const AdminDeliveryPage = () => {
             {error && <p className="delivery-error">{error}</p>}
             {delivery.length > 0 ? (
               <div className="main-course3">
-                {delivery.map((e) => (
+                {/* {delivery.map((e) => (
                   <div className="overall3">
                     <h4 className="dish-name3">{e.username}</h4>
                     <div className="description3">
@@ -250,7 +253,8 @@ const AdminDeliveryPage = () => {
                       </button>
                     </div>
                   </Modal>
-                </div>
+                </div> */}
+                <UserTable userData={delivery} onDelete={handleDelete} />
               </div>
             ) : (
               <p className="delivery-error">No Data available</p>

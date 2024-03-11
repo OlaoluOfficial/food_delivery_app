@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import DeliveryLoginPage from "./delliveryLoginPage";
 import { jwtDecode } from "jwt-decode";
+import AdminHeader from "../admin/adminHeader";
 
 const DeliveryPersonnelPage = () => {
   const token = Cookies.get("foodieToken");
@@ -124,6 +125,7 @@ const DeliveryPersonnelPage = () => {
     <>
       {decode === "delivery" ? (
         <div>
+          <AdminHeader />
           <h2>Delivery Personnel Page</h2>
           <ul>
             {availableOrder.map((order) => (

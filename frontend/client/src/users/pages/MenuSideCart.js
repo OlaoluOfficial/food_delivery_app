@@ -11,6 +11,7 @@ export default function SideCart({ menu, selectedId }) {
   const [res, setRes] = useState("");
 
   const navigate = useNavigate();
+  const { addCarts } = useCart();
 
   const handleOfferChange = (event) => {
     setOfferPrice(event.target.value);
@@ -51,6 +52,7 @@ export default function SideCart({ menu, selectedId }) {
         { withCredentials: true }
       );
       if (response.status == 200) {
+        addCarts()
         setSelectedFood("");
       } else {
         setRes(response.data.message);

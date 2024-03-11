@@ -13,7 +13,7 @@ function Cart() {
   const [delivery, setDelivery] = useState(0);
   const [user, setUser] = useState("");
   const [error, setError] = useState("");
-  const { addCart } = useCart();
+  // const { addCart } = useCart();
   const token = Cookies.get("foodieToken");
   const [decode, setDecode] = useState("");
 
@@ -32,7 +32,6 @@ function Cart() {
       .then((response) => {
         if (response.status === 200) {
           setCart(response.data.items);
-          addCart(response.data.items.length);
         }
       })
       .catch((error) => {

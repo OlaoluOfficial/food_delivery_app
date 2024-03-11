@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
 import AdminLoginPage from "../admin/adminLogin";
 import { jwtDecode } from "jwt-decode";
+import AdminHeader from "../admin/adminHeader";
 
 const schema = z.object({
   description: z.string(),
@@ -109,10 +110,14 @@ const RestaurantLandingPage = () => {
 
       try {
         // Simulate API request using fetch or Axios
-        const response = await fetch("http://localhost:2300/api/v1/products", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "http://localhost:2300/api/v1/restaurants/addProducts",
+          {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           alert(response.data.message);
@@ -166,7 +171,8 @@ const RestaurantLandingPage = () => {
         {
           method: "PUT",
           body: JSON.stringify(data),
-          credentials: "include"
+          
+          // credentials: "include",
         }
       );
 
@@ -191,6 +197,7 @@ const RestaurantLandingPage = () => {
       {(decode === "restaurant") ? (
         <div className="restaurant-page-container">
           <section className="admin-hero-section">
+          <AdminHeader />
             <h2 className="admin-primary-heading">
               Restaurant Admin Page
               <span className="primary-heading-paragraph">
