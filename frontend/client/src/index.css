@@ -97,8 +97,8 @@ body {
   align-self: center;
 } */
 .hero-img {
-  width: 35rem;
-  height: 35rem;
+  width: 30rem;
+  height: 30rem;
   /* background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14); */
   padding: 5rem;
   border-radius: 50%;
@@ -442,4 +442,7 @@ MENU SIDE CART
     width: 90%;
     margin: 0 auto;
   }
+
+
+
 }

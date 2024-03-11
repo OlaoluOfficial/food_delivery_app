@@ -13,7 +13,6 @@ import AdminLoginPage from "./adminLogin";
 import DeliveryLoginPage from "../delivery/delliveryLoginPage";
 import Swal from "sweetalert2";
 
-
 const schema = z.object({
   currentPassword: z
     .string()
@@ -143,9 +142,9 @@ function FPPage() {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="Password-input-container">
                 <input
-                  className="input-name"
+                  className="input-password"
                   type={type}
                   placeholder="New Password"
                   id="logIn"
