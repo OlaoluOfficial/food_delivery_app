@@ -4,6 +4,7 @@ import loginImg from "../img/login-img.jpg";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Swal from "sweetalert2";
 
 const Schema = z.object({
   email: z.string(),
@@ -32,7 +33,6 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   async function signUp(data) {
-    console.log("hfjgjgkjg")
     try {
       const response = await fetch("http://localhost:2300/api/v1/auth/signup", {
         method: "POST",
@@ -43,15 +43,22 @@ function RegisterPage() {
 
       if (response.ok) {
         // Registration successful, show success message or redirect to another page
-        alert("Registration successful! You can now log in.");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Registration successful! You can now log in.",
+          showConfirmButton: false,
+          timer: 2500,
+        });
+        
         // Optionally, redirect to the login page
         navigate("/login"); // Use navigate to redirect to '/login'
         // Reset the form and clear input fields
         setRegistrationError("");
       } else {
         // Registration failed, handle error response from the server
-        const data = await response.json();
-        alert(data.error); // Display the error message sent by the server
+        const data = await response.json(); 
+        setRegistrationError(data.data.msg); // Display the error message sent by the server
       }
     } catch (error) {
       console.error("Error during registration:", error);

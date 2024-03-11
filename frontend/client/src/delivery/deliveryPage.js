@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import DeliveryLoginPage from "./delliveryLoginPage";
 import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../admin/adminHeader";
+import Swal from "sweetalert2";
 
 const DeliveryPersonnelPage = () => {
   const token = Cookies.get("foodieToken");
@@ -31,6 +32,7 @@ const DeliveryPersonnelPage = () => {
       const response = await fetch("http://localhost:2300/api/v1/orders");
       const data = await response.json();
       const actualData = data.data;
+      console.log(actualData)
       setOrders(actualData);
 
       const updateAvailableOrder = actualData.filter(
@@ -62,29 +64,39 @@ const DeliveryPersonnelPage = () => {
     }
   };
 
-  const handleAcceptOrder = (orderId) => {
+  const handleAcceptOrder = async (orderId) => {
+    console.log(orderId)
     try {
       // Send a request to your backend API to mark the order as accepted
-      axios
+     const response= await axios
         .put(`http://localhost:2300/api/v1/orders/${orderId}`, {
           status: "confirmed",
-        })
-        .then(() => {
-          // Update the local state to reflect the accepted order
-          setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-              order.id === orderId ? { ...order, status: "Accepted" } : order
-            )
-          );
-        });
+        }, {withCredentials: true})
 
-      const updateSelectedOrder = selectedOrder.filter(
-        (item) => item.id !== orderId
-      );
+          if (response.status == 200) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Order Confirmed",
+              showConfirmButton: false,
+              timer: 1500,
+            });
 
-      setSelectedOrder(updateSelectedOrder);
-      fetchOrders();
+            const updateSelectedOrder = selectedOrder.filter(
+              (item) => item.id !== orderId
+            );
+
+            setSelectedOrder(updateSelectedOrder);
+            fetchOrders();
+          }
     } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
       console.error("Error accepting order:", error);
     }
   };
@@ -99,16 +111,19 @@ const DeliveryPersonnelPage = () => {
   const handleDelivered = async (orderId) => {
     try {
       // Send a request to your backend API to mark the order as accepted
-      await axios.put(`http://localhost:2300/api/v1/orders/${orderId}`, {
+      const response = await axios.put(`http://localhost:2300/api/v1/orders/${orderId}`, {
         status: "Delivered",
-      });
-
-      // Update the local state to reflect the accepted order
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === orderId ? { ...order, status: "Accepted" } : order
-        )
-      );
+      },{withCredentials: true});
+      if (response.status == 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Delivered",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        fetchOrders();
+      }
 
       const updateSelectedOrder = selectedOrder.filter(
         (item) => item.id !== orderId
@@ -116,9 +131,15 @@ const DeliveryPersonnelPage = () => {
       setSelectedOrder(updateSelectedOrder);
       fetchOrders();
     } catch (error) {
-      console.error("Error accepting order:", error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error("Error delivering order:", error);
     }
-    // setSelectedOrder(null); // Reset the selected order
   };
 
   return (
@@ -129,8 +150,8 @@ const DeliveryPersonnelPage = () => {
           <h2>Delivery Personnel Page</h2>
           <ul>
             {availableOrder.map((order) => (
-              <li key={order.orderId}>
-                Order #{order.orderId} - Status: {order.status}
+              <li key={order._id}>
+                Order #{order._id} - Status: {order.status}
                 <button onClick={() => handleSelection(order)}>View</button>
               </li>
             ))}
@@ -144,7 +165,7 @@ const DeliveryPersonnelPage = () => {
                   <div>
                     <div className="selectedOrder">
                       <div className="selectedOrder-header">
-                        <p>Order #{order.orderId}</p>
+                        <p>Order #{order._id}</p>
                         <p>Status: {order.status}</p>
                       </div>
                       <div className="selectedOrder-details">
@@ -163,10 +184,10 @@ const DeliveryPersonnelPage = () => {
                           <p>{order.customerContact}</p>
                         </div>
                       </div>
-                      <button onClick={() => handleAcceptOrder(order.orderId)}>
+                      <button onClick={() => handleAcceptOrder(order._id)}>
                         Accept Order
                       </button>
-                      <button onClick={() => handleCancel(order.orderId)}>
+                      <button onClick={() => handleCancel(order._id)}>
                         Cancel
                       </button>
                     </div>
@@ -180,9 +201,9 @@ const DeliveryPersonnelPage = () => {
             {acceptedOrder && (
               <ul>
                 {acceptedOrder.map((order) => (
-                  <li key={order.orderId}>
-                    Order #{order.orderId} - Status: {order.status}
-                    <button onClick={() => handleDelivered(order.orderId)}>
+                  <li key={order._id}>
+                    Order #{order._id} - Status: {order.status}
+                    <button onClick={() => handleDelivered(order._id)}>
                       Delivered
                     </button>
                   </li>

@@ -3,11 +3,11 @@ import { useTable } from "react-table";
 import { FaTrash, FaXmark } from "react-icons/fa6";
 import image from "../deliveryMan.png";
 
-const UserTable = ({ userData, onDelete }) => {
+const UserTable = ({ userData, onDelete, setSelectedId }) => {
   const columns = useMemo(
     () => [
       {
-        Header: "Avatar",
+        Header: "",
         accessor: "avatar",
         Cell: () => (
           <img
@@ -34,7 +34,9 @@ const UserTable = ({ userData, onDelete }) => {
         accessor: "actions",
         Cell: ({ row }) => (
           <button
-            onClick={() => onDelete(row.original.id)}
+            onClick={() => {
+              onDelete(row.original._id);
+            }}
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >
             <FaTrash
@@ -65,7 +67,11 @@ const UserTable = ({ userData, onDelete }) => {
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
-                  style={{ borderBottom: '2px solid #ddd', padding: '8px', textAlign: 'center' }}
+                  style={{
+                    borderBottom: "2px solid #ddd",
+                    padding: "8px",
+                    textAlign: "center",
+                  }}
                 >
                   {column.render("Header")}
                 </th>

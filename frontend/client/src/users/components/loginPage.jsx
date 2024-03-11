@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   email: z.string(),
@@ -49,7 +50,13 @@ function LoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        alert("Login successful!");
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Login successful!",
+            showConfirmButton: false,
+            timer: 2500,
+          });
         navigate("/");
         window.location.reload();
         // Reset the form and clear input fields
@@ -57,7 +64,13 @@ function LoginPage() {
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.data.message); // Display the error message sent by the server
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: data.data.message,
+            showConfirmButton: false,
+            timer: 2500,
+          });; // Display the error message sent by the server
       }
     } catch (error) {
       if (error.response == 400) {

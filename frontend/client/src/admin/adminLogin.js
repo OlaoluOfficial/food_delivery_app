@@ -55,7 +55,6 @@ function AdminLoginPage() {
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
         if (response.data.data.user.role == "admin") {
-          console.log(response);
           loginUser(response.data.data.user);
           //alert the user
           Swal.fire({
@@ -71,19 +70,36 @@ function AdminLoginPage() {
           // Reset the form and clear input fields
           setLoginError("");
         } else {
-          console.log(response.data.data.user);
           loginUser(response.data.data.user);
-          alert("Login successful!");
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Login successful!",
+            showConfirmButton: false,
+            timer: 2500,
+          });
           navigate("/restaurant");
           window.location.reload();
         }
       } else if (response.status == 419) {
-        alert(response.data.msg);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: response.data.msg,
+          showConfirmButton: false,
+          timer: 2500,
+        });
         navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.data.message); // Display the error message sent by the server
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: data.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        }); // Display the error message sent by the server
       }
       // Handle other errors (e.g., network error)
     } catch (error) {
@@ -91,7 +107,13 @@ function AdminLoginPage() {
       if (error.response.status == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else if (error.response.status == 419) {
-        alert(error.response.data.message);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        });
         navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");
