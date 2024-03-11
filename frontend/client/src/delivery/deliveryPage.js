@@ -2,19 +2,28 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import DeliveryLoginPage from "./delliveryLoginPage";
+import { jwtDecode } from "jwt-decode";
+import AdminHeader from "../admin/adminHeader";
 
 const DeliveryPersonnelPage = () => {
-    const token = Cookies.get("foodieToken");
-    const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
+  const token = Cookies.get("foodieToken");
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState([]);
   const [availableOrder, setAvailableOrder] = useState([]);
   const [acceptedOrder, setAcceptedOrder] = useState([]);
   const [deliveredOrder, setDeliveredOrder] = useState([]);
+  const [decode, setDecode] = useState("");
 
   useEffect(() => {
     // Fetch existing orders from your backend API
     fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
   }, []);
 
   const fetchOrders = async () => {
@@ -114,8 +123,9 @@ const DeliveryPersonnelPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {decode === "delivery" ? (
         <div>
+          <AdminHeader />
           <h2>Delivery Personnel Page</h2>
           <ul>
             {availableOrder.map((order) => (

@@ -8,6 +8,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
+import { useAdmin } from "./adminContext";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   email: z.string(),
@@ -18,12 +20,14 @@ const schema = z.object({
 });
 
 function AdminLoginPage() {
+  const { loginUser } = useAdmin();
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -45,14 +49,37 @@ function AdminLoginPage() {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        data, {withCredentials: true}
+        data,
+        { withCredentials: true }
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        alert("Login successful!");
-        navigate("/admin");
-        // Reset the form and clear input fields
-        setLoginError("");
+        if (response.data.data.user.role == "admin") {
+          console.log(response);
+          loginUser(response.data.data.user);
+          //alert the user
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Login successful!",
+            showConfirmButton: false,
+            timer: 2500,
+          });
+
+          navigate("/admin");
+          window.location.reload();
+          // Reset the form and clear input fields
+          setLoginError("");
+        } else {
+          console.log(response.data.data.user);
+          loginUser(response.data.data.user);
+          alert("Login successful!");
+          navigate("/restaurant");
+          window.location.reload();
+        }
+      } else if (response.status == 419) {
+        alert(response.data.msg);
+        navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
@@ -60,8 +87,12 @@ function AdminLoginPage() {
       }
       // Handle other errors (e.g., network error)
     } catch (error) {
-      if (error.response == 400) {
+      console.log(error)
+      if (error.response.status == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
+      } else if (error.response.status == 419) {
+        alert(error.response.data.message);
+        navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");
       }
@@ -79,7 +110,7 @@ function AdminLoginPage() {
             <input
               className="input-name "
               type="email"
-              placeholder="Username"
+              placeholder="email"
               id="logIn"
               {...register("email")}
             />

@@ -8,23 +8,24 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
+import { useAdmin } from "../admin/adminContext";
 
 const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters." }),
+  email: z.string().min(3, { message: "Email must be at least 3 characters." }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
 });
 
 function DeliveryLoginPage() {
+  const { loginUser } = useAdmin();
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -43,21 +44,25 @@ function DeliveryLoginPage() {
   };
 
   async function login(data) {
-    let Data = { ...data, role: "postman" };
+    let Data = { ...data, role: "delivery" };
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        Data
+        Data, {withCredentials: true}
       );
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
+      if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
+        // setAdminInfo(response.data.data.user);
+        loginUser(response.data.data.user)
         alert("Login successful!");
         navigate("/delivery");
-        // Reset the form and clear input fields
+        window.location.reload();
+        // Reset the error state
         setLoginError("");
+        // check fro the default password state
+      } else if (response.status == 419) {
+        alert(response.data.message);
+        navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
@@ -65,7 +70,10 @@ function DeliveryLoginPage() {
       }
     } catch (error) {
       if (error.response.status == 400) {
-        setLoginError(error.response.data.msg); // Set the registration error message
+        setLoginError(error.response.data.msg); // Set the login error message
+      } else if (error.response.status == 419) {
+        alert(error.response.data.message);
+        navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");
       }
@@ -83,10 +91,10 @@ function DeliveryLoginPage() {
           <div className="margin-bottom margin-top">
             <input
               className="input-name"
-              type="text"
-              placeholder="Username"
+              type="email"
+              placeholder="Email"
               id="logIn"
-              {...register("username")}
+              {...register("email")}
             />
             {errors.username && (
               <p className="error">{errors.username.message}</p>

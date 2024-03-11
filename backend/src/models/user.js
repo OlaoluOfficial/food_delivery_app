@@ -21,15 +21,21 @@ const userSchema = new Schema({
     },
     role: {
       type: String,
-      enum: ["customer", "restaurant", "admin", "postman"],
+      enum: ["customer", "restaurant", "admin", "delivery"],
       default: "customer",
     },
     address: {
       type: String,
     },
+    token: String,
+    resetPasswordExpires: Date ,
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

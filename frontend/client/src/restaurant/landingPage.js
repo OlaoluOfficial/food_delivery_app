@@ -7,6 +7,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
 import AdminLoginPage from "../admin/adminLogin";
+import { jwtDecode } from "jwt-decode";
+import AdminHeader from "../admin/adminHeader";
 
 const schema = z.object({
   description: z.string(),
@@ -16,7 +18,6 @@ const schema = z.object({
 
 const RestaurantLandingPage = () => {
   const token = Cookies.get("foodieToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
   const [foods, setFoods] = useState([]);
   const [foodName, setFoodName] = useState("");
   const [price, setPrice] = useState("");
@@ -29,12 +30,20 @@ const RestaurantLandingPage = () => {
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
   const [updateError, setUpdateError] = useState("");
+  const [decode, setDecode] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
+
+  useEffect(() => {
+    if (token) {
+      var decoded = jwtDecode(token);
+      setDecode(decoded.user.role);
+    }
+  }, []);
 
   const fetchFoods = async () => {
     try {
@@ -95,16 +104,20 @@ const RestaurantLandingPage = () => {
       formData.append("name", foodName);
       formData.append("price", price);
       formData.append("minimumPrice", minPrice);
-      formData.append("image", image);
+      formData.append("productImages", image);
       formData.append("description", desc);
       console.log(formData);
 
       try {
         // Simulate API request using fetch or Axios
-        const response = await fetch("http://localhost:2300/api/v1/products", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "http://localhost:2300/api/v1/restaurants/addProducts",
+          {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           alert(response.data.message);
@@ -149,14 +162,17 @@ const RestaurantLandingPage = () => {
   };
 
   const handleEdit = async (data) => {
+    console.log(data)
     // Implement the logic to edit a food item (e.g., redirect to an edit page)
     try {
       // Simulate API request using fetch or Axios
       const response = await fetch(
-        `http://localhost:2300/api/v1/products/${selectedId.id}`,
+        `http://localhost:2300/api/v1/products/${selectedItem._id}`,
         {
           method: "PUT",
-          body: data,
+          body: JSON.stringify(data),
+          
+          // credentials: "include",
         }
       );
 
@@ -178,9 +194,10 @@ const RestaurantLandingPage = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {(decode === "restaurant") ? (
         <div className="restaurant-page-container">
           <section className="admin-hero-section">
+          <AdminHeader />
             <h2 className="admin-primary-heading">
               Restaurant Admin Page
               <span className="primary-heading-paragraph">
@@ -313,7 +330,7 @@ const RestaurantLandingPage = () => {
                     ></FaPen>
                     <FaTrash
                       className="click-order2-icon"
-                      onClick={() => openModal2(food.id)}
+                      onClick={() => openModal2(food._id)}
                     ></FaTrash>
                   </div>
                 </div>

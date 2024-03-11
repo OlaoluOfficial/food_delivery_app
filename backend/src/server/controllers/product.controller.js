@@ -48,6 +48,7 @@ class ProductController {
   }
 
   static async updateProduct (req, res) {
+    console.log(req.body)
     try {
       const productId = req.params.productId;
       const updateData = req.body;

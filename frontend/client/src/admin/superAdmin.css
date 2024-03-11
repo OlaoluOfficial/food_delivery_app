@@ -70,6 +70,9 @@ body {
   width: 63%;
   /* border: 1px solid ; */
 }
+.delivery-address{
+  font-size: 1.5rem;
+}
 .description-status3 {
   color: #999;
   font-size: 1rem;
@@ -120,5 +123,7 @@ body {
 }
 .delivery-error {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #6a0303
 }
