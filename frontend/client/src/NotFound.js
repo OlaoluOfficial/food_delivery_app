@@ -13,7 +13,7 @@ const NotFound = () => {
         changed or temporarily not available.
       </p>
 
-      <a className="button404" href="https://indrakusuma.web.id/">
+      <a className="button404" href="http://localhost:3000">
         GO TO HOMEPAGE
       </a>
     </div>

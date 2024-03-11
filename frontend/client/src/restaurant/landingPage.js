@@ -10,6 +10,7 @@ import AdminLoginPage from "../admin/adminLogin";
 import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../admin/adminHeader";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const schema = z.object({
   description: z.string(),
@@ -23,7 +24,7 @@ const RestaurantLandingPage = () => {
   const [foodName, setFoodName] = useState("");
   const [price, setPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [desc, setDesc] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
@@ -114,16 +115,15 @@ const RestaurantLandingPage = () => {
 
       try {
         // Simulate API request using fetch or Axios
-        const response = await fetch(
+        const response = await axios.post(
           "http://localhost:2300/api/v1/restaurants/addProducts",
+          formData,
           {
-            method: "POST",
-            body: formData,
-            credentials: "include",
+            withCredentials: true,
           }
         );
 
-        if (response.ok) {
+        if (response.status == 201) {
           Swal.fire({
             position: "center",
             icon: "success",
@@ -137,6 +137,7 @@ const RestaurantLandingPage = () => {
           setDesc("");
           setPrice("");
           setMinPrice("");
+          setImage(null)
         } else {
           setError("Failed to upload data to the database");
           // console.error("Failed to upload data to the database");
@@ -155,6 +156,7 @@ const RestaurantLandingPage = () => {
         `http://localhost:2300/api/v1/products/${foodId}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -189,17 +191,13 @@ const RestaurantLandingPage = () => {
     // Implement the logic to edit a food item (e.g., redirect to an edit page)
     try {
       // Simulate API request using fetch or Axios
-      const response = await fetch(
+      const response = await axios.put(
         `http://localhost:2300/api/v1/products/${selectedItem._id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(data),
-
-          // credentials: "include",
-        }
+        data,
+        { withCredentials: true }
       );
 
-      if (response.ok) {
+      if (response.status == 200) {
         Swal.fire({
           position: "center",
           icon: "success",

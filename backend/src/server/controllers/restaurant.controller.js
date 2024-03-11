@@ -170,7 +170,7 @@ class RestaurantController {
     const restaurantId = req.user.id;
     let prodPics = [];
     const { name, description, price, minimumPrice } = req.body;
-    console.log(req.body);
+
     if (userRole !== "restaurant") {
       return res
         .status(401)
@@ -182,7 +182,7 @@ class RestaurantController {
 
       const product = new Product({
         restaurant: restaurantId,
-        name: productName,
+        name: name,
         description,
         price,
         productPictures: [],

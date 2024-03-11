@@ -312,6 +312,7 @@ MENU SIDE CART
 .overall {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  max-height: 18rem;
 }
 .content-box {
   display: flex;
