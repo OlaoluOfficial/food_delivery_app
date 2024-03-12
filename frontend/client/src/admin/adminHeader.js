@@ -1,25 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./adminHeader.css";
-import AdminContext from "./adminContext";
+import { useAdmin } from "./adminContext";
+import Cookies from "js-cookie";
 
 function AdminHeader() {
-  const { setAdminInfo, adminInfo } = useContext(AdminContext);
+  const token = Cookies.get("foodieToken");
+  const { adminInfo, setAdminInfo } = useAdmin();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch("http://localhost:2300/api/v1/users/getProfile", {
-      credentials: "include",
-    }).then((response) => {
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setAdminInfo(userInfo);
-        });
-      } else {
-        setAdminInfo(null);
-      }
-    });
-  }, [setAdminInfo]);
 
 
   function logout() {
@@ -31,23 +19,30 @@ function AdminHeader() {
     });
     setAdminInfo(null);
   }
-  const username =
-    adminInfo && adminInfo.username ? adminInfo.username.split(" ") : null;
-  const name = username ? username[0] : null;
-
+  if (adminInfo) {
+    if (adminInfo.role == "restaurant") {
+      const username =
+        adminInfo && adminInfo.name ? adminInfo.name.split(" ") : null;
+      var Dname = username ? username[0] : null;
+    } else {
+      const username =
+        adminInfo && adminInfo.username ? adminInfo.username.split(" ") : null;
+      var Dname = username ? username[0] : null;
+    }
+  }
   return (
     <div className="Header1">
       <div className="nav-flex-container1">
         <div className="nav-btn-box">
-          {username && (
+          {Dname && (
             <>
               <a className="nav-btn1" onClick={logout}>
                 Logout
               </a>
-              <span className="nav-btn1 nav-btn-colored1">{name}</span>
+              <span className="nav-btn1 nav-btn-colored1">{Dname}</span>
             </>
           )}
-          {!name && (
+          {!Dname && (
             <>
               <Link className="nav-btn1" to="/admin/login">
                 Log-In

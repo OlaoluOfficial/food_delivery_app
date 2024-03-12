@@ -22,7 +22,7 @@ function Header() {
   }, [setUserInfo]);
 
   function logout() {
-    fetch("http://localhost:2300/logout", {
+    fetch("http://localhost:2300/api/v1/auth/logout", {
       credentials: "include",
       method: "POST",
     });

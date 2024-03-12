@@ -8,9 +8,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode"
+import { jwtDecode } from "jwt-decode";
 import AdminLoginPage from "./adminLogin";
 import DeliveryLoginPage from "../delivery/delliveryLoginPage";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   currentPassword: z
@@ -24,9 +25,8 @@ const schema = z.object({
 function FPPage() {
   const token = Cookies.get("foodieToken");
   const [isLoggedIn, setIsLoggedIn] = useState(token !== undefined);
-   const [decoded, setDecoded] = useState("");
+  const [decoded, setDecoded] = useState("");
   const [loginError, setLoginError] = useState(null);
-  const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
@@ -36,15 +36,13 @@ function FPPage() {
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
-  
   useEffect(() => {
     if (token) {
       var decoded = jwtDecode(token);
-      setDecoded(decoded.role);
+      setDecoded(decoded.user.role);
     }
   }, []);
-  
-  
+
   //password toggle function
   const handleToggle = () => {
     if (type === "password") {
@@ -60,30 +58,55 @@ function FPPage() {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/changepassword",
-        data, {withCredentials: true}
+        data,
+        { withCredentials: true }
       );
       if (response.status == 201) {
+        console.log(decoded);
         // Registration successful, show success message or redirect to another page
         if (decoded == "delivery") {
-          alert("Password change successful!");
+          Swal.fire({
+            position: "center",
+            icon: "succes",
+            title: "Password change successful!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
           navigate("/delivery/login");
           // Reset the error state
           setLoginError("");
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "succes",
+            title: "Password change successful!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          navigate("/admin/login");
+          // Reset the error state
+          setLoginError("");
         }
-        alert("Password change successful!");
-        navigate("/admin/login");
-        // Reset the error state
-        setLoginError("");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.data.message); // Display the error message sent by the server
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: data.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        // Display the error message sent by the server
       }
     } catch (error) {
       if (error.response.status == 400) {
-        setLoginError(error.response.data.msg); // Set the registration error message
+        setLoginError(error.response.data.message); // Set the registration error message
       } else {
-        setLoginError("An error occurred, please try again later");
+        setLoginError(error.response.data.message);
+        // setLoginError("An error occurred, please try again later");
       }
       // Handle other errors (e.g., network error)
     }
@@ -119,9 +142,9 @@ function FPPage() {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="Password-input-container">
                 <input
-                  className="input-name"
+                  className="input-password"
                   type={type}
                   placeholder="New Password"
                   id="logIn"
@@ -129,8 +152,8 @@ function FPPage() {
                 />
                 {icon && <div onClick={handleToggle}>{icon}</div>}
                 <div>
-                  {errors.confirmPassword && (
-                    <p className="error">{errors.confirmPassword.message}</p>
+                  {errors.newPassword && (
+                    <p className="error">{errors.newPassword.message}</p>
                   )}
                 </div>
               </div>
@@ -144,8 +167,10 @@ function FPPage() {
             </form>
           </div>
         </div>
+      ) : decoded == "delivery" ? (
+        <DeliveryLoginPage />
       ) : (
-        (decoded == "delivery") ? (<DeliveryLoginPage />):( < AdminLoginPage />)
+        <AdminLoginPage />
       )}
     </>
   );

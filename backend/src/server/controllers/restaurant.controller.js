@@ -41,12 +41,10 @@ class RestaurantController {
           };
 
           sendEmailNotification(mailOptions);
-          return res
-            .status(201)
-            .json({
-              message: "Restaurant created successfully",
-              data: savedRestaurant,
-            });
+          return res.status(201).json({
+            message: "Restaurant created successfully",
+            data: savedRestaurant,
+          });
         } else {
           return res
             .status(500)
@@ -171,7 +169,7 @@ class RestaurantController {
     const productPics = req.files;
     const restaurantId = req.user.id;
     let prodPics = [];
-    const { productName, description, price, minimumPrice } = req.body;
+    const { name, description, price, minimumPrice } = req.body;
 
     if (userRole !== "restaurant") {
       return res
@@ -184,7 +182,7 @@ class RestaurantController {
 
       const product = new Product({
         restaurant: restaurantId,
-        name: productName,
+        name: name,
         description,
         price,
         productPictures: [],

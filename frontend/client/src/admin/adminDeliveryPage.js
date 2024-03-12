@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
 import { jwtDecode } from "jwt-decode";
+import UserTable from "./UserTable";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   username: z.string().min(2),
@@ -31,6 +33,7 @@ const AdminDeliveryPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({ resolver: zodResolver(schema) });
 
@@ -84,7 +87,16 @@ const AdminDeliveryPage = () => {
         credentials: "include",
       });
       if (response.ok) {
-        response.json().then(alert("Registration successful!"));
+        response.json().then(
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Registration Successful!!",
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        );
+        reset();
         // Registration successful, show success message or redirect to another page
         fetchDelivery();
       } else {
@@ -116,17 +128,29 @@ const AdminDeliveryPage = () => {
         fetchDelivery();
       } else {
         console.error("Failed to delete data from the database");
-        alert("Something went wrong, Please try again later");
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Something went wrong, Please try again later",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong, Please try again later");
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Something went wrong, Please try again later",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
   return (
     <>
-      {(decode === "admin") ? (
+      {decode === "admin" ? (
         <div className="restaurant-page-container">
           <section className="section-admin-hero">
             <AdminHeader />
@@ -203,35 +227,19 @@ const AdminDeliveryPage = () => {
             {error && <p className="delivery-error">{error}</p>}
             {delivery.length > 0 ? (
               <div className="main-course3">
-                {delivery.map((e) => (
-                  <div className="overall3">
-                    <h4 className="dish-name3">{e.username}</h4>
-                    <div className="description3">
-                      <p>{e.phone}</p>
-                    </div>
-                    <div className="delivery-address">
-                      <p>{e.email}</p>
-                      <p>{e.address}</p>
-                    </div>
-                    <div className="click-order3">
-                      <FaTrash
-                        className="click-order3-icon"
-                        onClick={() => openModal2(e._id)}
-                      ></FaTrash>
-                    </div>
-                  </div>
-                ))}
+                <UserTable userData={delivery} onDelete={openModal2} />
+
                 <div className="modal-container">
                   <Modal
                     isOpen={modalOpen2}
-                    onRequestClose={closeModal2}
+                    onRequestClose={() => setModalOpen2(false)}
                     className="modal2"
                   >
                     <FaXmark
                       className="modal-icon"
                       onClick={() => setModalOpen2(false)}
                     />
-                    <h3>Delete Product</h3>
+                    <h3>Delete Personnel</h3>
                     <p>Are you sure you want to delete this item?</p>
 
                     <div className="btn-chamber2">

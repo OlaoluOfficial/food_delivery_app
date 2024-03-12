@@ -96,25 +96,6 @@ body {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.combo_deals {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.beans,
-.pulpy {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-}
-
-.foodname {
-  text-align: center;
-  font-weight: bold;
-  font-size: large;
-  margin: 10px 0;
-}
 
 .price {
   text-align: center;
@@ -130,25 +111,7 @@ body {
   margin-top: 10px;
 }
 
-.combo-btn {
-  background-color: #fd7e14;
-  border-radius: 0 3rem 3rem 0;
-  padding: 0.5rem 1rem;
-  width: auto;
-}
-/* 
-.bg-red {
-  background-color:red ;
-  border-radius: 0 3rem 3rem 0;
-  padding: 0.5rem 1rem;
-  width: auto;
-}
-.bg-red:hover {
-  background-color: red;
-}
-.color-red {
-  color: red;
-} */
+
 
 .minus,
 .plus {
@@ -276,7 +239,7 @@ a {
   margin-top: 3rem;
 }
 .margin-top-big {
-  margin-top: 6rem;
+  margin-top: 13rem;
 }
 .login-logo {
   width: 10rem;

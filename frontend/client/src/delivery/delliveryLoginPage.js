@@ -8,7 +8,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import logo from "../users/img/EatRite-logo.png";
-import AdminContext from "../admin/adminContext";
+import { useAdmin } from "../admin/adminContext";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   email: z.string().min(3, { message: "Email must be at least 3 characters." }),
@@ -18,13 +19,14 @@ const schema = z.object({
 });
 
 function DeliveryLoginPage() {
-  const { setAdminInfo, adminInfo } = useContext(AdminContext);
+  const { loginUser } = useAdmin();
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
   const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -47,30 +49,57 @@ function DeliveryLoginPage() {
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
-        Data, {withCredentials: true}
+        Data,
+        { withCredentials: true }
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        setAdminInfo(response.data.data.user);
-        alert("Login successful!");
+        // setAdminInfo(response.data.data.user);
+        loginUser(response.data.data.user);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Login successful!",
+          showConfirmButton: false,
+          timer: 2500,
+        });
         navigate("/delivery");
         window.location.reload();
         // Reset the error state
         setLoginError("");
         // check fro the default password state
       } else if (response.status == 419) {
-        alert(response.data.message);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: response.data.msg,
+          showConfirmButton: false,
+          timer: 2500,
+        });
         navigate("/change-password");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.data.message); // Display the error message sent by the server
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: data.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        }); // Display the error message sent by the server
       }
     } catch (error) {
       if (error.response.status == 400) {
         setLoginError(error.response.data.msg); // Set the login error message
       } else if (error.response.status == 419) {
-        alert(error.response.data.message);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+
         navigate("/change-password");
       } else {
         setLoginError("An error occurred, please try again later");

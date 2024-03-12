@@ -36,7 +36,6 @@ export default function MenuContainer() {
       axios
         .get(url)
         .then((response) => {
-          console.log(response);
           setMenus(response.data.data);
         })
         .catch((error) => {
