@@ -102,8 +102,7 @@ class AuthController {
       }
       res.cookie("foodieToken", token, { maxAge: 1000 * 60 * 60 });
 
-      const { password: userPassword, ...userDataWithoutPassword } =
-        user.toObject();
+      const { password: userPassword, ...userDataWithoutPassword } = user.toObject();
 
       resp = {
         code: 200,
@@ -155,13 +154,9 @@ class AuthController {
             { new: true }
           );
         }
-        return res
-          .status(201)
-          .json({ message: "Password changed successfully" });
+        return res.status(201).json({ message: "Password changed successfully" });
       } else
-        return res
-          .status(403)
-          .json({ message: "Current password is incorrect" });
+        return res.status(403).json({ message: "Current password is incorrect" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Error changing password" });
