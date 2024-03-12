@@ -47,8 +47,8 @@ function RegisterPage() {
           position: "center",
           icon: "success",
           title: "Registration successful! You can now log in.",
-          showConfirmButton: false,
-          timer: 2500,
+          showConfirmButton: true,
+          timer: 5000,
         });
         
         // Optionally, redirect to the login page

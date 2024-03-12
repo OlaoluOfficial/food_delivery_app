@@ -58,7 +58,7 @@ function LoginPage() {
             timer: 2500,
           });
         navigate("/");
-        window.location.reload();
+        // window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
       } else {

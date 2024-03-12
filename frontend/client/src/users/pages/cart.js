@@ -7,12 +7,15 @@ import { FaTrash } from "react-icons/fa6";
 import LoginPage from "../components/loginPage";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
+
 
 function Cart() {
   const [cart, setCart] = useState([]);
   const [delivery, setDelivery] = useState(0);
   const [user, setUser] = useState("");
   const [error, setError] = useState("");
+  const [checkoutError, setCheckoutError] = useState("");
   // const { addCart } = useCart();
   const token = Cookies.get("foodieToken");
   const [decode, setDecode] = useState("");
@@ -130,11 +133,25 @@ function Cart() {
         const redirectUrl = response.data.data;
         window.open(redirectUrl);
       } else {
-        setError(response.data.message);
+         Swal.fire({
+           position: "center",
+           icon: "error",
+           title: response.data.message,
+           showConfirmButton: false,
+           timer: 2500,
+         });
+
       }
     } catch (error) {
       console.log(error);
-      setError(error);
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: error.response.data.message,
+          showConfirmButton: true,
+          timer: 2500,
+        });
+  
     }
   };
 
@@ -228,6 +245,7 @@ function Cart() {
                   ).toFixed(2)}
                 </h5>
               </div>
+
               <button className="cartButton" onClick={handleCheckout}>
                 Check out
               </button>
