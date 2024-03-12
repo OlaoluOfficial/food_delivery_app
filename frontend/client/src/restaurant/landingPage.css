@@ -48,7 +48,8 @@ body {
 em {
   font-size: 1.2rem;
 }
-.form-section {
+.form-section,
+.section-orders {
   /* margin-bottom: 8rem; */
   padding: 0rem 6rem 0rem 6rem;
 }
@@ -85,11 +86,13 @@ fieldset {
 }
 .form {
 }
-.form-list {
+.form-list,
+.order-list {
   list-style: none;
   padding: 2rem;
 }
-.form-list-item {
+.form-list-item,
+.order-list-item {
   margin-bottom: 2.5rem;
 }
 .form-list-item input {
