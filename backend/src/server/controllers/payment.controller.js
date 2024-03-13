@@ -11,7 +11,7 @@ class PaymentController {
         tx_ref: `${txRef}_PMCK`,
         amount: totalPrice,
         currency: 'NGN',
-        redirect_url: redirectUrl,
+        redirect_url: "http://localhost:2300/api/v1/pay/complete-payment",
         meta: {
           products,
           totalPrice,
