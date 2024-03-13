@@ -5,28 +5,35 @@ const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
     try {
-      const {
-        product,
-        price,
-        customer,
-        restaurant,
-      } = req.body;
+      const { products, totalPrice, customer, postman } = req.body;
 
+      const orderProducts = [];
+
+      for (const product of products) {
+        const dbProduct = await product.findById(product.productId)
+        if (!dbProduct) {
+          return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
+        }
+        orderProducts.push({
+          productId: dbProduct._id,
+          name: dbProduct.name,
+          quantity: product.quantity,
+          price: dbProduct.price,
+          restaurantId: dbProduct.restaurant
+        });
+      }
     
-      const order = new Order({
-        product,
-        price,
+      const newOrder = new Order({
+        products: orderProducts,
         customer,
-        restaurant
+        postman,
+        totalPrice
       });
 
-      // Save the order to the database
-      await order.save();
+      await newOrder.save();
 
-      res
-        .status(200)
-        .json({ message: 'Order Successfully Created', data: order });
-    // } 
+      res.status(200).json({ message: 'Order Successfully Created', data: newOrder });
+
   }catch (error) {
       console.log(error.message);
       return new Error('Could not create order');
