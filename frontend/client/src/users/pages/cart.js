@@ -121,7 +121,7 @@ function Cart() {
         email: user.email,
         phoneNumber: user.phoneNumber,
         name: user.username,
-        redirectUrl: "http://localhost:2300",
+        redirectUrl: "http://localhost:30000",
       };
 
       let response = await axios.post(
