@@ -5,7 +5,7 @@ const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
     try {
-      const { products, totalPrice } = req.body;
+      const { products, totalPrice, customer, postman } = req.body;
 
       const orderProducts = [];
 
@@ -25,6 +25,8 @@ class OrderController {
     
       const newOrder = new Order({
         products: orderProducts,
+        customer,
+        postman,
         totalPrice
       });
 
