@@ -1,15 +1,22 @@
 const axios = require('axios');
+const Order = require('../../models/order');
 
 class PaymentController {
   static async charge(req, res) {
     try {
-      const { amount, email, txRef, phoneNumber, name, redirectUrl } = req.body;
+      const { email, txRef, phoneNumber, name, redirectUrl, products, totalPrice } = req.body;
+      const customer = req.user.id;
 
       const data = {
         tx_ref: `${txRef}_PMCK`,
-        amount,
+        amount: totalPrice,
         currency: 'NGN',
-        redirect_url: redirectUrl,
+        redirect_url: "http://localhost:2300/api/v1/pay/complete-payment",
+        meta: {
+          products,
+          totalPrice,
+          customer
+        },
         customer: {
           email,
           phonenumber: phoneNumber,
@@ -64,6 +71,47 @@ class PaymentController {
     } catch (error) {
       console.error('Error handling webhook:', error);
       res.status(500).send('Internal server error');
+    }
+  }
+
+  static async paymentComplete(req, res) {
+    const data = req.body.data;
+    const meta = data.meta || {};
+
+    const orderId = meta.order_id;
+  
+    if (data.status === 'successful') {
+      console.log('Payment successful! Order ID:', orderId);
+
+      const { products, totalPrice, customer } = meta;
+
+      const orderProducts = [];
+
+      for (const product of products) {
+        const dbProduct = await product.findById(product.productId)
+        if (!dbProduct) {
+          return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
+        }
+        orderProducts.push({
+          productId: dbProduct._id,
+          name: dbProduct.name,
+          quantity: product.quantity,
+          price: dbProduct.price,
+          restaurantId: dbProduct.restaurant
+        });
+      }
+    
+      const newOrder = new Order({
+        products: orderProducts,
+        customer,
+        totalPrice
+      });
+
+      await newOrder.save();
+      res.send('Payment successful!');
+    } else {
+      console.log('Payment failed.');
+      res.send('Payment failed.');
     }
   }
 }
