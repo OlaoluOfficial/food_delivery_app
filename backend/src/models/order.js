@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema({
       ref: 'Restaurant'
     }
   }],
+  status: {
+    type: String,
+    enum: ['placed', 'confirmed', 'completed'],
+    default: 'placed'
+  },
   orderTime: {
     type: Date,
     default: Date.now,
