@@ -1,4 +1,3 @@
-// const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const axios = require('axios');
 
 class PaymentController {
@@ -35,6 +34,38 @@ class PaymentController {
     }
   }
 
+  static async handleWebhook(req, res) {
+    try {
+      const { hash } = req.body;
+      const eventData = req.body;
+      console.log(eventData);
+
+      const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
+      if (hash) {
+        if (hash !== secretHash) {
+          console.error('Invalid webhook signature');
+          return res.status(401).send('Unauthorized');
+        }
+      }
+      switch (eventData.event_type) {
+        case 'payment.success':
+          console.log('Payment successful:', eventData.data);
+          break;
+        case 'payment.failure':
+          console.log('Payment failed:', eventData.data);
+          break;
+        default:
+          console.log('Unknown event type:', eventData.event_type);
+          break;
+      }
+
+      // Respond to Flutterwave with a 200 OK status to acknowledge receipt of the webhook event
+      res.status(200).send('Webhook received successfully');
+    } catch (error) {
+      console.error('Error handling webhook:', error);
+      res.status(500).send('Internal server error');
+    }
+  }
 }
 
 module.exports = PaymentController;
