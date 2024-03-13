@@ -1,16 +1,18 @@
 const Order = require('../../models/order');
 const User = require('../../models/user');
+const Product = require('../../models/product');
 const Restaurant = require('../../models/restaurant');
 const sendEmailNotification = require('./email.controller');
 class OrderController {
   static async createOrder(req, res) {
     try {
       const { products, totalPrice } = req.body;
+      const customer = req.user.id;
 
       const orderProducts = [];
 
       for (const product of products) {
-        const dbProduct = await product.findById(product.productId)
+        const dbProduct = await Product.findById(product.productId)
         if (!dbProduct) {
           return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
         }
@@ -25,6 +27,7 @@ class OrderController {
     
       const newOrder = new Order({
         products: orderProducts,
+        customer,
         totalPrice
       });
 
