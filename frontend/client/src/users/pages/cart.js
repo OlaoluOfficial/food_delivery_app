@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import "./cart.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useCart } from "../CartContext";
 import { FaTrash } from "react-icons/fa6";
 import LoginPage from "../components/loginPage";
 import Cookies from "js-cookie";
@@ -54,7 +53,6 @@ function Cart() {
         "http://localhost:2300/api/v1/users/getProfile",
         { withCredentials: true }
       );
-      console.log(User);
       if (User.status === 200) {
         setUser(User.data);
       }
@@ -119,10 +117,12 @@ function Cart() {
         amount: total,
         txRef: "ref-1000",
         email: user.email,
-        phoneNumber: user.phoneNumber,
+        phoneNumber: user.phone,
         name: user.username,
-        redirectUrl: "http://localhost:30000",
+        redirectUrl: "http://localhost:3000",
+        products: cart
       };
+      console.log(payload)
 
       let response = await axios.post(
         "http://localhost:2300/api/v1/pay",
