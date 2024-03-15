@@ -1,22 +1,26 @@
 const axios = require('axios');
 const Order = require('../../models/order');
+const Transaction = require('../../models/transaction');
+const random = require('random-string-generator')
 
 class PaymentController {
   static async charge(req, res) {
     try {
-      const { email, txRef, phoneNumber, name, redirectUrl, products, totalPrice } = req.body;
+      const { email, phoneNumber, name, products, totalPrice, redirectUrl } = req.body;
       const customer = req.user.id;
+      const txRef = random('upper');
+
+      let meta = {
+        products,
+        customer,
+        totalPrice
+      }
 
       const data = {
-        tx_ref: `${txRef}_PMCK`,
+        "tx_ref": txRef,
         amount: totalPrice,
         currency: 'NGN',
-        redirect_url: "http://localhost:2300/api/v1/pay/complete-payment",
-        meta: {
-          products,
-          totalPrice,
-          customer
-        },
+        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/${txRef}`,
         customer: {
           email,
           phonenumber: phoneNumber,
@@ -29,6 +33,10 @@ class PaymentController {
           Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
         }
       });
+
+      const txn = new Transaction({ products: JSON.stringify(meta), txRef });
+
+      await txn.save();
       
       if (response.data.status === 'success') {
         res.json({ message: response.data.message, data: response.data.data.link });
@@ -41,77 +49,66 @@ class PaymentController {
     }
   }
 
-  static async handleWebhook(req, res) {
+  static async verify(req, res) {
     try {
-      const { hash } = req.body;
-      const eventData = req.body;
-      console.log(eventData);
+      let { txRef } = req.body;
 
-      const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
-      if (hash) {
-        if (hash !== secretHash) {
-          console.error('Invalid webhook signature');
-          return res.status(401).send('Unauthorized');
+      let txn = await Transaction.findOne({ txRef });
+      let txnProduct = JSON.parse(txn.products)
+      const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${txRef}`, {
+        headers: {
+          Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
         }
-      }
-      switch (eventData.event_type) {
-        case 'payment.success':
-          console.log('Payment successful:', eventData.data);
-          break;
-        case 'payment.failure':
-          console.log('Payment failed:', eventData.data);
-          break;
-        default:
-          console.log('Unknown event type:', eventData.event_type);
-          break;
-      }
-
-      // Respond to Flutterwave with a 200 OK status to acknowledge receipt of the webhook event
-      res.status(200).send('Webhook received successfully');
-    } catch (error) {
-      console.error('Error handling webhook:', error);
-      res.status(500).send('Internal server error');
-    }
-  }
-
-  static async paymentComplete(req, res) {
-    const data = req.body.data;
-    const meta = data.meta || {};
-
-    const orderId = meta.order_id;
-  
-    if (data.status === 'successful') {
-      console.log('Payment successful! Order ID:', orderId);
-
-      const { products, totalPrice, customer } = meta;
-
-      const orderProducts = [];
-
-      for (const product of products) {
-        const dbProduct = await product.findById(product.productId)
-        if (!dbProduct) {
-          return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
-        }
-        orderProducts.push({
-          productId: dbProduct._id,
-          name: dbProduct.name,
-          quantity: product.quantity,
-          price: dbProduct.price,
-          restaurantId: dbProduct.restaurant
-        });
-      }
-    
-      const newOrder = new Order({
-        products: orderProducts,
-        customer,
-        totalPrice
       });
 
-      await newOrder.save();
-      res.send('Payment successful!');
-    } else {
-      console.log('Payment failed.');
-      res.send('Payment failed.');
+      if (response) {
+        if (response.data.data.status === 'successful') {
+          const { products, totalPrice, customer } = txnProduct;
+
+          const orderProducts = [];
+
+          for (const product of products) {
+            const dbProduct = await product.findById(product.productId)
+            if (!dbProduct) {
+              return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
+            }
+            orderProducts.push({
+              productId: dbProduct._id,
+              name: dbProduct.name,
+              quantity: product.quantity,
+              price: dbProduct.price,
+              restaurantId: dbProduct.restaurant
+            });
+          }
+        
+          const newOrder = new Order({
+            products: orderProducts,
+            customer,
+            totalPrice
+          });
+
+          await newOrder.save();
+
+          await Transaction.findOneAndUpdate(
+            { txRef },
+            { status: 'successful' },
+            { new: true }
+          );
+          return res.status(200).json({ message: 'Payment Successful' });
+        } else {
+          await Transaction.findOneAndUpdate(
+            { txRef },
+            { status: 'failed' },
+            { new: true }
+          );
+          return res.status(200).json({ message: 'Payment Failed' });
+        }
+      } else {
+        res.status(400).json({ message: 'Unable to verify transaction!!!' })
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: 'Internal server error!' });
     }
   }
 }
