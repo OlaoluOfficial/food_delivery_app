@@ -55,7 +55,7 @@ class PaymentController {
       let { tx_ref } = req.body;
       const txRef = tx_ref
       let txn = await Transaction.findOne({ txRef : tx_ref });
-      let txnProduct = JSON.parse(txn.products)
+                                                                                                                                                                                                                               let txnProduct = JSON.parse(txn.products)
       const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${txRef}`, {
         headers: {
           Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
