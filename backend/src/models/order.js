@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
     ref: 'User', 
     required: true 
   },
-  product: [{
+  products: [{
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product'
@@ -31,7 +31,6 @@ const orderSchema = new mongoose.Schema({
   postman: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
-    required: true 
   }
 });
 

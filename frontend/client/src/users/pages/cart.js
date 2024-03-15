@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./cart.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa6";
 import LoginPage from "../components/loginPage";
@@ -18,6 +18,7 @@ function Cart() {
   // const { addCart } = useCart();
   const token = Cookies.get("foodieToken");
   const [decode, setDecode] = useState("");
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (token) {
@@ -124,24 +125,48 @@ function Cart() {
       };
       console.log(payload)
 
-      let response = await axios.post(
-        "http://localhost:2300/api/v1/pay",
-        payload,
-        { withCredentials: true }
-      );
-      if (response.status == 200) {
-        const redirectUrl = response.data.data;
-        window.open(redirectUrl);
-      } else {
-         Swal.fire({
-           position: "center",
-           icon: "error",
-           title: response.data.message,
-           showConfirmButton: false,
-           timer: 2500,
-         });
+      // let response = await axios.post(
+      //   "http://localhost:2300/api/v1/pay",
+      //   payload,
+      //   { withCredentials: true }
+      // );
+      // if (response.status == 200) {
+      //   const redirectUrl = response.data.data;
+      //   window.open(redirectUrl);
+      // } else {
+      //    Swal.fire({
+      //      position: "center",
+      //      icon: "error",
+      //      title: response.data.message,
+      //      showConfirmButton: false,
+      //      timer: 2500,
+      //    });
 
-      }
+      // }
+
+  let response = await axios.post("http://localhost:2300/api/v1/orders", payload, {
+    withCredentials: true,
+  });
+  if (response.status == 200) {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: response.data.message,
+      showConfirmButton: false,
+      timer: 2500,
+    });
+    navigate("/")
+  } else {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: response.data.message,
+      showConfirmButton: false,
+      timer: 2500,
+    });
+  }
+
+
     } catch (error) {
       console.log(error);
         Swal.fire({
