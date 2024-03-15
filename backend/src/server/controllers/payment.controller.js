@@ -6,7 +6,7 @@ const random = require('random-string-generator')
 class PaymentController {
   static async charge(req, res) {
     try {
-      const { email, phoneNumber, name, products, totalPrice } = req.body;
+      const { email, phoneNumber, name, products, totalPrice, redirectUrl } = req.body;
       const customer = req.user.id;
       const txRef = random('upper');
 
@@ -20,7 +20,7 @@ class PaymentController {
         "tx_ref": txRef,
         amount: totalPrice,
         currency: 'NGN',
-        "redirect_url": `http://localhost:2300/api/v1/pay/complete-payment/${txRef}`,
+        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/${txRef}`,
         customer: {
           email,
           phonenumber: phoneNumber,
