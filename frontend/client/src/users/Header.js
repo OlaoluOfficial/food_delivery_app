@@ -6,7 +6,7 @@ import { useCart } from "./CartContext";
 
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
-  const { cartItemCount } = useCart();
+  const { cartItemCount, clearCart } = useCart();
   useEffect(() => {
     fetch("http://localhost:2300/api/v1/users/getProfile", {
       credentials: "include",
@@ -27,6 +27,7 @@ function Header() {
       method: "POST",
     });
     setUserInfo(null);
+    clearCart()
   }
   const username =
     userInfo && userInfo.username ? userInfo.username.split(" ") : null;

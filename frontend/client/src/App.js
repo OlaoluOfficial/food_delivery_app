@@ -21,6 +21,7 @@ import AdminDeliveryPage from "./admin/adminDeliveryPage";
 import NotFound from "./NotFound";
 import { CartProvider } from "./users/CartContext";
 import { AdminContextProvider } from "./admin/adminContext";
+import VerificationPage from "./users/pages/verificationPage";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/verify" element={<VerificationPage />} />
               <Route path="/faqs" element={<FAQs />} />
               <Route path="/" element={<Layout />}>
                 <Route index element={<Homepage />} />

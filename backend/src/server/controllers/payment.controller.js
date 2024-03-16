@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Order = require('../../models/order');
+const Product = require("../../models/product");
 const Transaction = require('../../models/transaction');
 const random = require('random-string-generator')
 
@@ -20,7 +21,7 @@ class PaymentController {
         "tx_ref": txRef,
         amount: totalPrice,
         currency: 'NGN',
-        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/${txRef}`,
+        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/verify/:${txRef}`,
         customer: {
           email,
           phonenumber: phoneNumber,
@@ -51,10 +52,10 @@ class PaymentController {
 
   static async verify(req, res) {
     try {
-      let { txRef } = req.body;
-
-      let txn = await Transaction.findOne({ txRef });
-      let txnProduct = JSON.parse(txn.products)
+      let { tx_ref } = req.body;
+      const txRef = tx_ref
+      let txn = await Transaction.findOne({ txRef : tx_ref });
+                                                                                                                                                                                                                               let txnProduct = JSON.parse(txn.products)
       const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${txRef}`, {
         headers: {
           Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
@@ -67,25 +68,27 @@ class PaymentController {
 
           const orderProducts = [];
 
-          for (const product of products) {
-            const dbProduct = await product.findById(product.productId)
-            if (!dbProduct) {
-              return res.status(404).json({ message: `Product with ID ${product.productId} not found` })
-            }
-            orderProducts.push({
-              productId: dbProduct._id,
-              name: dbProduct.name,
-              quantity: product.quantity,
-              price: dbProduct.price,
-              restaurantId: dbProduct.restaurant
-            });
-          }
+     for (const product of products) {
+       const dbProduct = await Product.findById(product.product._id);
+       if (!dbProduct) {
+         return res
+           .status(404)
+           .json({ message: `Product with ID ${product._id} not found` });
+       }
+       orderProducts.push({
+         productId: dbProduct._id,
+         name: dbProduct.name,
+         quantity: product.quantity,
+         price: product.price,
+         restaurantId: dbProduct.restaurant,
+       });
+     }
         
-          const newOrder = new Order({
-            products: orderProducts,
-            customer,
-            totalPrice
-          });
+        const newOrder = new Order({
+          products: orderProducts,
+          customer,
+          totalPrice,
+        });
 
           await newOrder.save();
 

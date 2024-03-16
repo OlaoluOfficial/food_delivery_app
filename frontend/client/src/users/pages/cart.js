@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import "./cart.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useCart } from "../CartContext";
 import { FaTrash } from "react-icons/fa6";
 import LoginPage from "../components/loginPage";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 
 function Cart() {
   const [cart, setCart] = useState([]);
-  const [delivery, setDelivery] = useState(0);
+  const [cartId, setCartId] = useState("");
   const [user, setUser] = useState("");
   const [error, setError] = useState("");
+  const [checkoutError, setCheckoutError] = useState("");
   // const { addCart } = useCart();
   const token = Cookies.get("foodieToken");
   const [decode, setDecode] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -32,6 +34,7 @@ function Cart() {
       .then((response) => {
         if (response.status === 200) {
           setCart(response.data.items);
+          setCartId(response.data._id);
         }
       })
       .catch((error) => {
@@ -51,7 +54,6 @@ function Cart() {
         "http://localhost:2300/api/v1/users/getProfile",
         { withCredentials: true }
       );
-      console.log(User);
       if (User.status === 200) {
         setUser(User.data);
       }
@@ -110,16 +112,18 @@ function Cart() {
   };
 
   const handleCheckout = async () => {
-    const total = parseInt(getTotalPrice() + delivery);
+    const total = parseInt(getTotalPrice()) + parseInt(getDelivery());
+
     try {
       const payload = {
-        amount: total,
-        txRef: "ref-1000",
+        totalPrice: total,
         email: user.email,
-        phoneNumber: user.phoneNumber,
+        phoneNumber: user.phone,
         name: user.username,
-        redirectUrl: "http://localhost:2300",
+        products: cart,
+        cartId: cartId,
       };
+      console.log(payload);
 
       let response = await axios.post(
         "http://localhost:2300/api/v1/pay",
@@ -130,11 +134,23 @@ function Cart() {
         const redirectUrl = response.data.data;
         window.open(redirectUrl);
       } else {
-        setError(response.data.message);
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: response.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        });
       }
     } catch (error) {
       console.log(error);
-      setError(error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: true,
+        timer: 2500,
+      });
     }
   };
 
@@ -228,6 +244,7 @@ function Cart() {
                   ).toFixed(2)}
                 </h5>
               </div>
+
               <button className="cartButton" onClick={handleCheckout}>
                 Check out
               </button>
