@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../users/userContext";
 import loginImg from "../admin/admin-hero-img.jpeg";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -23,7 +22,6 @@ function AdminLoginPage() {
   const { loginUser } = useAdmin();
   const [loginError, setLoginError] = useState(null);
   const [password, setPassword] = useState("");
-  const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
@@ -103,7 +101,7 @@ function AdminLoginPage() {
       }
       // Handle other errors (e.g., network error)
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error.response.status == 400) {
         setLoginError(error.response.data.msg); // Set the registration error message
       } else if (error.response.status == 419) {
