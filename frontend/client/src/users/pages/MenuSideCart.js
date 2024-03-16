@@ -30,7 +30,7 @@ export default function SideCart({ menu, selectedId }) {
         });
 
       const selectedItem = allMenu.map((item) => {
-        if (item.id === selectedId) {
+        if (item._id === selectedId) {
           setSelectedFood(item);
         }
         if (selectedId === null) {
