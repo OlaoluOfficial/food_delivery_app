@@ -112,60 +112,35 @@ function Cart() {
   };
 
   const handleCheckout = async () => {
-    const total = parseInt(getTotalPrice() + delivery);
+    const total = parseInt(getTotalPrice() + getDelivery());
     try {
       const payload = {
-        amount: total,
-        txRef: "ref-1000",
+        totalPrice: total,
         email: user.email,
         phoneNumber: user.phone,
         name: user.username,
-        redirectUrl: "http://localhost:3000",
         products: cart
       };
       console.log(payload)
 
-      // let response = await axios.post(
-      //   "http://localhost:2300/api/v1/pay",
-      //   payload,
-      //   { withCredentials: true }
-      // );
-      // if (response.status == 200) {
-      //   const redirectUrl = response.data.data;
-      //   window.open(redirectUrl);
-      // } else {
-      //    Swal.fire({
-      //      position: "center",
-      //      icon: "error",
-      //      title: response.data.message,
-      //      showConfirmButton: false,
-      //      timer: 2500,
-      //    });
+      let response = await axios.post(
+        "http://localhost:2300/api/v1/pay",
+        payload,
+        { withCredentials: true }
+      );
+      if (response.status == 200) {
+        const redirectUrl = response.data.data;
+        window.open(redirectUrl);
+      } else {
+         Swal.fire({
+           position: "center",
+           icon: "error",
+           title: response.data.message,
+           showConfirmButton: false,
+           timer: 2500,
+         });
 
-      // }
-
-  let response = await axios.post("http://localhost:2300/api/v1/orders", payload, {
-    withCredentials: true,
-  });
-  if (response.status == 200) {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: response.data.message,
-      showConfirmButton: false,
-      timer: 2500,
-    });
-    navigate("/")
-  } else {
-    Swal.fire({
-      position: "center",
-      icon: "error",
-      title: response.data.message,
-      showConfirmButton: false,
-      timer: 2500,
-    });
-  }
-
+      }
 
     } catch (error) {
       console.log(error);

@@ -29,7 +29,6 @@ class OrderController {
       console.log(orderProducts);
       const newOrder = new Order({
         products: orderProducts,
-        customer,
         totalPrice,
         customer: customer,
       });
