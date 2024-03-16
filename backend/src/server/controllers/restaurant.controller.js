@@ -1,9 +1,10 @@
-const fs = require("fs").promises;
+// const fs = require("fs").promises;
 const bcrypt = require("bcryptjs");
 const Product = require("../../models/product");
 const Restaurant = require("../../models/restaurant");
-const errorHandler = require("../middlewares/handleError");
+// const errorHandler = require("../middlewares/handleError");
 const sendEmailNotification = require("./email.controller");
+const { uploadImage } = require('../../config/cloudinary');
 
 class RestaurantController {
   static async createRestaurant(req, res) {
@@ -164,11 +165,57 @@ class RestaurantController {
     }
   }
 
+  // static async addProduct(req, res) {
+  //   const userRole = req.user.role;
+  //   const productPics = req.files;
+  //   const restaurantId = req.user.id;
+  //   let prodPics = [];
+  //   const { name, description, price, minimumPrice } = req.body;
+
+  //   if (userRole !== "restaurant") {
+  //     return res
+  //       .status(401)
+  //       .json({ message: "You are not authorized to perform this action" });
+  //   }
+
+  //   try {
+  //     prodPics = productPics.map((file) => file.path);
+
+  //     const product = new Product({
+  //       restaurant: restaurantId,
+  //       name: name,
+  //       description,
+  //       price,
+  //       productPictures: [],
+  //       minimumPrice,
+  //     });
+
+  //     const newProduct = await product.save();
+
+  //     if (newProduct) {
+  //       await Product.findByIdAndUpdate(
+  //         { _id: newProduct.id },
+  //         { $push: { productPictures: { $each: prodPics } } },
+  //         { new: true }
+  //       );
+  //     }
+
+  //     return res.status(201).json({ message: "Product uploaded successfully" });
+  //   } catch (error) {
+  //     productPics.forEach(async (file) => {
+  //       await fs.unlink(file.path);
+  //     });
+  //     const errors = errorHandler.productsSchemaErrors(error);
+  //     console.log(errors);
+  //     return res.status(500).json({ message: errors });
+  //   }
+  // }
+
+
   static async addProduct(req, res) {
     const userRole = req.user.role;
-    const productPics = req.files;
+    const productImages = req.files;
     const restaurantId = req.user.id;
-    let prodPics = [];
     const { name, description, price, minimumPrice } = req.body;
 
     if (userRole !== "restaurant") {
@@ -178,35 +225,27 @@ class RestaurantController {
     }
 
     try {
-      prodPics = productPics.map((file) => file.path);
+      let productPictures = [];
+
+      for (const file of productImages) {
+        const imageUrl = await uploadImage(file.path, 'product_pictures');
+        productPictures.push(imageUrl);
+      }
 
       const product = new Product({
         restaurant: restaurantId,
         name: name,
         description,
         price,
-        productPictures: [],
+        productPictures,
         minimumPrice,
       });
 
-      const newProduct = await product.save();
-
-      if (newProduct) {
-        await Product.findByIdAndUpdate(
-          { _id: newProduct.id },
-          { $push: { productPictures: { $each: prodPics } } },
-          { new: true }
-        );
-      }
+      await product.save();
 
       return res.status(201).json({ message: "Product uploaded successfully" });
     } catch (error) {
-      productPics.forEach(async (file) => {
-        await fs.unlink(file.path);
-      });
-      const errors = errorHandler.productsSchemaErrors(error);
-      console.log(errors);
-      return res.status(500).json({ message: errors });
+      return res.status(500).json({ message: error });
     }
   }
 }

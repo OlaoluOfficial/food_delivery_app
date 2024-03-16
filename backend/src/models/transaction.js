@@ -12,7 +12,8 @@ const transactionSchema = new mongoose.Schema({
   },
   txRef: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 });
 

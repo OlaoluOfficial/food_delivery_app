@@ -2,7 +2,8 @@ const axios = require('axios');
 const Order = require('../../models/order');
 const Product = require("../../models/product");
 const Transaction = require('../../models/transaction');
-const random = require('random-string-generator')
+const random = require('random-string-generator');
+const Cart = require('../../models/cart');
 
 class PaymentController {
   static async charge(req, res) {
@@ -52,7 +53,7 @@ class PaymentController {
 
   static async verify(req, res) {
     try {
-      let { tx_ref } = req.body;
+      let { tx_ref, cartId } = req.body;
       const txRef = tx_ref
       let txn = await Transaction.findOne({ txRef : tx_ref });
                                                                                                                                                                                                                                let txnProduct = JSON.parse(txn.products)
@@ -97,6 +98,8 @@ class PaymentController {
             { status: 'successful' },
             { new: true }
           );
+          await Cart.findByIdAndDelete(cartId);
+
           return res.status(200).json({ message: 'Payment Successful' });
         } else {
           await Transaction.findOneAndUpdate(
