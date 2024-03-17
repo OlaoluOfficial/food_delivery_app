@@ -59,7 +59,7 @@ static async getUserCart(req, res) {
       const cart = await Cart.findOne({ user: userId }).populate('items.product');
   
       if (!cart) {
-        return res.status(404).json({ msg: 'Cart not found' });
+        return res.status(404).json({ msg: 'Your Cart is empty' });
       }
   
       res.json(cart);

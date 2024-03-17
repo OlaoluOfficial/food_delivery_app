@@ -21,7 +21,7 @@ routes.delete(
   AuthMiddleware.authenticateUser,
   RestaurantController.deleteRestaurant
 );
-routes.get("/:id/products", RestaurantController.getRestaurantProducts);
+routes.get("/products", RestaurantController.getRestaurantProducts);
 routes.post(
   "/addProducts",
   AuthMiddleware.authenticateUser,

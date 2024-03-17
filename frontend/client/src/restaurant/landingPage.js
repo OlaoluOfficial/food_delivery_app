@@ -50,8 +50,11 @@ const RestaurantLandingPage = () => {
 
   const fetchFoods = async () => {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/products");
-      if (response.ok) {
+      const response = await axios.get(
+        "http://localhost:2300/api/v1/restaurants/products",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
         const data = await response.json();
         setFoods(data.data);
       } else {
@@ -137,7 +140,7 @@ const RestaurantLandingPage = () => {
           setDesc("");
           setPrice("");
           setMinPrice("");
-          setImage(null)
+          setImage(null);
         } else {
           setError("Failed to upload data to the database");
           // console.error("Failed to upload data to the database");
@@ -344,7 +347,11 @@ const RestaurantLandingPage = () => {
               {foods.map((food) => (
                 <div className="overall2">
                   <div className="content-box2">
-                    <img className="img" src={food.productPictures[0]} alt="beans img" />
+                    <img
+                      className="img"
+                      src={food.productPictures[0]}
+                      alt="beans img"
+                    />
                     <div className="description2">
                       <strong className="dish-name2">{food.name}</strong>
                       <p className="dish-description2"> {food.description}</p>

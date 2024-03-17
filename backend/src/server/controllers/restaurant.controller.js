@@ -122,7 +122,7 @@ class RestaurantController {
 
   static async getRestaurantProducts(req, res) {
     try {
-      const restaurantId = req.params.id;
+      const restaurantId = req.user.id;
 
       const products = await Product.find({
         restaurant: restaurantId,
