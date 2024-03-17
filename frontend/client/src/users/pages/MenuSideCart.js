@@ -30,7 +30,7 @@ export default function SideCart({ menu, selectedId }) {
         });
 
       const selectedItem = allMenu.map((item) => {
-        if (item.id === selectedId) {
+        if (item._id === selectedId) {
           setSelectedFood(item);
         }
         if (selectedId === null) {
@@ -90,7 +90,7 @@ export default function SideCart({ menu, selectedId }) {
       {selectedFood ? (
         <div className="side-cart-inner-container">
           <div className="side-cart-upper">
-            <img src={selectedFood.image} alt="Food" />
+            <img src={selectedFood.productPictures[0]} alt="Food" />
             <p>{selectedFood.name}</p>
           </div>
           <p className="para">Current Price: &#8358; {selectedFood.price}</p>

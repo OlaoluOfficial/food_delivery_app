@@ -167,7 +167,7 @@ MAIN MENU
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
   overflow: scroll;
-  height: 100vh;
+  max-height: 100vh;
 }
 .main-course::-webkit-scrollbar {
   display: none;

@@ -6,9 +6,9 @@ function BensCard({ menu, selectedId, setSelectedId }) {
     setSelectedId(id !== selectedId ? id : null);
   }
   return (
-    <div className="overall" onClick={() => handleClick(menu.id)}>
+    <div className="overall" onClick={() => handleClick(menu._id)}>
       <div className="content-box">
-        <img className="card-img" src={image1} alt="food" />
+        <img className="card-img" src={menu.productPictures[0]} alt="food" />
         <div className="description">
           <strong className="dish-name">{menu.name}</strong>
           <p className="dish-description"> {menu.description}</p>
@@ -16,21 +16,23 @@ function BensCard({ menu, selectedId, setSelectedId }) {
       </div>
       <div className="dish-name">
         <p className="vendor-name-box">
-          <span className="vendor-name">{menu.restaurant} </span>
+          <span className="vendor-name">{menu.restaurant.name} </span>
         </p>
       </div>
       <div className="click-order">
-        <span className={selectedId === menu.id ? "color-red" : "color-orange"}>
-          <sup className={selectedId === menu.id && "color-red"}>&#8358;</sup>
+        <span
+          className={selectedId === menu._id ? "color-red" : "color-orange"}
+        >
+          <sup className={selectedId === menu._id && "color-red"}>&#8358;</sup>
           {menu.price}
         </span>
         <button
           className={
             selectedId === menu.id ? "menu-btn bg-red" : "menu-btn bg-orange"
           }
-          onClick={() => handleClick(menu.id)}
+          onClick={() => handleClick(menu._id)}
         >
-          {menu.id === selectedId ? "Food Added" : "Add to Cart"}
+          {menu._id === selectedId ? "Food Added" : "Add to Cart"}
         </button>
       </div>
     </div>
