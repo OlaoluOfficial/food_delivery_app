@@ -344,7 +344,7 @@ const RestaurantLandingPage = () => {
               {foods.map((food) => (
                 <div className="overall2">
                   <div className="content-box2">
-                    <img className="img" src={food.image} alt="beans img" />
+                    <img className="img" src={food.productPictures[0]} alt="beans img" />
                     <div className="description2">
                       <strong className="dish-name2">{food.name}</strong>
                       <p className="dish-description2"> {food.description}</p>
