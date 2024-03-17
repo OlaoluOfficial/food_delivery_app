@@ -20,7 +20,9 @@ function BensCard({ menu, selectedId, setSelectedId }) {
         </p>
       </div>
       <div className="click-order">
-        <span className={selectedId === menu._id ? "color-red" : "color-orange"}>
+        <span
+          className={selectedId === menu._id ? "color-red" : "color-orange"}
+        >
           <sup className={selectedId === menu._id && "color-red"}>&#8358;</sup>
           {menu.price}
         </span>

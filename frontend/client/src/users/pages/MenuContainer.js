@@ -23,8 +23,6 @@ export default function MenuContainer() {
         .then((response) => {
           if (response.data.products.length > 0) {
             setMenus(response.data.products);
-          } else if (response.data.restaurants.length > 0) {
-            setMenus(response.data.restaurants);
           } else {
             alert("No Result Found");
           }
@@ -51,10 +49,10 @@ export default function MenuContainer() {
         <form className="menu-search" onSubmit={handleSearch}>
           <input
             className="input_search"
-            placeholder="Search for food or restaurant"
+            placeholder="Search for food"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <FaMagnifyingGlass className="search" type="button" />
+          <FaMagnifyingGlass className="search" type="button"  onClick={handleSearch }/>
         </form>
       </div>
       <div className="menu-cart-flexbox">
