@@ -8,7 +8,7 @@ const Cart = require('../../models/cart');
 class PaymentController {
   static async charge(req, res) {
     try {
-      const { email, phoneNumber, name, products, totalPrice, redirectUrl } = req.body;
+      const { email, phoneNumber, name, products, totalPrice, redirectUrl, cartId } = req.body;
       const customer = req.user.id;
       const txRef = random('upper');
 
@@ -22,7 +22,7 @@ class PaymentController {
         "tx_ref": txRef,
         amount: totalPrice,
         currency: 'NGN',
-        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/verify/:${txRef}`,
+        "redirect_url": redirectUrl ? redirectUrl : `http://localhost:3000/verify`,
         customer: {
           email,
           phonenumber: phoneNumber,
@@ -36,7 +36,7 @@ class PaymentController {
         }
       });
 
-      const txn = new Transaction({ products: JSON.stringify(meta), txRef });
+      const txn = new Transaction({ products: JSON.stringify(meta), txRef, cart: cartId });
 
       await txn.save();
       
@@ -53,11 +53,12 @@ class PaymentController {
 
   static async verify(req, res) {
     try {
-      let { tx_ref, cartId } = req.body;
+      let { tx_ref } = req.body;
       const txRef = tx_ref
       let txn = await Transaction.findOne({ txRef : tx_ref });
-                                                                                                                                                                                                                               let txnProduct = JSON.parse(txn.products)
-      const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${txRef}`, {
+                                                                                                                                                                                                                               
+      let txnProduct = JSON.parse(txn.products)
+      const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${tx_ref}`, {
         headers: {
           Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
         }
@@ -98,7 +99,7 @@ class PaymentController {
             { status: 'successful' },
             { new: true }
           );
-          await Cart.findByIdAndDelete(cartId);
+          await Cart.findByIdAndDelete(txn.cart);
 
           return res.status(200).json({ message: 'Payment Successful' });
         } else {

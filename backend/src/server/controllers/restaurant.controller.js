@@ -123,7 +123,7 @@ class RestaurantController {
 
   static async getRestaurantProducts(req, res) {
     try {
-      const restaurantId = req.params.id;
+      const restaurantId = req.user.id;
 
       const products = await Product.find({
         restaurant: restaurantId,
@@ -164,53 +164,6 @@ class RestaurantController {
       return res.status(500).json({ message: error.message });
     }
   }
-
-  // static async addProduct(req, res) {
-  //   const userRole = req.user.role;
-  //   const productPics = req.files;
-  //   const restaurantId = req.user.id;
-  //   let prodPics = [];
-  //   const { name, description, price, minimumPrice } = req.body;
-
-  //   if (userRole !== "restaurant") {
-  //     return res
-  //       .status(401)
-  //       .json({ message: "You are not authorized to perform this action" });
-  //   }
-
-  //   try {
-  //     prodPics = productPics.map((file) => file.path);
-
-  //     const product = new Product({
-  //       restaurant: restaurantId,
-  //       name: name,
-  //       description,
-  //       price,
-  //       productPictures: [],
-  //       minimumPrice,
-  //     });
-
-  //     const newProduct = await product.save();
-
-  //     if (newProduct) {
-  //       await Product.findByIdAndUpdate(
-  //         { _id: newProduct.id },
-  //         { $push: { productPictures: { $each: prodPics } } },
-  //         { new: true }
-  //       );
-  //     }
-
-  //     return res.status(201).json({ message: "Product uploaded successfully" });
-  //   } catch (error) {
-  //     productPics.forEach(async (file) => {
-  //       await fs.unlink(file.path);
-  //     });
-  //     const errors = errorHandler.productsSchemaErrors(error);
-  //     console.log(errors);
-  //     return res.status(500).json({ message: errors });
-  //   }
-  // }
-
 
   static async addProduct(req, res) {
     const userRole = req.user.role;
