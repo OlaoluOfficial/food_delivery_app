@@ -55,15 +55,14 @@ const RestaurantLandingPage = () => {
         { withCredentials: true }
       );
       if (response.status === 200) {
-        const data = await response.json();
-        setFoods(data.data);
+        setFoods(response.data.products);
       } else {
         console.error("Failed to fetch data from the database");
-        setFetError("Failed to fetch data from the database");
+        setFetError(response.data.message);
       }
     } catch (error) {
       console.error("Error:", error);
-      setFetError("Failed to fetch data from the database");
+      setFetError(error.response.data.message);
     }
   };
   useEffect(() => {
@@ -345,7 +344,7 @@ const RestaurantLandingPage = () => {
             <div className="main-course2">
               {fetError && <p className="delivery-error">{fetError}</p>}
               {foods.map((food) => (
-                <div className="overall2">
+                <div className="overall2" key={food._id}>
                   <div className="content-box2">
                     <img
                       className="img"

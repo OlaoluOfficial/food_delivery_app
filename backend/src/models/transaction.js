@@ -12,6 +12,11 @@ const transactionSchema = new mongoose.Schema({
   },
   txRef: {
     type: String,
+    required: true,
+    unique: true
+  },
+  cart: {
+    type: String,
     required: true
   }
 });
