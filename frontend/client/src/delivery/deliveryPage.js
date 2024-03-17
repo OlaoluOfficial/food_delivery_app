@@ -240,7 +240,6 @@ const DeliveryPersonnelPage = () => {
                     </tbody>
                   </table>
                 </div>
-                {/* ); })} */}
               </div>
             )}
           </section>
