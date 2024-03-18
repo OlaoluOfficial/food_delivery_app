@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../userContext";
+import { useUser } from "../userContext";
 import loginImg from "../img/login-img.jpg";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   email: z.string(),
@@ -17,8 +18,8 @@ const schema = z.object({
 });
 
 function LoginPage() {
+  const { loginUser } = useUser();
   const [loginError, setLoginError] = useState(null);
-  const { setUserInfo } = useContext(UserContext);
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEye className="icons" />);
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function LoginPage() {
   };
 
   async function login(data) {
-    let Data = {...data, role: "customer"}
+    let Data = { ...data, role: "customer" };
     try {
       const response = await axios.post(
         "http://localhost:2300/api/v1/auth/login",
@@ -49,15 +50,28 @@ function LoginPage() {
       );
       if (response.status == 200) {
         // Registration successful, show success message or redirect to another page
-        alert("Login successful!");
+        loginUser(response.data.data.user);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Login successful!",
+          showConfirmButton: false,
+          timer: 2500,
+        });
         navigate("/");
-        window.location.reload();
+        // window.location.reload();
         // Reset the form and clear input fields
         setLoginError("");
       } else {
         // Registration failed, handle error response from the server
         const data = await response.json();
-        alert(data.data.message); // Display the error message sent by the server
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: data.data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        }); // Display the error message sent by the server
       }
     } catch (error) {
       if (error.response == 400) {

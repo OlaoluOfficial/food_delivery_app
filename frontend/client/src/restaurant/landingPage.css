@@ -79,15 +79,14 @@ em {
 fieldset {
   border-color: #fd7e14;
   border-radius: 0 2.5rem 2.5rem 0;
+  min-width: 40rem;
 }
 .legend {
   text-align: center;
   margin-bottom: 2rem;
 }
-.form {
-}
-.form-list,
-.order-list {
+
+.form-list {
   list-style: none;
   padding: 2rem;
 }
@@ -170,7 +169,7 @@ fieldset {
   cursor: pointer;
 }
 .description2 {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 1.8rem;

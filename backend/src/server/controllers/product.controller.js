@@ -36,7 +36,7 @@ class ProductController {
 
   static async getProduct (req, res) {
     try {
-      const product = await Product.findById(req.params.orderId);
+      const product = await Product.findById(req.params.productId);
       if (!product) {
         return res.status(404).json({ message: 'Product not found' });
       }
@@ -48,7 +48,6 @@ class ProductController {
   }
 
   static async updateProduct (req, res) {
-    console.log(req.body)
     try {
       const productId = req.params.productId;
       const updateData = req.body;
@@ -108,6 +107,23 @@ class ProductController {
       return res.status(500).json({ message: "Failed to upload product" });
     }
   } 
+
+  static async deleteProduct (req, res) {
+    const productId = req.params.productId;
+  
+    try {
+      const deletedProduct = await Product.findByIdAndDelete(productId);
+  
+      if (!deletedProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+      return res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
 
 module.exports = ProductController;

@@ -9,6 +9,9 @@ import Cookies from "js-cookie";
 import AdminLoginPage from "../admin/adminLogin";
 import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../admin/adminHeader";
+import Swal from "sweetalert2";
+import axios from "axios";
+import logo from "../users/img/footer-logo.png";
 
 const schema = z.object({
   description: z.string(),
@@ -22,13 +25,14 @@ const RestaurantLandingPage = () => {
   const [foodName, setFoodName] = useState("");
   const [price, setPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [desc, setDesc] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [error, setError] = useState("");
+  const [fetError, setFetError] = useState("");
   const [updateError, setUpdateError] = useState("");
   const [decode, setDecode] = useState("");
 
@@ -47,15 +51,19 @@ const RestaurantLandingPage = () => {
 
   const fetchFoods = async () => {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/products");
-      if (response.ok) {
-        const data = await response.json();
-        setFoods(data.data);
+      const response = await axios.get(
+        "http://localhost:2300/api/v1/restaurants/products",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setFoods(response.data.products);
       } else {
         console.error("Failed to fetch data from the database");
+        setFetError(response.data.message);
       }
     } catch (error) {
       console.error("Error:", error);
+      setFetError(error.response.data.message);
     }
   };
   useEffect(() => {
@@ -110,23 +118,29 @@ const RestaurantLandingPage = () => {
 
       try {
         // Simulate API request using fetch or Axios
-        const response = await fetch(
+        const response = await axios.post(
           "http://localhost:2300/api/v1/restaurants/addProducts",
+          formData,
           {
-            method: "POST",
-            body: formData,
-            credentials: "include",
+            withCredentials: true,
           }
         );
 
-        if (response.ok) {
-          alert(response.data.message);
+        if (response.status == 201) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
           // Refetch the updated list of foods
           fetchFoods();
           setFoodName("");
           setDesc("");
           setPrice("");
           setMinPrice("");
+          setImage(null);
         } else {
           setError("Failed to upload data to the database");
           // console.error("Failed to upload data to the database");
@@ -145,6 +159,7 @@ const RestaurantLandingPage = () => {
         `http://localhost:2300/api/v1/products/${foodId}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -154,30 +169,45 @@ const RestaurantLandingPage = () => {
         // Refetch the updated list of foods
         fetchFoods();
       } else {
-        alert("Something went wrong, Please try again later");
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Something went wrong, Please try again later",
+          showConfirmButton: true,
+          timer: 1500,
+        });
       }
     } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: true,
+        timer: 1500,
+      });
       console.error("Error:", error);
     }
   };
 
   const handleEdit = async (data) => {
-    console.log(data)
+    console.log(data);
     // Implement the logic to edit a food item (e.g., redirect to an edit page)
     try {
       // Simulate API request using fetch or Axios
-      const response = await fetch(
+      const response = await axios.put(
         `http://localhost:2300/api/v1/products/${selectedItem._id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(data),
-          
-          // credentials: "include",
-        }
+        data,
+        { withCredentials: true }
       );
 
-      if (response.ok) {
-        alert("Data successfully uploaded to the database");
+      if (response.status == 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Data successfully updated in the database",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         setSelectedItem("");
         closeModal();
         // Refetch the updated list of foods
@@ -188,16 +218,23 @@ const RestaurantLandingPage = () => {
         // Additional logic or feedback for failure
       }
     } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: true,
+        timer: 1500,
+      });
       console.error("Error:", error);
     }
   };
 
   return (
     <>
-      {(decode === "restaurant") ? (
+      {decode === "restaurant" ? (
         <div className="restaurant-page-container">
           <section className="admin-hero-section">
-          <AdminHeader />
+            <AdminHeader />
             <h2 className="admin-primary-heading">
               Restaurant Admin Page
               <span className="primary-heading-paragraph">
@@ -306,10 +343,15 @@ const RestaurantLandingPage = () => {
             </svg>
             <h3>Uploaded Dishes</h3>
             <div className="main-course2">
+              {fetError && <p className="delivery-error">{fetError}</p>}
               {foods.map((food) => (
-                <div className="overall2">
+                <div className="overall2" key={food._id}>
                   <div className="content-box2">
-                    <img className="img" src={food.image} alt="beans img" />
+                    <img
+                      className="card-img"
+                      src={food.productPictures[0]}
+                      alt="beans img"
+                    />
                     <div className="description2">
                       <strong className="dish-name2">{food.name}</strong>
                       <p className="dish-description2"> {food.description}</p>
@@ -436,6 +478,12 @@ const RestaurantLandingPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;TGE Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

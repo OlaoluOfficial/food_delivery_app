@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
+import logo from "../users/img/footer-logo.png";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -83,8 +85,15 @@ const SuperAdminPage = () => {
 
       if (response.ok) {
         // Registration successful, show success message or redirect to another page
-        reset()
-        alert("Registration successful!");
+        reset();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Registration Successful!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
         fetchAdmin();
       } else {
         // Registration failed, handle error response from the server
@@ -119,11 +128,23 @@ const SuperAdminPage = () => {
         fetchAdmin();
       } else {
         console.error("Failed to delete data from the database");
-        alert("Something went wrong, Please try again later");
-        // Additional logic or feedback for failure
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Something went wrong, Please try again later",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
       console.error("Error:", error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
@@ -289,6 +310,12 @@ const SuperAdminPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;TGE Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

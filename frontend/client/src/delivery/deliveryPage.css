@@ -28,10 +28,10 @@ body {
 }
 .section-orders,
 .section-viewed-orders {
-  margin-bottom: 8rem;
+  padding-bottom: 8rem;
 }
 .section-viewed-orders {
-  margin: 2rem;
+  padding: 2rem;
 }
 .viewed-header {
   margin-left: 4rem;
@@ -70,4 +70,111 @@ th {
 }
 .mar-left {
   margin-left: 1.5rem;
+}
+
+.modal-container {
+  /* max-width: 60vw; */
+  /* border:1px solid; */
+  margin-top: 5rem;
+}
+.modal-delivery {
+  max-width: 50vw;
+  border: 1px solid;
+  border-radius: 15px;
+  margin: 5rem auto;
+  padding: 2rem 4rem;
+  max-height: 120vh;
+  position: relative;
+  background-color: #fff2e8;
+}
+
+.modal-delivery h3 {
+  margin: 2rem 0 1rem 0;
+}
+
+.modal-icon {
+  font-size: 2rem;
+  position: absolute;
+  right: 14px;
+  cursor: pointer;
+}
+
+.modal-button {
+  width: 7rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-chamber-delivery {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  /* position: absolute; */
+  right: 2px;
+  /* border:1px solid; */
+  justify-content: end;
+}
+
+.delivery-modal-food {
+  border-bottom: 0.5px solid #4c2506f4;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+@media screen and (max-width: 530px) {
+  .modal-container-delivery {
+    width: 100vw;
+    /* border:1px solid; */
+    margin-top: 5rem;
+  }
+  .modal-delivery {
+    max-width: 90vw;
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    max-height: 120vh;
+    background-color: #fff2e8;
+    margin: 8rem 0;
+  }
+
+  .modal-delivery h3 {
+    margin: 2rem 0 1rem 0;
+    font-size: 2rem;
+  }
+
+  .modal-delivery h4 {
+    font-size: 1.5rem;
+  }
+  .modal-delivery p {
+    font-size: 1.5rem;
+  }
+
+  .modal-icon {
+    font-size: 2rem;
+    position: absolute;
+    right: 14px;
+    cursor: pointer;
+  }
+
+  .modal-button {
+    width: 7rem;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .btn-chamber-delivery {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    /* position: absolute; */
+    /* right: 2px; */
+    /* border:1px solid; */
+    /* justify-content: end; */
+  }
+
+  .delivery-modal-food {
+    border-bottom: 0.5px solid #4c2506f4;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
 }

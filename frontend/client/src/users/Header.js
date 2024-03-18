@@ -1,32 +1,20 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
-import UserContext from "./userContext";
+import {useUser} from "./userContext";
 import { useCart } from "./CartContext";
 
 function Header() {
-  const { setUserInfo, userInfo } = useContext(UserContext);
-  const { cartItemCount } = useCart();
-  useEffect(() => {
-    fetch("http://localhost:2300/api/v1/users/getProfile", {
-      credentials: "include",
-    }).then((response) => {
-      if (response.ok) {
-        response.json().then((userInfo) => {
-          setUserInfo(userInfo);
-        });
-      } else {
-        setUserInfo(null);
-      }
-    });
-  }, [setUserInfo]);
-
+  const { setUserInfo, userInfo } = useUser()
+  const { cartItemCount, clearCart } = useCart();
+  
   function logout() {
     fetch("http://localhost:2300/api/v1/auth/logout", {
       credentials: "include",
       method: "POST",
     });
     setUserInfo(null);
+    clearCart()
   }
   const username =
     userInfo && userInfo.username ? userInfo.username.split(" ") : null;

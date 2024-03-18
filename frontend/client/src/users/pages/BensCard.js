@@ -8,7 +8,7 @@ function BensCard({ menu, selectedId, setSelectedId }) {
   return (
     <div className="overall" onClick={() => handleClick(menu._id)}>
       <div className="content-box">
-        <img className="card-img" src={image1} alt="food" />
+        <img className="card-img" src={menu.productPictures[0]} alt="food" />
         <div className="description">
           <strong className="dish-name">{menu.name}</strong>
           <p className="dish-description"> {menu.description}</p>
@@ -16,7 +16,7 @@ function BensCard({ menu, selectedId, setSelectedId }) {
       </div>
       <div className="dish-name">
         <p className="vendor-name-box">
-          <span className="vendor-name">{menu.restaurant} </span>
+          <span className="vendor-name">{menu.restaurant.name} </span>
         </p>
       </div>
       <div className="click-order">

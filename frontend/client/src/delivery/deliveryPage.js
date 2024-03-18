@@ -3,20 +3,25 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import DeliveryLoginPage from "./delliveryLoginPage";
 import { jwtDecode } from "jwt-decode";
-import AdminHeader from "../admin/adminHeader";
+import Swal from "sweetalert2";
+import DeliveryHeader from "./deliveryHeader";
 import "./deliveryPage.css";
-
 import img from "../users/img/EatRite-logo.png";
-import data from "./data.json";
+import Modal from "react-modal";
+import { FaXmark } from "react-icons/fa6";
+import logo from "../users/img/footer-logo.png";
 
 const DeliveryPersonnelPage = () => {
   const token = Cookies.get("foodieToken");
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState("");
   const [availableOrder, setAvailableOrder] = useState([]);
   const [acceptedOrder, setAcceptedOrder] = useState([]);
   const [deliveredOrder, setDeliveredOrder] = useState([]);
   const [decode, setDecode] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const [updateError, setUpdateError] = useState("");
 
   useEffect(() => {
     // Fetch existing orders from your backend API
@@ -30,14 +35,21 @@ const DeliveryPersonnelPage = () => {
     }
   }, []);
 
+  const openModal = (item) => {
+    setSelectedOrder(item);
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setSelectedOrder("");
+    setModalOpen(false);
+  };
   const fetchOrders = async () => {
     try {
-      // const response = await fetch("http://localhost:2300/api/v1/orders");
-      // const data = await response.json();
-      // const actualData = data.data;
-      // setOrders(actualData);
-      setOrders(data);
-      console.log(orders);
+      const response = await fetch("http://localhost:2300/api/v1/orders");
+      const data = await response.json();
+      const actualData = data.data;
+      console.log(actualData);
+      setOrders(actualData);
 
       const updateAvailableOrder = data.filter(
         (item) => item.status === "placed"
@@ -58,9 +70,10 @@ const DeliveryPersonnelPage = () => {
       console.error("Error fetching orders:", error);
     }
   };
-  const handleSelection = (order) => {
+
+  const handleSelection = async (order) => {
     const updatedOrder = [...selectedOrder];
-    const existingOrder = updatedOrder.find((item) => item.id === order.id);
+    const existingOrder = updatedOrder.find((item) => item._id === order._id);
     if (existingOrder) {
       setSelectedOrder([...selectedOrder]);
     } else {
@@ -68,63 +81,73 @@ const DeliveryPersonnelPage = () => {
     }
   };
 
-  const handleAcceptOrder = (orderId) => {
+  const handleAcceptOrder = async (orderId) => {
+    console.log(orderId);
     try {
       // Send a request to your backend API to mark the order as accepted
-      axios
-        .put(`http://localhost:2300/api/v1/orders/${orderId}`, {
+      const response = await axios.put(
+        `http://localhost:2300/api/v1/orders/${orderId}`,
+        {
           status: "confirmed",
-        })
-        .then(() => {
-          // Update the local state to reflect the accepted order
-          setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-              order.id === orderId ? { ...order, status: "Accepted" } : order
-            )
-          );
-        });
-
-      const updateSelectedOrder = selectedOrder.filter(
-        (item) => item.id !== orderId
+        },
+        { withCredentials: true }
       );
 
-      setSelectedOrder(updateSelectedOrder);
-      fetchOrders();
+      if (response.status == 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Confirmed",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        closeModal();
+
+        fetchOrders();
+      }
     } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Something went wrong, Please try again later",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       console.error("Error accepting order:", error);
     }
   };
 
-  const handleCancel = (selectedId) => {
-    const updateSelectedOrder = selectedOrder.filter(
-      (item) => item.id !== selectedId
-    );
-    setSelectedOrder(updateSelectedOrder);
-    // setSelectedOrder(null); // Reset the selected order
-  };
   const handleDelivered = async (orderId) => {
     try {
       // Send a request to your backend API to mark the order as accepted
-      await axios.put(`http://localhost:2300/api/v1/orders/${orderId}`, {
-        status: "Delivered",
-      });
-
-      // Update the local state to reflect the accepted order
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === orderId ? { ...order, status: "Accepted" } : order
-        )
+      const response = await axios.put(
+        `http://localhost:2300/api/v1/orders/${orderId}`,
+        {
+          status: "delivered",
+        },
+        { withCredentials: true }
       );
-
-      const updateSelectedOrder = selectedOrder.filter(
-        (item) => item.id !== orderId
-      );
-      setSelectedOrder(updateSelectedOrder);
+      if (response.status == 200) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Delivered",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        fetchOrders();
+      }
       fetchOrders();
     } catch (error) {
-      console.error("Error accepting order:", error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Something went wrong, Please try again later",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error("Error delivering order:", error);
     }
-    // setSelectedOrder(null); // Reset the selected order
   };
 
   return (
@@ -132,7 +155,7 @@ const DeliveryPersonnelPage = () => {
       {decode === "delivery" ? (
         <div className="delivery-container">
           <section className="section-delivery-hero">
-            <AdminHeader />
+            <DeliveryHeader />
             <img className="hero-img" src={img} alt="hero-img" />
             <h1 className="heading-primary">DeliveryPersonnel</h1>
           </section>
@@ -161,76 +184,127 @@ const DeliveryPersonnelPage = () => {
               </div>
               <fieldset>
                 <legend className="legend">Orders</legend>
-                <ul className="order-list">
-                  {availableOrder.map((order) => (
-                    <li key={order.orderId} className="order-list-item">
-                      Order #{order.orderId} - Status: {order.status}
-                      <button
-                        className="menu-btn bg-brown mar-right mar-left"
-                        onClick={() => handleSelection(order)}
-                      >
-                        View
-                      </button>
-                      <button className="menu-btn bg-brown mar-left">
-                        Close
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                {availableOrder.length > 0 ? (
+                  <ul className="order-list">
+                    {availableOrder.map((order) => (
+                      <li key={order._id} className="order-list-item">
+                        Order #{order.orderId} - Status: {order.status}
+                        <button
+                          className="menu-btn bg-brown mar-right mar-left"
+                          onClick={() => openModal(order)}
+                        >
+                          View
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ textAlign: "center" }}>No Available Orders yet</p>
+                )}
               </fieldset>
             </div>
           </section>
           <section className="section-viewed-orders">
             {selectedOrder && (
               <div>
-                <div className="viewed-header">
-                  <svg
-                    className="hotel-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
+                <div className="modal-container-delivery">
+                  <Modal
+                    isOpen={modalOpen}
+                    onRequestClose={closeModal}
+                    className="modal-delivery"
                   >
-                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                  </svg>
-                  <h3 className="heading-tertiary">Viewed Orders</h3>
+                    <FaXmark
+                      className="modal-icon"
+                      onClick={() => setModalOpen(false)}
+                    />
+                    <h3>OrderId: {selectedOrder.orderId}</h3>
+                    <div
+                      style={{
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <h4>Customer Details:</h4>
+                      <div>
+                        <p>{selectedOrder.customer.name}</p>
+                        <p>{selectedOrder.customer.location}</p>
+                        <p>{selectedOrder.customer.phoneNumber}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <h4>Food Details:</h4>
+                      {selectedOrder.products.map((food) => {
+                        return (
+                          <div key={food._id} className="delivery-modal-food">
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <p>
+                                <b>{food.name}</b>
+                              </p>
+                              <p>Quantity: {food.quantity}</p>
+                            </div>
+                            <p>Restaurant: {food.restaurant.name}</p>
+                            <p>Location: {food.restaurant.location}</p>
+                            <p>Tel.: {food.restaurant.phoneNumber}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {updateError && <p className="error">{updateError}</p>}
+
+                    <div className="btn-chamber-delivery">
+                      <button
+                        className="menu-btn bg-org mar-right"
+                        onClick={() => handleAcceptOrder(selectedOrder._id)}
+                      >
+                        Accept Order
+                      </button>
+                      <button
+                        className="menu-btn bg-org mar-right"
+                        onClick={() => closeModal()}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Modal>
                 </div>
+              </div>
+            )}
+          </section>
+          <div>
+            {acceptedOrder.length > 0 && (
+              <>
+                <h3>Accepted Orders</h3>
                 <div className="table-container">
                   <table>
                     <thead>
                       <tr>
-                        <th>First name</th>
-                        <th>Amount</th>
-                        <th>Phone</th>
-                        <th>Address</th>
                         <th>Order ID</th>
+                        <th>Customer's Name</th>
+                        <th>Customer's Address</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedOrder.map((order) => (
-                        <tr key={order.id}>
-                          <td>{order.name}</td>
-                          <td>{order.price}</td>
-                          <td>{order.customerContact}</td>
-                          <td>{order.customerAddress}</td>
-                          <td>{order.id}</td>
+                      {acceptedOrder.map((order) => (
+                        <tr key={order._id}>
+                          <td>{order.orderId}</td>
+                          <td>{order.customer.name}</td>
+                          <td>{order.customer.location}</td>
                           <td>{order.status}</td>
                           <td>
                             {
                               <>
                                 <button
                                   className="menu-btn bg-org mar-right"
-                                  onClick={() =>
-                                    handleAcceptOrder(order.orderId)
-                                  }
+                                  onClick={() => handleDelivered(order._id)}
                                 >
-                                  Accept Order
-                                </button>
-                                <button
-                                  className="menu-btn bg-org mar-right"
-                                  onClick={() => handleCancel(order.orderId)}
-                                >
-                                  Cancel
+                                  Order Delivered
                                 </button>
                               </>
                             }
@@ -240,28 +314,19 @@ const DeliveryPersonnelPage = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
-            )}
-          </section>
-          <div>
-            <h3>Accepted Orders</h3>
-            {acceptedOrder && (
-              <ul>
-                {acceptedOrder.map((order) => (
-                  <li key={order.orderId}>
-                    Order #{order.orderId} - Status: {order.status}
-                    <button onClick={() => handleDelivered(order.orderId)}>
-                      Delivered
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              </>
             )}
           </div>
         </div>
       ) : (
         <DeliveryLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;TGE Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };
