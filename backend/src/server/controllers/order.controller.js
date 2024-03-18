@@ -75,7 +75,11 @@ class OrderController {
     try {
       const { orderId } = req.params;
       const postmanId = req.user.id;
-      const updateData = req.body;
+      const { status } = req.body;
+      const updateData = {
+        status,
+        postman: postmanId,
+      };
 
       const updatedOrder = await Order.findOneAndUpdate(
         { _id: orderId },
@@ -86,14 +90,8 @@ class OrderController {
       if (!updatedOrder) {
         return res.status(404).json({ message: "Order not found" });
       }
-      const customer = await User.findOne({
-        _id: updatedOrder.customer,
-      });
-
-      const restaurant = await Restaurant.findOne({
-        _id: updatedOrder.restaurant,
-      });
-      updatedOrder.postman = postmanId;
+      const customer = updatedOrder.customer;
+      const restaurant = updatedOrder.products[0].restaurant;
 
       await updatedOrder.save();
 
