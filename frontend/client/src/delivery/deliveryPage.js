@@ -102,11 +102,6 @@ const DeliveryPersonnelPage = () => {
         });
         closeModal();
 
-        const updateSelectedOrder = selectedOrder.filter(
-          (item) => item.id !== orderId
-        );
-
-        setSelectedOrder(updateSelectedOrder);
         fetchOrders();
       }
     } catch (error) {
@@ -141,11 +136,6 @@ const DeliveryPersonnelPage = () => {
         });
         fetchOrders();
       }
-
-      const updateSelectedOrder = selectedOrder.filter(
-        (item) => item.id !== orderId
-      );
-      setSelectedOrder(updateSelectedOrder);
       fetchOrders();
     } catch (error) {
       Swal.fire({
