@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../admin/adminHeader";
 import Swal from "sweetalert2";
 import axios from "axios";
+import logo from "../users/img/footer-logo.png";
 
 const schema = z.object({
   description: z.string(),
@@ -347,7 +348,7 @@ const RestaurantLandingPage = () => {
                 <div className="overall2" key={food._id}>
                   <div className="content-box2">
                     <img
-                      className="img"
+                      className="card-img"
                       src={food.productPictures[0]}
                       alt="beans img"
                     />
@@ -477,6 +478,12 @@ const RestaurantLandingPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;TGE Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

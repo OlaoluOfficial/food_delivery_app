@@ -28,7 +28,7 @@ function BensCard({ menu, selectedId, setSelectedId }) {
         </span>
         <button
           className={
-            selectedId === menu.id ? "menu-btn bg-red" : "menu-btn bg-orange"
+            selectedId === menu._id ? "menu-btn bg-red" : "menu-btn bg-orange"
           }
           onClick={() => handleClick(menu._id)}
         >
