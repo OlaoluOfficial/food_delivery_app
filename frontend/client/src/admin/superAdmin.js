@@ -253,7 +253,7 @@ const SuperAdminPage = () => {
                       onClick={() => setModalOpen2(false)}
                     />
                     <h3>Delete Product</h3>
-                    <p>Are you sure you want to delete this item?</p>
+                    <p>Are you sure you want to delete this restaurant?</p>
 
                     <div className="btn-chamber2">
                       <button

@@ -80,68 +80,63 @@ class PaymentController {
       let txn = await Transaction.findOne({ txRef: tx_ref });
 
       let txnProduct = JSON.parse(txn.products);
-      // const response = await axios.get(
-      //   `https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${tx_ref}`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
-      //     },
-      //   }
-      // );
-
-      // if (response) {
-      //   if (response.data.data.status === "successful") {
-      const { products, totalPrice, customer } = txnProduct;
-
-      const orderProducts = [];
-
-      for (const product of products) {
-        const dbProduct = await Product.findById(product.product._id);
-        const restaurantOb = await Restaurant.findById(
-          dbProduct.restaurant
-        ).select("-password");;
-        if (!dbProduct) {
-          return res
-            .status(404)
-            .json({ message: `Product with ID ${product._id} not found` });
+      const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${tx_ref}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+          },
         }
-        orderProducts.push({
-          productId: dbProduct._id,
-          name: dbProduct.name,
-          quantity: product.quantity,
-          price: product.price,
-          restaurant: restaurantOb,
-        });
-      }
-const orderId = random("upper");
-      const newOrder = new Order({
-        products: orderProducts,
-        customer,
-        totalPrice,
-        orderId: orderId
-      });
-
-      await newOrder.save();
-
-      await Transaction.findOneAndUpdate(
-        { txRef },
-        { status: "successful" },
-        { new: true }
       );
-      await Cart.findByIdAndDelete(txn.cart);
 
-      return res.status(200).json({ message: "Payment Successful" });
-      //   } else {
-      //     await Transaction.findOneAndUpdate(
-      //       { txRef },
-      //       { status: "failed" },
-      //       { new: true }
-      //     );
-      //     return res.status(200).json({ message: "Payment Failed" });
-      //   }
-      // } else {
-      //   res.status(400).json({ message: "Unable to verify transaction!!!" });
-      // }
+      if (response) {
+        if (response.data.data.status === "successful") {
+          const { products, totalPrice, customer } = txnProduct;
+
+          const orderProducts = [];
+
+          for (const product of products) {
+            const dbProduct = await Product.findById(product.product._id);
+            const restaurantOb = await Restaurant.findById(dbProduct.restaurant).select("-password");;
+            if (!dbProduct) {
+              return res.status(404).json({ message: `Product with ID ${product._id} not found` });
+            }
+            orderProducts.push({
+              productId: dbProduct._id,
+              name: dbProduct.name,
+              quantity: product.quantity,
+              price: product.price,
+              restaurant: restaurantOb,
+            });
+            }
+            const orderId = random("upper");
+            const newOrder = new Order({
+              products: orderProducts,
+              customer,
+              totalPrice,
+              orderId: orderId
+            });
+
+            await newOrder.save();
+
+            await Transaction.findOneAndUpdate(
+              { txRef },
+              { status: "successful" },
+              { new: true }
+            );
+            await Cart.findByIdAndDelete(txn.cart);
+
+            return res.status(200).json({ message: "Payment Successful" });
+          } else {
+            await Transaction.findOneAndUpdate(
+              { txRef },
+              { status: "failed" },
+              { new: true }
+            );
+            return res.status(200).json({ message: "Payment Failed" });
+          }
+        } else {
+          res.status(400).json({ message: "Unable to verify transaction!!!" });
+        }
     } catch (error) {
       console.error(error);
       res.status(500).send({ message: "Internal server error!" });

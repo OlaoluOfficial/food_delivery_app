@@ -240,7 +240,7 @@ const AdminDeliveryPage = () => {
                       onClick={() => setModalOpen2(false)}
                     />
                     <h3>Delete Personnel</h3>
-                    <p>Are you sure you want to delete this item?</p>
+                    <p>Are you sure you want to delete this user?</p>
 
                     <div className="btn-chamber2">
                       <button
