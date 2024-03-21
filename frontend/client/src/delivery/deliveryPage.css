@@ -28,10 +28,10 @@ body {
 }
 .section-orders,
 .section-viewed-orders {
-  margin-bottom: 8rem;
+  padding-bottom: 8rem;
 }
 .section-viewed-orders {
-  margin: 2rem;
+  padding: 2rem;
 }
 .viewed-header {
   margin-left: 4rem;

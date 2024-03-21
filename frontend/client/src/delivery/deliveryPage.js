@@ -9,6 +9,7 @@ import "./deliveryPage.css";
 import img from "../users/img/EatRite-logo.png";
 import Modal from "react-modal";
 import { FaXmark } from "react-icons/fa6";
+import logo from "../users/img/footer-logo.png";
 
 const DeliveryPersonnelPage = () => {
   const token = Cookies.get("foodieToken");
@@ -50,19 +51,19 @@ const DeliveryPersonnelPage = () => {
       console.log(actualData);
       setOrders(actualData);
 
-      const updateAvailableOrder = actualData.filter(
-        (item) => item.status == "placed"
+      const updateAvailableOrder = data.filter(
+        (item) => item.status === "placed"
       );
       setAvailableOrder(updateAvailableOrder);
       // set accepted orders state
-      const updateAcceptedOrder = actualData.filter(
-        (item) => item.status == "confirmed"
+      const updateAcceptedOrder = data.filter(
+        (item) => item.status === "confirmed"
       );
       setAcceptedOrder(updateAcceptedOrder);
 
       // set delivered orders state
-      const updateDeliveredOrder = actualData.filter(
-        (item) => item.status == "Delivered"
+      const updateDeliveredOrder = data.filter(
+        (item) => item.status === "Delivered"
       );
       setDeliveredOrder(updateDeliveredOrder);
     } catch (error) {
@@ -320,6 +321,12 @@ const DeliveryPersonnelPage = () => {
       ) : (
         <DeliveryLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

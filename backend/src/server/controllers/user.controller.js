@@ -9,7 +9,7 @@ class UserController {
       }
       res.json(user);
     } catch (error) {
-      return new Error("Could not create user");
+      return new Error("Could not get user profile");
     }
   }
 
@@ -27,8 +27,7 @@ class UserController {
 
       res.status(200).json(updatedUser);
     } catch (err) {
-      console.error("Error updating user:", err);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Error updating user" });
     }
   }
 
@@ -37,7 +36,6 @@ class UserController {
       const users = await User.find({ role: "delivery", isDeleted: false });
       res.status(200).json(users);
     } catch (error) {
-      console.error("Error fetching users:", error);
       res.status(500).json({ message: "Error getting users!" });
     }
   }

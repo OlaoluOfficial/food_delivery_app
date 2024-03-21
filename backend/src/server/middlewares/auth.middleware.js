@@ -9,12 +9,9 @@ class AuthMiddleware {
       const token = req.cookies.foodieToken;
 
       if (!token) {
-        return res
-          .status(401)
-          .json({ msg: "No Token, authorization denied, Login again" });
+        return res.status(401).json({ msg: "No Token, authorization denied, Login again" });
       }
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
 
       let user;
       if (decoded.user.role === "restaurant") {

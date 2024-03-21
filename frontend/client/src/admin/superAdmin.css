@@ -70,7 +70,7 @@ body {
   width: 63%;
   /* border: 1px solid ; */
 }
-.delivery-address{
+.delivery-address {
   font-size: 1.5rem;
 }
 .description-status3 {
@@ -125,5 +125,22 @@ body {
   text-align: center;
   margin-top: 1rem;
   font-size: 1.5rem;
-  color: #6a0303
+  color: #6a0303;
+}
+.general-footer {
+  height: auto;
+  padding: 0.7rem 1.4rem;
+  background-color: #2d1909;
+  color: #fff2e8;
+  font-size: 1.2rem;
+  display: flex;
+  gap: 5rem;
+  align-items: center;
+  justify-content: center;
+}
+.footer-logo {
+  width: 100%;
+}
+.footer-logo-box {
+  width: 12rem;
 }
