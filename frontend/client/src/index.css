@@ -91,17 +91,11 @@ body {
   border-radius: 0 3rem 3rem 0;
   background-color: #fff2e8;
   color: rgb(25, 13, 2);
-  
 }
-/* .cart-icon-container {
-  align-self: center;
-} */
+
 .hero-img {
-  width: 30rem;
-  height: 30rem;
-  /* background: radial-gradient(closest-side, #4c2506, #fff2e8, #fd7e14); */
-  padding: 5rem;
-  border-radius: 50%;
+  width: 23rem;
+  height: 23rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -120,7 +114,7 @@ body {
 }
 .heading-primary {
   color: #fff2e8;
-  font-size: 10.5rem;
+  font-size: 10rem;
   position: absolute;
   top: 85%;
   left: 50%;
@@ -179,9 +173,7 @@ MAIN MENU
   align-items: center;
   gap: 10rem;
 }
-/* .heading-secondary {
-  border:1px solid;
-} */
+
 .menu-search {
   width: 40%;
   position: relative;
@@ -363,7 +355,7 @@ MENU SIDE CART
 .btn {
   width: 3rem;
   height: 3rem;
-  border-radius: 100%;
+  /* border-radius: 100%; */
   border: none;
   font-size: 1.9rem;
   background-color: #fd7e14;
@@ -443,7 +435,4 @@ MENU SIDE CART
     width: 90%;
     margin: 0 auto;
   }
-
-
-
 }

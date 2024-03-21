@@ -118,11 +118,14 @@ function Cart() {
     try {
       const payload = {
         totalPrice: total,
-        email: user.email,
-        phoneNumber: user.phone,
-        name: user.username,
-        products: cart,
+                products: cart,
         cartId: cartId,
+        customer: {
+          location: user.address,
+          email: user.email,
+          name: user.username,
+          phoneNumber: user.phone,
+        },
       };
       console.log(payload);
 

@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FaSpinner } from "react-icons/fa";
+import { useCart } from "../CartContext";
 // import { ThreeDots } from "react-loader-spinner";
 
 const VerificationPage = () => {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
 
   const sendData = async () => {
     const url = window.location.href;
@@ -28,6 +30,7 @@ const VerificationPage = () => {
           { withCredentials: true }
         );
         if (response.status == 200) {
+          clearCart()
           Swal.fire({
             position: "center",
             icon: "success",

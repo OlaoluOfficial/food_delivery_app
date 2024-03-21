@@ -36,7 +36,7 @@ const restaurantSchema = new Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt properties
+    timestamps: true,
   }
 );
 

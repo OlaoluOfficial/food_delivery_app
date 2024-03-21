@@ -12,7 +12,7 @@ import AdminHeader from "./adminHeader";
 import { jwtDecode } from "jwt-decode";
 import UserTable from "./UserTable";
 import Swal from "sweetalert2";
-
+import logo from "../users/img/footer-logo.png";
 const schema = z.object({
   username: z.string().min(2),
   phone: z.string().min(11),
@@ -240,7 +240,7 @@ const AdminDeliveryPage = () => {
                       onClick={() => setModalOpen2(false)}
                     />
                     <h3>Delete Personnel</h3>
-                    <p>Are you sure you want to delete this item?</p>
+                    <p>Are you sure you want to delete this user?</p>
 
                     <div className="btn-chamber2">
                       <button
@@ -268,6 +268,12 @@ const AdminDeliveryPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

@@ -11,7 +11,7 @@ import AdminLoginPage from "./adminLogin";
 import AdminHeader from "./adminHeader";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
-
+import logo from "../users/img/footer-logo.png";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -85,7 +85,7 @@ const SuperAdminPage = () => {
 
       if (response.ok) {
         // Registration successful, show success message or redirect to another page
-        reset()
+        reset();
         Swal.fire({
           position: "center",
           icon: "success",
@@ -93,7 +93,7 @@ const SuperAdminPage = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-     
+
         fetchAdmin();
       } else {
         // Registration failed, handle error response from the server
@@ -135,17 +135,16 @@ const SuperAdminPage = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        
       }
     } catch (error) {
       console.error("Error:", error);
-       Swal.fire({
-         position: "center",
-         icon: "error",
-         title: error.response.data.message,
-         showConfirmButton: false,
-         timer: 1500,
-       });
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
@@ -253,7 +252,7 @@ const SuperAdminPage = () => {
                       onClick={() => setModalOpen2(false)}
                     />
                     <h3>Delete Product</h3>
-                    <p>Are you sure you want to delete this item?</p>
+                    <p>Are you sure you want to delete this restaurant?</p>
 
                     <div className="btn-chamber2">
                       <button
@@ -311,6 +310,12 @@ const SuperAdminPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

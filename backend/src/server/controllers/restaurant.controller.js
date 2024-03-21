@@ -85,14 +85,11 @@ class RestaurantController {
           _id: restaurantId,
         });
         if (deleteRestaurant) {
-          await Product.deleteMany({
-            restaurant: restaurantId,
-          });
+          await Product.deleteMany({ restaurant: restaurantId });
         }
         res.status(200).json({ message: `Restaurant deleted` });
       }
     } catch (error) {
-      console.log(error);
       res.status(401).json(`Error in deleting restaurant: ${error}`);
     }
   }
@@ -102,9 +99,7 @@ class RestaurantController {
       const restaurantId = req.params.id;
       const userRole = req.user.role;
       if (userRole !== "admin") {
-        return res
-          .status(401)
-          .json({ message: "You are not authorized to perform this action" });
+        return res.status(401).json({ message: "You are not authorized to perform this action" });
       }
 
       const restaurant = await Restaurant.findById(restaurantId);
@@ -115,8 +110,6 @@ class RestaurantController {
         return res.status(404).json({ message: "Restaurant not found" });
       }
     } catch (error) {
-      // Handle errors
-      console.error(`Error fetching restaurant details: ${error}`);
       return res.status(500).json({ message: error.message });
     }
   }
@@ -130,15 +123,12 @@ class RestaurantController {
       }).populate("restaurant", "name location");
 
       if (products.length === 0) {
-        return res
-          .status(404)
-          .json({ message: "No products found for this restaurant" });
+        return res.status(404).json({ message: "No products found for this restaurant" });
       }
 
       return res.status(200).json({ products: products });
     } catch (error) {
-      console.error(`Error in fetching products: ${error}`);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json({ message: "Error getting products" });
     }
   }
 
@@ -172,9 +162,7 @@ class RestaurantController {
     const { name, description, price, minimumPrice } = req.body;
 
     if (userRole !== "restaurant") {
-      return res
-        .status(401)
-        .json({ message: "You are not authorized to perform this action" });
+      return res.status(401).json({ message: "You are not authorized to perform this action" });
     }
 
     try {
@@ -198,7 +186,7 @@ class RestaurantController {
 
       return res.status(201).json({ message: "Product uploaded successfully" });
     } catch (error) {
-      return res.status(500).json({ message: error });
+      return res.status(500).json({ message: 'Error adding products' });
     }
   }
 }

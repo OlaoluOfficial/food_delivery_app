@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../admin/adminHeader";
 import Swal from "sweetalert2";
 import axios from "axios";
+import logo from "../users/img/footer-logo.png";
 
 const schema = z.object({
   description: z.string(),
@@ -50,17 +51,19 @@ const RestaurantLandingPage = () => {
 
   const fetchFoods = async () => {
     try {
-      const response = await fetch("http://localhost:2300/api/v1/products");
-      if (response.ok) {
-        const data = await response.json();
-        setFoods(data.data);
+      const response = await axios.get(
+        "http://localhost:2300/api/v1/restaurants/products",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setFoods(response.data.products);
       } else {
         console.error("Failed to fetch data from the database");
-        setFetError("Failed to fetch data from the database");
+        setFetError(response.data.message);
       }
     } catch (error) {
       console.error("Error:", error);
-      setFetError("Failed to fetch data from the database");
+      setFetError(error.response.data.message);
     }
   };
   useEffect(() => {
@@ -137,7 +140,7 @@ const RestaurantLandingPage = () => {
           setDesc("");
           setPrice("");
           setMinPrice("");
-          setImage(null)
+          setImage(null);
         } else {
           setError("Failed to upload data to the database");
           // console.error("Failed to upload data to the database");
@@ -342,9 +345,13 @@ const RestaurantLandingPage = () => {
             <div className="main-course2">
               {fetError && <p className="delivery-error">{fetError}</p>}
               {foods.map((food) => (
-                <div className="overall2">
+                <div className="overall2" key={food._id}>
                   <div className="content-box2">
-                    <img className="img" src={food.productPictures[0]} alt="beans img" />
+                    <img
+                      className="card-img"
+                      src={food.productPictures[0]}
+                      alt="beans img"
+                    />
                     <div className="description2">
                       <strong className="dish-name2">{food.name}</strong>
                       <p className="dish-description2"> {food.description}</p>
@@ -471,6 +478,12 @@ const RestaurantLandingPage = () => {
       ) : (
         <AdminLoginPage />
       )}
+      <footer className="general-footer">
+        <div>&copy;Final Year Project</div>
+        <div className="footer-logo-box">
+          <img className="footer-logo" src={logo} alt="logo" />
+        </div>
+      </footer>
     </>
   );
 };

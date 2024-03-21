@@ -52,14 +52,14 @@ class CartController {
     }
   }
   
-static async getUserCart(req, res) {
+  static async getUserCart(req, res) {
     try {
       const userId = req.user.id;
   
       const cart = await Cart.findOne({ user: userId }).populate('items.product');
   
       if (!cart) {
-        return res.status(404).json({ msg: 'Cart not found' });
+        return res.status(404).json({ msg: 'Your Cart is empty' });
       }
   
       res.json(cart);
