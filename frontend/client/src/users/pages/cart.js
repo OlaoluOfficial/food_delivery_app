@@ -35,7 +35,7 @@ function Cart() {
         if (response.status === 200) {
           setCart(response.data.items);
           setCartId(response.data._id);
-          console.log(cart)
+          console.log(cart);
         }
       })
       .catch((error) => {
@@ -118,7 +118,7 @@ function Cart() {
     try {
       const payload = {
         totalPrice: total,
-                products: cart,
+        products: cart,
         cartId: cartId,
         customer: {
           location: user.address,
@@ -179,12 +179,15 @@ function Cart() {
               </div>
 
               <ul>
-               {cart.map((item) => (
+                {cart.map((item) => (
                   <li key={item._id}>
                     <div className="leftCartSec-Headers">
                       <div className="cart-item-removal">
                         <div className="cart-item">
-                          <img src={item.product.productPictures[0]} alt="item" />
+                          <img
+                            src={item.product.productPictures[0]}
+                            alt="item"
+                          />
                           <p>{item.product.name}</p>
                         </div>
 

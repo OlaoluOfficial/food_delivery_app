@@ -92,7 +92,13 @@ const UserTable = ({ userData, onDelete, setSelectedId }) => {
                 }}
               >
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} style={{ padding: "8px" }}>
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      padding: "8px",
+                      textAlign: "center",
+                    }}
+                  >
                     {cell.render("Cell")}
                   </td>
                 ))}
