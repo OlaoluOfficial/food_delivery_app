@@ -52,7 +52,7 @@ class CartController {
     }
   }
   
-static async getUserCart(req, res) {
+  static async getUserCart(req, res) {
     try {
       const userId = req.user.id;
   

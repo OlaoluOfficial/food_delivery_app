@@ -311,7 +311,7 @@ const SuperAdminPage = () => {
         <AdminLoginPage />
       )}
       <footer className="general-footer">
-        <div>&copy;TGE Final Year Project</div>
+        <div>&copy;Final Year Project</div>
         <div className="footer-logo-box">
           <img className="footer-logo" src={logo} alt="logo" />
         </div>

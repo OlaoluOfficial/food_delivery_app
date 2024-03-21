@@ -9,8 +9,7 @@ class SearchController {
   
       res.status(200).json({ products: productResults });
     } catch (error) {
-      console.error('Error searching:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({ message: 'Error fetching products' });
     }
   }
 }

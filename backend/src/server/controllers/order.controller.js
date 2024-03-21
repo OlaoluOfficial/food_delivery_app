@@ -1,7 +1,5 @@
 const Order = require("../../models/order");
-const User = require("../../models/user");
 const Product = require("../../models/product");
-const Restaurant = require("../../models/restaurant");
 const sendEmailNotification = require("./email.controller");
 class OrderController {
   static async createOrder(req, res) {
